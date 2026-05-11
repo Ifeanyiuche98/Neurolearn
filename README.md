@@ -1,6 +1,6 @@
 # my-app
 
-This app was generated from the `rppg-demo` template in
+This app   https://neurolearn-sooty.vercel.app/    was generated from the `rppg-demo` template in
 `@elata-biosciences/create-elata-demo`.
 
 ## What This Demo Shows
