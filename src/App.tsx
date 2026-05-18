@@ -8,7 +8,12 @@ import {
 import rppgWasmJsUrl from '@elata-biosciences/rppg-web/pkg/rppg_wasm.js?url';
 import rppgWasmBinaryUrl from '@elata-biosciences/rppg-web/pkg/rppg_wasm_bg.wasm?url';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// ── v3 imports ────────────────────────────────────────────────────────────────
+import { useStreak } from './useStreak';
+import { useQuizTimer, TIMER_SECONDS } from './useQuizTimer';
+import StreakBar from './StreakBar';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results';
 
@@ -49,9 +54,9 @@ const MODULES: LearningModule[] = [
         content: `A blockchain is a special type of database that stores information in "blocks" that are chained together. Unlike a normal database controlled by one company, a blockchain is shared across thousands of computers worldwide — making it nearly impossible to hack or manipulate.
 
 Each block contains:
-• A list of transactions or data
-• A timestamp of when it was created
-• A unique fingerprint (called a "hash") of the previous block
+- A list of transactions or data
+- A timestamp of when it was created
+- A unique fingerprint (called a "hash") of the previous block
 
 This chaining of fingerprints is what makes blockchain so powerful. If someone tries to change an old block, its fingerprint changes — breaking the chain and alerting the entire network.`,
       },
@@ -90,31 +95,11 @@ Africa specifically — Blockchain can provide financial services to millions of
       { front: 'What is a Node?', back: 'Any computer that participates in a blockchain network by storing a full copy of the chain and validating transactions.' },
     ],
     quiz: [
-      {
-        question: 'What makes it nearly impossible to change old data on a blockchain?',
-        options: ['A central server protects it', 'Each block contains the fingerprint of the previous block', 'Blocks are encrypted with passwords', 'Government regulations protect it'],
-        correct: 1,
-      },
-      {
-        question: 'What problem did Bitcoin originally solve?',
-        options: ['Slow internet speeds', 'The double-spend problem', 'Password theft', 'Identity fraud'],
-        correct: 1,
-      },
-      {
-        question: 'Which consensus method does Ethereum currently use?',
-        options: ['Proof of Work', 'Proof of Authority', 'Proof of Stake', 'Proof of History'],
-        correct: 2,
-      },
-      {
-        question: 'What is a node?',
-        options: ['A type of cryptocurrency', 'A computer that participates in the blockchain network', 'A transaction fee', 'A type of wallet'],
-        correct: 1,
-      },
-      {
-        question: 'Which of these is TRUE about blockchain?',
-        options: ['It is controlled by one company', 'Only banks can use it', 'It is shared across thousands of computers', 'It only works with the internet, not computers'],
-        correct: 2,
-      },
+      { question: 'What makes it nearly impossible to change old data on a blockchain?', options: ['A central server protects it', 'Each block contains the fingerprint of the previous block', 'Blocks are encrypted with passwords', 'Government regulations protect it'], correct: 1 },
+      { question: 'What problem did Bitcoin originally solve?', options: ['Slow internet speeds', 'The double-spend problem', 'Password theft', 'Identity fraud'], correct: 1 },
+      { question: 'Which consensus method does Ethereum currently use?', options: ['Proof of Work', 'Proof of Authority', 'Proof of Stake', 'Proof of History'], correct: 2 },
+      { question: 'What is a node?', options: ['A type of cryptocurrency', 'A computer that participates in the blockchain network', 'A transaction fee', 'A type of wallet'], correct: 1 },
+      { question: 'Which of these is TRUE about blockchain?', options: ['It is controlled by one company', 'Only banks can use it', 'It is shared across thousands of computers', 'It only works with the internet, not computers'], correct: 2 },
     ],
   },
   {
@@ -129,8 +114,8 @@ Africa specifically — Blockchain can provide financial services to millions of
         content: `A crypto wallet does NOT store your crypto. Your crypto lives on the blockchain. What a wallet stores is your private key — a secret code that proves you own the crypto at a specific address.
 
 Think of it like this:
-• Your wallet address = your bank account number (public, shareable)
-• Your private key = your PIN (secret, never share!)
+- Your wallet address = your bank account number (public, shareable)
+- Your private key = your PIN (secret, never share!)
 
 There are two main types:
 
@@ -143,14 +128,14 @@ Cold Wallets — Offline hardware devices (e.g. Ledger). Most secure for storing
         content: `When you create a wallet, you are given a seed phrase — 12 or 24 random words in a specific order. This is the MOST important thing in crypto.
 
 Your seed phrase can:
-• Restore your wallet on any device if your phone is lost
-• Give full access to ALL wallets in that account
+- Restore your wallet on any device if your phone is lost
+- Give full access to ALL wallets in that account
 
 Never:
-• Screenshot your seed phrase
-• Store it in cloud storage (Google Drive, iCloud, email)
-• Share it with ANYONE — not even "support staff"
-• Type it into any website
+- Screenshot your seed phrase
+- Store it in cloud storage (Google Drive, iCloud, email)
+- Share it with ANYONE — not even "support staff"
+- Type it into any website
 
 Write it on paper. Store it in a safe place. Some people use fireproof, waterproof metal backups.`,
       },
@@ -177,31 +162,11 @@ Rule of thumb: If it sounds too good to be true, it is.`,
       { front: 'What is a rug pull?', back: 'A scam where developers hype a project, collect investor funds, then abandon it and disappear with the money.' },
     ],
     quiz: [
-      {
-        question: 'What does your crypto wallet actually store?',
-        options: ['Your cryptocurrency coins', 'Your private key', 'Your transaction history', 'Your identity documents'],
-        correct: 1,
-      },
-      {
-        question: 'Where should you store your seed phrase?',
-        options: ['In Google Drive for easy access', 'Screenshot on your phone', 'Written on paper in a safe place', 'In your email drafts'],
-        correct: 2,
-      },
-      {
-        question: 'What type of wallet is most secure for large amounts?',
-        options: ['Hot wallet', 'Mobile wallet', 'Cold wallet (hardware)', 'Exchange wallet'],
-        correct: 2,
-      },
-      {
-        question: 'A support agent asks for your seed phrase to fix your wallet. What do you do?',
-        options: ['Provide it — they need it to help', 'Only give the first 6 words', 'Refuse — legitimate support never asks for this', 'Send it via encrypted message'],
-        correct: 2,
-      },
-      {
-        question: 'What is a rug pull?',
-        options: ['A type of hardware wallet', 'When developers abandon a project and steal investor funds', 'A network upgrade gone wrong', 'A government crypto ban'],
-        correct: 1,
-      },
+      { question: 'What does your crypto wallet actually store?', options: ['Your cryptocurrency coins', 'Your private key', 'Your transaction history', 'Your identity documents'], correct: 1 },
+      { question: 'Where should you store your seed phrase?', options: ['In Google Drive for easy access', 'Screenshot on your phone', 'Written on paper in a safe place', 'In your email drafts'], correct: 2 },
+      { question: 'What type of wallet is most secure for large amounts?', options: ['Hot wallet', 'Mobile wallet', 'Cold wallet (hardware)', 'Exchange wallet'], correct: 2 },
+      { question: 'A support agent asks for your seed phrase to fix your wallet. What do you do?', options: ['Provide it — they need it to help', 'Only give the first 6 words', 'Refuse — legitimate support never asks for this', 'Send it via encrypted message'], correct: 2 },
+      { question: 'What is a rug pull?', options: ['A type of hardware wallet', 'When developers abandon a project and steal investor funds', 'A network upgrade gone wrong', 'A government crypto ban'], correct: 1 },
     ],
   },
   {
@@ -216,16 +181,16 @@ Rule of thumb: If it sounds too good to be true, it is.`,
         content: `DeFi stands for Decentralized Finance. It is a system of financial services — lending, borrowing, trading, earning interest — that runs on blockchain instead of banks.
 
 Traditional Finance:
-• You need a bank account (millions in Africa do not have one)
-• Banks set the interest rates and can change them anytime
-• Banks can freeze your account
-• Banks are closed on weekends and holidays
+- You need a bank account (millions in Africa do not have one)
+- Banks set the interest rates and can change them anytime
+- Banks can freeze your account
+- Banks are closed on weekends and holidays
 
 DeFi:
-• Anyone with a smartphone and internet can access it
-• Smart contracts set the rules automatically and transparently
-• No one can freeze your funds
-• Available 24/7, 365 days a year
+- Anyone with a smartphone and internet can access it
+- Smart contracts set the rules automatically and transparently
+- No one can freeze your funds
+- Available 24/7, 365 days a year
 
 DeFi is particularly powerful for Africa, where mobile penetration is high but banking access remains low.`,
       },
@@ -236,9 +201,9 @@ DeFi is particularly powerful for Africa, where mobile penetration is high but b
 Example: IF Person A sends 1 ETH AND Person B sends $3000 USDC to this contract, THEN automatically swap them. This happens instantly, transparently, and without a broker.
 
 Liquidity Pools are how DeFi exchanges work:
-• Users deposit token pairs (e.g. ETH + USDC) into a pool
-• Traders swap against this pool instead of matching with another buyer/seller
-• Liquidity providers earn a share of every trading fee
+- Users deposit token pairs (e.g. ETH + USDC) into a pool
+- Traders swap against this pool instead of matching with another buyer/seller
+- Liquidity providers earn a share of every trading fee
 
 This replaces the traditional order book model used by stock exchanges.`,
       },
@@ -253,10 +218,10 @@ Yield Farming — Provide liquidity and earn token rewards on top of trading fee
 Staking — Lock up tokens to help secure a network and earn rewards (e.g. staking ETH on Ethereum).
 
 DeFi Risks to know:
-• Smart contract bugs — Code errors can be exploited by attackers
-• Impermanent loss — Liquidity providers can lose value vs just holding
-• Rug pulls — Fake DeFi projects steal funds
-• High gas fees — Some blockchain transactions can be expensive
+- Smart contract bugs — Code errors can be exploited by attackers
+- Impermanent loss — Liquidity providers can lose value vs just holding
+- Rug pulls — Fake DeFi projects steal funds
+- High gas fees — Some blockchain transactions can be expensive
 
 Always start small. Never invest more than you can afford to lose.`,
       },
@@ -269,31 +234,11 @@ Always start small. Never invest more than you can afford to lose.`,
       { front: 'What is impermanent loss?', back: 'A potential loss for liquidity providers when the price ratio of their deposited tokens changes significantly after deposit.' },
     ],
     quiz: [
-      {
-        question: 'What makes DeFi different from traditional banking?',
-        options: ['It requires a credit score', 'It runs on blockchain with no central authority', 'It is only available in wealthy countries', 'Banks control it behind the scenes'],
-        correct: 1,
-      },
-      {
-        question: 'What is a smart contract?',
-        options: ['A legal document stored online', 'A self-executing program that runs on blockchain', 'A government-regulated financial agreement', 'An encrypted email contract'],
-        correct: 1,
-      },
-      {
-        question: 'How do liquidity providers earn money in DeFi?',
-        options: ['They earn salaries from the protocol team', 'They earn a share of trading fees', 'They earn by reporting scams', 'They earn government subsidies'],
-        correct: 1,
-      },
-      {
-        question: 'Which of these is a real DeFi risk?',
-        options: ['Internet connection fees', 'Smart contract bugs being exploited', 'Government bailouts', 'Market opening hours'],
-        correct: 1,
-      },
-      {
-        question: 'Why is DeFi especially valuable in Africa?',
-        options: ['African governments fully support it', 'It provides financial access to people without bank accounts', 'It is cheaper to mine crypto in Africa', 'African banks invented DeFi'],
-        correct: 1,
-      },
+      { question: 'What makes DeFi different from traditional banking?', options: ['It requires a credit score', 'It runs on blockchain with no central authority', 'It is only available in wealthy countries', 'Banks control it behind the scenes'], correct: 1 },
+      { question: 'What is a smart contract?', options: ['A legal document stored online', 'A self-executing program that runs on blockchain', 'A government-regulated financial agreement', 'An encrypted email contract'], correct: 1 },
+      { question: 'How do liquidity providers earn money in DeFi?', options: ['They earn salaries from the protocol team', 'They earn a share of trading fees', 'They earn by reporting scams', 'They earn government subsidies'], correct: 1 },
+      { question: 'Which of these is a real DeFi risk?', options: ['Internet connection fees', 'Smart contract bugs being exploited', 'Government bailouts', 'Market opening hours'], correct: 1 },
+      { question: 'Why is DeFi especially valuable in Africa?', options: ['African governments fully support it', 'It provides financial access to people without bank accounts', 'It is cheaper to mine crypto in Africa', 'African banks invented DeFi'], correct: 1 },
     ],
   },
   {
@@ -310,12 +255,12 @@ Always start small. Never invest more than you can afford to lose.`,
 An NFT is a token on the blockchain that proves ownership of a unique digital or physical item.
 
 What can be an NFT?
-• Digital art
-• Music
-• In-game items
-• Certificates and diplomas
-• Property deeds
-• Event tickets
+- Digital art
+- Music
+- In-game items
+- Certificates and diplomas
+- Property deeds
+- Event tickets
 
 Key insight: NFTs solve the problem of digital ownership. Before NFTs, anyone could copy a digital file. NFTs do not prevent copying — but they create a verifiable, immutable proof of who owns the original.`,
       },
@@ -330,9 +275,9 @@ ERC-721 — The NFT standard. Each token is unique and non-interchangeable. Used
 ERC-1155 — Multi-token standard. A single contract can issue both fungible and non-fungible tokens. Perfect for gaming.
 
 Beyond Ethereum:
-• Solana uses SPL tokens
-• BNB Chain uses BEP-20
-• Each blockchain has its own standards, but the concepts are the same`,
+- Solana uses SPL tokens
+- BNB Chain uses BEP-20
+- Each blockchain has its own standards, but the concepts are the same`,
       },
       {
         title: 'Real-World Use Cases for NFTs',
@@ -359,42 +304,18 @@ The hype cycle around JPEG NFTs will pass — but the underlying technology and 
       { front: 'What is ERC-1155?', back: 'A multi-token standard allowing one contract to manage both fungible and non-fungible tokens — ideal for gaming and complex apps.' },
     ],
     quiz: [
-      {
-        question: 'What does "non-fungible" mean?',
-        options: ['Cannot be traded', 'Unique and not interchangeable with another token', 'Stored offline', 'Backed by gold'],
-        correct: 1,
-      },
-      {
-        question: 'Which token standard is used for NFTs on Ethereum?',
-        options: ['ERC-20', 'BEP-20', 'ERC-721', 'SPL'],
-        correct: 2,
-      },
-      {
-        question: 'What real-world problem could NFTs help solve in Africa?',
-        options: ['Slow mobile data', 'Unreliable land registry and fake certificates', 'Lack of smartphones', 'Power outages'],
-        correct: 1,
-      },
-      {
-        question: 'What does ERC-20 represent?',
-        options: ['A unique digital collectible', 'A fungible token standard for currencies and utility', 'A hardware wallet type', 'A DeFi protocol'],
-        correct: 1,
-      },
-      {
-        question: 'What does an NFT actually prove?',
-        options: ['That you created the original file', 'Ownership of the original version of a digital asset', 'That no copies of the file exist', 'The current market value of the asset'],
-        correct: 1,
-      },
+      { question: 'What does "non-fungible" mean?', options: ['Cannot be traded', 'Unique and not interchangeable with another token', 'Stored offline', 'Backed by gold'], correct: 1 },
+      { question: 'Which token standard is used for NFTs on Ethereum?', options: ['ERC-20', 'BEP-20', 'ERC-721', 'SPL'], correct: 2 },
+      { question: 'What real-world problem could NFTs help solve in Africa?', options: ['Slow mobile data', 'Unreliable land registry and fake certificates', 'Lack of smartphones', 'Power outages'], correct: 1 },
+      { question: 'What does ERC-20 represent?', options: ['A unique digital collectible', 'A fungible token standard for currencies and utility', 'A hardware wallet type', 'A DeFi protocol'], correct: 1 },
+      { question: 'What does an NFT actually prove?', options: ['That you created the original file', 'Ownership of the original version of a digital asset', 'That no copies of the file exist', 'The current market value of the asset'], correct: 1 },
     ],
   },
 ];
 
-// ─── Helper Functions (unchanged from v1) ────────────────────────────────────
+// ─── Helper Functions (unchanged from v2) ────────────────────────────────────
 
-const EMPTY_METRICS: Metrics = {
-  bpm: null,
-  confidence: 0,
-  signal_quality: 0,
-};
+const EMPTY_METRICS: Metrics = { bpm: null, confidence: 0, signal_quality: 0 };
 
 function formatMetric(value: number | null | undefined, digits = 2): string {
   if (value == null || Number.isNaN(value)) return '—';
@@ -465,21 +386,25 @@ export default function App() {
     borderRadius: '6px', padding: '6px 12px', cursor: 'pointer', fontSize: '0.8rem',
   };
 
-  // ── rPPG state (all unchanged from v1) ─────────────────────────────────
+  // ── v3: Streak + Timer hooks ───────────────────────────────────────────────
+  const streakData = useStreak();
+  const quizTimer = useQuizTimer();
+  const [lastQuestionXP, setLastQuestionXP] = useState(0);
+
+  // ── rPPG state ────────────────────────────────────────────────────────────
   const videoRef = useRef<HTMLVideoElement>(null);
   const sessionRef = useRef<RppgSession | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [status, setStatus] = useState('Requesting camera…');
   const [metrics, setMetrics] = useState<Metrics>(EMPTY_METRICS);
   const [diagnostics, setDiagnostics] = useState<RppgSessionDiagnostics | null>(null);
-
   const [sessionActive, setSessionActive] = useState(false);
   const [sessionSeconds, setSessionSeconds] = useState(0);
   const [sessionSummary, setSessionSummary] = useState<{ duration: number; avgBpm: number | null } | null>(null);
   const bpmReadingsRef = useRef<number[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ── Learning state ─────────────────────────────────────────────────────
+  // ── Learning state ────────────────────────────────────────────────────────
   const [screen, setScreen] = useState<Screen>('home');
   const [activeModule, setActiveModule] = useState<LearningModule | null>(null);
   const [lessonPage, setLessonPage] = useState(0);
@@ -489,7 +414,7 @@ export default function App() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [quizScore, setQuizScore] = useState(0);
 
-  // ── rPPG sync (unchanged from v1) ──────────────────────────────────────
+  // ── rPPG sync ─────────────────────────────────────────────────────────────
   const syncFromSession = useCallback(() => {
     const session = sessionRef.current;
     if (!session) return;
@@ -498,15 +423,12 @@ export default function App() {
     setMetrics(nextMetrics);
     setDiagnostics(nextDiagnostics);
     setStatus(getStatusMessage(nextDiagnostics));
-    if (nextMetrics.bpm != null) {
-      bpmReadingsRef.current.push(nextMetrics.bpm);
-    }
+    if (nextMetrics.bpm != null) bpmReadingsRef.current.push(nextMetrics.bpm);
   }, []);
 
   useEffect(() => {
     let cancelled = false;
     let intervalId: ReturnType<typeof setInterval> | null = null;
-
     async function init() {
       const video = videoRef.current;
       if (!video) return;
@@ -544,9 +466,7 @@ export default function App() {
         setStatus(message);
       }
     }
-
     void init();
-
     return () => {
       cancelled = true;
       if (intervalId) clearInterval(intervalId);
@@ -555,7 +475,6 @@ export default function App() {
     };
   }, [syncFromSession]);
 
-  // ── Session controls (unchanged from v1) ───────────────────────────────
   const startSession = () => {
     bpmReadingsRef.current = [];
     setSessionSeconds(0);
@@ -572,7 +491,6 @@ export default function App() {
     setSessionSummary({ duration: sessionSeconds, avgBpm });
   };
 
-  // ── Module navigation ──────────────────────────────────────────────────
   const startModule = (mod: LearningModule) => {
     setActiveModule(mod);
     setLessonPage(0);
@@ -597,16 +515,21 @@ export default function App() {
       setFlashcardIndex(i => i + 1);
       setCardFlipped(false);
     } else {
+      quizTimer.resetQuiz();
       setScreen('quiz');
     }
   };
 
+  // ── v3: handleAnswer with timer + XP ─────────────────────────────────────
   const handleAnswer = (idx: number) => {
     if (selectedAnswer !== null) return;
+    quizTimer.stopTimer();
+    const isCorrect = activeModule !== null && idx === activeModule.quiz[quizIndex].correct;
+    if (isCorrect) setQuizScore(s => s + 1);
+    const rawXP = quizTimer.calcXP(isCorrect);
+    const actualXP = streakData.addXP(rawXP);
+    setLastQuestionXP(actualXP);
     setSelectedAnswer(idx);
-    if (activeModule && idx === activeModule.quiz[quizIndex].correct) {
-      setQuizScore(s => s + 1);
-    }
   };
 
   const nextQuestion = () => {
@@ -614,44 +537,55 @@ export default function App() {
     if (quizIndex < activeModule.quiz.length - 1) {
       setQuizIndex(i => i + 1);
       setSelectedAnswer(null);
+      setLastQuestionXP(0);
+      quizTimer.startTimer();
     } else {
       stopSession();
       setScreen('results');
     }
   };
 
+  // ── v3: start timer when quiz question appears ────────────────────────────
+  useEffect(() => {
+    if (screen === 'quiz' && selectedAnswer === null) {
+      quizTimer.startTimer();
+    }
+  }, [screen, quizIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── v3: auto-advance on time expiry ──────────────────────────────────────
+  useEffect(() => {
+    if (quizTimer.timeExpired && selectedAnswer === null) {
+      setSelectedAnswer(-1);
+      setLastQuestionXP(0);
+    }
+  }, [quizTimer.timeExpired, selectedAnswer]);
+
   const backToHome = () => {
     setScreen('home');
     setActiveModule(null);
     setSessionSummary(null);
+    quizTimer.resetQuiz();
   };
 
-  // ── Derived values ─────────────────────────────────────────────────────
   const statusTone = getStatusTone(diagnostics);
   const readinessLabel = diagnostics?.estimationAvailable && metrics.bpm != null ? 'Ready' : 'Warm-up';
   const confidencePct = Math.round(clamp01(metrics.confidence) * 100);
   const qualityPct = Math.round(clamp01(metrics.signal_quality) * 100);
   const focusState = getFocusState(metrics.bpm);
 
-  // ── Screen renderers ───────────────────────────────────────────────────
+  // ── Renderers ─────────────────────────────────────────────────────────────
 
   function renderHome() {
     return (
       <div style={{ padding: '24px 0' }}>
+        <StreakBar streakData={streakData} />
         <h2 style={{ color: '#fff', marginBottom: '8px', fontSize: '1.4rem' }}>Choose a Learning Module</h2>
         <p style={{ color: '#888', marginBottom: '24px', fontSize: '0.9rem' }}>
           Select a topic below. NeuroLearn will track your focus as you learn.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           {MODULES.map(mod => (
-            <button
-              key={mod.id}
-              onClick={() => startModule(mod)}
-              style={{
-                background: '#1a1a2e', border: `2px solid ${mod.color}`,
-                borderRadius: '12px', padding: '20px', cursor: 'pointer', textAlign: 'left',
-              }}
-            >
+            <button key={mod.id} onClick={() => startModule(mod)} style={{ background: '#1a1a2e', border: `2px solid ${mod.color}`, borderRadius: '12px', padding: '20px', cursor: 'pointer', textAlign: 'left' }}>
               <div style={{ fontSize: '2rem', marginBottom: '8px' }}>{mod.icon}</div>
               <div style={{ color: mod.color, fontWeight: 'bold', fontSize: '1rem', marginBottom: '6px' }}>{mod.title}</div>
               <div style={{ color: '#aaa', fontSize: '0.8rem', lineHeight: '1.4' }}>{mod.description}</div>
@@ -676,22 +610,16 @@ export default function App() {
           <span style={{ color: activeModule.color, fontWeight: 'bold' }}>{activeModule.icon} {activeModule.title}</span>
           <span style={{ color: '#555', marginLeft: 'auto', fontSize: '0.8rem' }}>Lesson {lessonPage + 1} of {activeModule.lesson.length}</span>
         </div>
-        <div style={{
-          background: '#1a1a2e', borderRadius: '12px', padding: '24px', marginBottom: '20px',
-          borderLeft: `4px solid ${activeModule.color}`, maxHeight: '360px', overflowY: 'auto',
-        }}>
+        <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '24px', marginBottom: '20px', borderLeft: `4px solid ${activeModule.color}`, maxHeight: '360px', overflowY: 'auto' }}>
           <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.15rem' }}>{page.title}</h3>
           <p style={{ color: '#ccc', lineHeight: '1.9', fontSize: '0.92rem', whiteSpace: 'pre-line' }}>{page.content}</p>
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          {lessonPage > 0
-            ? <button onClick={() => setLessonPage(p => p - 1)} style={secondaryBtnStyle}>Previous</button>
-            : <div />}
+          {lessonPage > 0 ? <button onClick={() => setLessonPage(p => p - 1)} style={secondaryBtnStyle}>Previous</button> : <div />}
           <div style={{ flex: 1 }} />
           {!isLast
             ? <button onClick={() => setLessonPage(p => p + 1)} style={{ ...primaryBtnStyle, background: activeModule.color }}>Next</button>
-            : <button onClick={goToFlashcards} style={{ ...primaryBtnStyle, background: activeModule.color }}>Start Flashcards</button>
-          }
+            : <button onClick={goToFlashcards} style={{ ...primaryBtnStyle, background: activeModule.color }}>Start Flashcards</button>}
         </div>
         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '20px' }}>
           {activeModule.lesson.map((_, i) => (
@@ -716,30 +644,12 @@ export default function App() {
         <p style={{ color: '#777', fontSize: '0.82rem', marginBottom: '14px', textAlign: 'center' }}>
           {cardFlipped ? 'Answer revealed! Ready for the next card?' : 'Tap the card to reveal the answer'}
         </p>
-        <div
-          onClick={() => setCardFlipped(f => !f)}
-          style={{
-            background: cardFlipped ? '#1a2a1a' : '#1a1a2e',
-            border: `2px solid ${cardFlipped ? '#4CAF50' : activeModule.color}`,
-            borderRadius: '16px', padding: '40px 24px', minHeight: '190px',
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            justifyContent: 'center', cursor: 'pointer', textAlign: 'center',
-            marginBottom: '20px', transition: 'all 0.25s',
-          }}
-        >
-          <p style={{ color: '#555', fontSize: '0.7rem', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
-            {cardFlipped ? 'ANSWER' : 'QUESTION'}
-          </p>
-          <p style={{ color: '#fff', fontSize: '1.05rem', lineHeight: '1.7' }}>
-            {cardFlipped ? card.back : card.front}
-          </p>
+        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? '#1a2a1a' : '#1a1a2e', border: `2px solid ${cardFlipped ? '#4CAF50' : activeModule.color}`, borderRadius: '16px', padding: '40px 24px', minHeight: '190px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '20px', transition: 'all 0.25s' }}>
+          <p style={{ color: '#555', fontSize: '0.7rem', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1.5px' }}>{cardFlipped ? 'ANSWER' : 'QUESTION'}</p>
+          <p style={{ color: '#fff', fontSize: '1.05rem', lineHeight: '1.7' }}>{cardFlipped ? card.back : card.front}</p>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {cardFlipped && (
-            <button onClick={nextFlashcard} style={{ ...primaryBtnStyle, background: activeModule.color }}>
-              {isLast ? 'Take Quiz' : 'Next Card'}
-            </button>
-          )}
+          {cardFlipped && <button onClick={nextFlashcard} style={{ ...primaryBtnStyle, background: activeModule.color }}>{isLast ? 'Take Quiz' : 'Next Card'}</button>}
         </div>
         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '20px' }}>
           {activeModule.flashcards.map((_, i) => (
@@ -753,35 +663,52 @@ export default function App() {
   function renderQuiz() {
     if (!activeModule) return null;
     const q = activeModule.quiz[quizIndex];
+    const answered = selectedAnswer !== null;
     return (
       <div style={{ padding: '24px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
           <button onClick={() => setScreen('flashcard')} style={backBtnStyle}>Back to Flashcards</button>
           <span style={{ color: activeModule.color, fontWeight: 'bold' }}>{activeModule.icon} Quiz</span>
           <span style={{ color: '#555', marginLeft: 'auto', fontSize: '0.8rem' }}>Q{quizIndex + 1} of {activeModule.quiz.length}</span>
         </div>
+
+        {/* ── v3: Timer bar row ───────────────────────────────────────────── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+          <div style={{ minWidth: '40px', textAlign: 'center', color: quizTimer.timerColor, fontWeight: 'bold', fontSize: '1.1rem' }}>
+            {answered ? '✓' : `${quizTimer.timeLeft}s`}
+          </div>
+          <div style={{ flex: 1, height: '8px', background: '#1a1a2e', borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${answered ? 100 : quizTimer.timerPercent}%`, background: answered ? '#4CAF50' : quizTimer.timerColor, borderRadius: '4px', transition: 'width 0.9s linear, background 0.3s' }} />
+          </div>
+          {quizTimer.comboCount > 1 && (
+            <div style={{ background: '#FF980022', border: '1px solid #FF980066', borderRadius: '20px', padding: '2px 10px', color: '#FF9800', fontSize: '0.75rem', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+              🔗 {quizTimer.comboCount}x Combo
+            </div>
+          )}
+          {lastQuestionXP > 0 && answered && (
+            <div style={{ background: '#2196F322', border: '1px solid #2196F366', borderRadius: '20px', padding: '2px 10px', color: '#2196F3', fontSize: '0.75rem', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+              +{lastQuestionXP} XP
+            </div>
+          )}
+        </div>
+
+        {selectedAnswer === -1 && (
+          <div style={{ background: '#F4433622', border: '1px solid #F4433644', borderRadius: '8px', padding: '8px 14px', color: '#F44336', fontSize: '0.82rem', marginBottom: '10px' }}>
+            ⏱ Time's up! The correct answer is highlighted below.
+          </div>
+        )}
+
         <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
           <p style={{ color: '#fff', fontSize: '1.05rem', lineHeight: '1.65', marginBottom: '20px' }}>{q.question}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {q.options.map((opt, idx) => {
-              let bg = '#0f0f1a';
-              let border = '#2a2a3a';
-              let color = '#ccc';
-              if (selectedAnswer !== null) {
+              let bg = '#0f0f1a', border = '#2a2a3a', color = '#ccc';
+              if (answered) {
                 if (idx === q.correct) { bg = '#1a2a1a'; border = '#4CAF50'; color = '#4CAF50'; }
-                else if (idx === selectedAnswer) { bg = '#2a1a1a'; border = '#F44336'; color = '#F44336'; }
+                else if (idx === selectedAnswer && selectedAnswer !== -1) { bg = '#2a1a1a'; border = '#F44336'; color = '#F44336'; }
               }
               return (
-                <button
-                  key={idx}
-                  onClick={() => handleAnswer(idx)}
-                  disabled={selectedAnswer !== null}
-                  style={{
-                    background: bg, border: `2px solid ${border}`, borderRadius: '8px',
-                    padding: '12px 16px', color, cursor: selectedAnswer !== null ? 'default' : 'pointer',
-                    textAlign: 'left', fontSize: '0.9rem', transition: 'all 0.2s',
-                  }}
-                >
+                <button key={idx} onClick={() => handleAnswer(idx)} disabled={answered} style={{ background: bg, border: `2px solid ${border}`, borderRadius: '8px', padding: '12px 16px', color, cursor: answered ? 'default' : 'pointer', textAlign: 'left', fontSize: '0.9rem', transition: 'all 0.2s' }}>
                   <span style={{ fontWeight: 'bold', marginRight: '8px' }}>{String.fromCharCode(65 + idx)}.</span>
                   {opt}
                 </button>
@@ -789,7 +716,8 @@ export default function App() {
             })}
           </div>
         </div>
-        {selectedAnswer !== null && (
+
+        {answered && (
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button onClick={nextQuestion} style={{ ...primaryBtnStyle, background: activeModule.color }}>
               {quizIndex < activeModule.quiz.length - 1 ? 'Next Question' : 'See Results'}
@@ -829,23 +757,39 @@ export default function App() {
             <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Focus Score</p>
             <p style={{ color: focusScore.color, fontSize: '2.4rem', fontWeight: 'bold', marginBottom: '4px' }}>{focusScore.score}</p>
             <p style={{ color: '#666', fontSize: '0.8rem' }}>{focusScore.label}</p>
-            <p style={{ color: '#555', fontSize: '0.75rem', marginTop: '10px' }}>
-              Avg BPM: {sessionSummary?.avgBpm != null ? Math.round(sessionSummary.avgBpm) : 'N/A'}
-            </p>
+            <p style={{ color: '#555', fontSize: '0.75rem', marginTop: '10px' }}>Avg BPM: {sessionSummary?.avgBpm != null ? Math.round(sessionSummary.avgBpm) : 'N/A'}</p>
           </div>
         </div>
+
+        {/* ── v3: XP earned this session ──────────────────────────────────── */}
+        <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '16px 20px', marginBottom: '12px', border: '1px solid #2196F333', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>XP Earned This Session</p>
+            <p style={{ color: '#2196F3', fontSize: '1.8rem', fontWeight: 'bold' }}>+{quizTimer.totalQuizXP.toLocaleString()} XP</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Streak Multiplier</p>
+            <p style={{ color: '#9C27B0', fontSize: '1.4rem', fontWeight: 'bold' }}>{streakData.xpMultiplier.toFixed(1)}x</p>
+            <p style={{ color: '#555', fontSize: '0.72rem' }}>{streakData.getStreakLabel()}</p>
+          </div>
+        </div>
+
+        <div style={{ background: '#0f0f1a', borderRadius: '12px', padding: '14px', textAlign: 'center', marginBottom: '12px', border: '1px solid #1a1a2a' }}>
+          <p style={{ color: '#555', fontSize: '0.75rem', marginBottom: '2px' }}>Lifetime XP</p>
+          <p style={{ color: '#fff', fontSize: '1.4rem', fontWeight: 'bold' }}>{streakData.totalXP.toLocaleString()} XP</p>
+        </div>
+
         <div style={{ background: '#0f0f1a', borderRadius: '12px', padding: '14px', textAlign: 'center', marginBottom: '24px', border: '1px solid #1a1a2a' }}>
           <p style={{ color: '#555', fontSize: '0.75rem', marginBottom: '4px' }}>Total Study Time</p>
           <p style={{ color: '#fff', fontSize: '1.6rem', fontWeight: 'bold' }}>{sessionSummary ? formatTime(sessionSummary.duration) : '—'}</p>
         </div>
+
         <button onClick={backToHome} style={{ ...primaryBtnStyle, background: activeModule.color, width: '100%', padding: '12px 20px' }}>
           Back to Modules
         </button>
       </div>
     );
   }
-
-  // ── Main render ─────────────────────────────────────────────────────────
 
   return (
     <div className="app">
@@ -862,12 +806,9 @@ export default function App() {
           <span className="session-chip-text">{status}</span>
         </div>
       </header>
-
       <main className="main">
         <section className="stage" aria-labelledby="stage-heading">
           <h1 id="stage-heading" className="visually-hidden">NeuroLearn Focus Session</h1>
-
-          {/* LEFT: Learning content */}
           <div className="stage-video-wrap" style={{ flex: 2, minWidth: 0 }}>
             {screen === 'home' && renderHome()}
             {screen === 'lesson' && renderLesson()}
@@ -875,8 +816,6 @@ export default function App() {
             {screen === 'quiz' && renderQuiz()}
             {screen === 'results' && renderResults()}
           </div>
-
-          {/* RIGHT: rPPG sidebar — always visible */}
           <aside className="readouts" aria-label="Focus metrics">
             <div style={{ marginBottom: '14px' }}>
               <div className="video-chrome">
@@ -887,11 +826,8 @@ export default function App() {
                   Live input
                 </div>
               </div>
-              <p style={{ color: '#444', fontSize: '0.72rem', marginTop: '6px', textAlign: 'center' }}>
-                Face the light · fill the frame · stay steady
-              </p>
+              <p style={{ color: '#444', fontSize: '0.72rem', marginTop: '6px', textAlign: 'center' }}>Face the light · fill the frame · stay steady</p>
             </div>
-
             <div className="bpm-block">
               <p className="bpm-label">Heart Rate</p>
               <div className="bpm-value-row">
@@ -900,31 +836,20 @@ export default function App() {
               </div>
               <p className="bpm-sub">{readinessLabel}</p>
             </div>
-
             <div style={{ padding: '10px 12px', background: '#1a1a2e', borderRadius: '8px', marginBottom: '10px', borderLeft: `4px solid ${focusState.color}` }}>
               <p style={{ color: focusState.color, fontWeight: 'bold', fontSize: '0.82rem', marginBottom: '3px' }}>{focusState.label}</p>
               <p style={{ color: '#aaa', fontSize: '0.76rem', lineHeight: '1.4' }}>{focusState.message}</p>
             </div>
-
             <div className="meter-group">
               <div className="meter">
-                <div className="meter-head">
-                  <span>Confidence</span><span className="meter-pct">{confidencePct}%</span>
-                </div>
-                <div className="meter-track" role="presentation">
-                  <div className="meter-fill meter-fill--confidence" style={{ width: `${confidencePct}%` }} />
-                </div>
+                <div className="meter-head"><span>Confidence</span><span className="meter-pct">{confidencePct}%</span></div>
+                <div className="meter-track" role="presentation"><div className="meter-fill meter-fill--confidence" style={{ width: `${confidencePct}%` }} /></div>
               </div>
               <div className="meter">
-                <div className="meter-head">
-                  <span>Signal quality</span><span className="meter-pct">{qualityPct}%</span>
-                </div>
-                <div className="meter-track" role="presentation">
-                  <div className="meter-fill meter-fill--quality" style={{ width: `${qualityPct}%` }} />
-                </div>
+                <div className="meter-head"><span>Signal quality</span><span className="meter-pct">{qualityPct}%</span></div>
+                <div className="meter-track" role="presentation"><div className="meter-fill meter-fill--quality" style={{ width: `${qualityPct}%` }} /></div>
               </div>
             </div>
-
             <div style={{ marginTop: '12px', padding: '10px 12px', background: '#0f0f1a', borderRadius: '8px', textAlign: 'center' }}>
               <p style={{ color: '#555', fontSize: '0.72rem', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>SESSION TIME</p>
               <p style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '8px' }}>{formatTime(sessionSeconds)}</p>
@@ -936,9 +861,8 @@ export default function App() {
           </aside>
         </section>
       </main>
-
       <footer className="footer">
-        <span>NeuroLearn v2 · Powered by Elata rPPG · Web3 Focus Tracker</span>
+        <span>NeuroLearn v3 · Powered by Elata rPPG · Web3 Focus Tracker</span>
       </footer>
     </div>
   );
