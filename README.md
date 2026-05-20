@@ -173,7 +173,7 @@ Target Chain:         EVM-compatible (Ethereum + L2s, to be confirmed at launch)
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/neurolearn.git
+git clone https://github.com/Ifeanyiuche98/neurolearn.git
 
 # Navigate into the project
 cd neurolearn/my-app
