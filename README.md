@@ -208,7 +208,7 @@ NeuroLearn combines three things no other platform does together:
 2. **Gamified retention** — streaks, timers, and combos create the habit loop that keeps people coming back
 3. **Web3-native incentives** — token rewards align learning with real value, not just certificates
 
-Built by **Ifeanyi Raymond Uche**, Co-founder of [African First Network (AFN)](https://github.com/YOUR_USERNAME) — a decentralized infrastructure initiative building community-owned wireless networks and tokenized ecosystems for African communities.
+Built by **Ifeanyi Raymond Uche**, Co-founder of [African First Network (AFN)](https://github.com/Ifeanyiuche98) — a decentralized infrastructure initiative building community-owned wireless networks and tokenized ecosystems for African communities.
 
 ---
 
