@@ -109,19 +109,20 @@ Lifetime XP = Session XP × Streak Multiplier (1.0 + streak × 0.1, max 2.5x)
 - Improved UI and module navigation
 - BPM warm-up and signal quality indicators
 
-### ✅ v3 — Gamification (Current)
+### ✅ v3 Phase 1 — Gamification
 - Daily streak system with XP multiplier
 - Timed quiz engine with speed bonus + combo multiplier
 - StreakBar UI component
 - XP tracking (session + lifetime)
 - Token-ready architecture (config hooks in place)
 
-### ⏳ v3 Phase 2 — Token Rewards + Leaderboard
+### ✅ v3 Phase 2 — Token Rewards + Leaderboard (Current)
 - Simulated ELT token rewards for quiz completions
 - XP-to-token conversion logic
 - Global leaderboard (all-time + weekly reset)
 - Personal rank tracker
 - Wallet connect scaffold (chain-agnostic, EVM-ready)
+- Personal session leaderboard (localStorage — global multi-user leaderboard via Supabase coming post-launch)
 
 ### 🔮 v3 Phase 3 — BPM Intelligence Layer
 - BPM pattern logger per quiz session
@@ -208,7 +209,7 @@ NeuroLearn combines three things no other platform does together:
 2. **Gamified retention** — streaks, timers, and combos create the habit loop that keeps people coming back
 3. **Web3-native incentives** — token rewards align learning with real value, not just certificates
 
-Built by **Ifeanyi Raymond Uche**, Co-founder of [African First Network (AFN)](https://github.com/Ifeanyiuche98) — a decentralized infrastructure initiative building community-owned wireless networks and tokenized ecosystems for African communities.
+Built by **Ifeanyi Raymond Uche**, Co-founder of [African First Network (AFN)](https://github.com/YOUR_USERNAME) — a decentralized infrastructure initiative building community-owned wireless networks and tokenized ecosystems for African communities.
 
 ---
 
