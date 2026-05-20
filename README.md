@@ -1,24 +1,44 @@
-# NeuroLearn — Web3 Learning Focus Tracker
+# NeuroLearn v3 🧠⚡
 
-**Live App:** https://neurolearn-sooty.vercel.app/
+> **Biosignal-Powered Web3 Learning — Built on Elata Biosciences Platform**
 
-NeuroLearn is a biosignal-powered learning companion built for the Web3 generation. Using your device's webcam and Elata's rPPG technology, NeuroLearn tracks your heart rate in real-time and interprets your focus state — helping you understand how your body responds while you learn blockchain and crypto concepts.
+NeuroLearn is a Web3 education app that uses real-time heart rate tracking (rPPG via webcam) to monitor your focus while you learn. v3 introduces a full gamification layer — daily streaks, timed quizzes, combo multipliers, XP rewards, and a token-ready architecture.
 
-Built on the Elata Biosciences platform. Registered on Elata testnet (AppId: 146 · Symbol: NEUROLEARN).
-
----
-
-## What NeuroLearn Does
-
-- Tracks heart rate and focus state in real-time via webcam — no wearable hardware required
-- Guides users through structured Web3 learning modules (lessons → flashcards → quiz)
-- Generates a **Quiz Score** and biometric **Focus Score** at the end of every module
-- Records total study session duration
-- All processing happens on-device — no data is sent to external servers
+**Live App:** [https://neurolearn-sooty.vercel.app](https://neurolearn-sooty.vercel.app)
 
 ---
 
-## Learning Modules
+## 🚀 What's New in v3
+
+### 🔁 Daily Return Engine
+Never lose your learning habit. The streak system tracks consecutive daily visits and rewards consistency.
+
+- 🔥 **Daily streak counter** — tracks consecutive learning days
+- ⚡ **XP multiplier** — 10% bonus per streak day, up to 2.5x
+- ❄️ **Streak Freeze Tokens** — protect your streak if you miss a day
+- 💪 **Comeback Bonus** — +50 XP when you return after a break
+- 🏆 **Milestone rewards** — bonus XP at 3, 7, 14, 30, and 100-day streaks
+- 📊 **StreakBar UI** — always-visible strip on the home screen
+
+### 🎮 Gamified Quiz Engine
+Every question now has tension, urgency, and reward.
+
+- ⏱ **20-second countdown timer** per question
+- 🚀 **Speed bonus XP** — faster correct answers earn more points
+- 🔗 **Combo multiplier** — consecutive correct answers stack XP (up to +200 bonus)
+- ❌ **Auto-advance on timeout** — correct answer revealed, combo resets
+- 📈 **Live XP pop** — see exactly what you earned after every answer
+- 🎯 **Post-quiz performance card** — XP earned, streak multiplier, lifetime total
+
+### 📊 Results Screen Upgrade
+- Session XP earned with streak multiplier applied
+- Lifetime XP tracker
+- Streak label on results (e.g. "1 day streak", "🔥 7 day streak")
+- All existing v2 scores retained (Quiz Score + Focus Score + BPM)
+
+---
+
+## 📚 Learning Modules
 
 | Module | Lessons | Flashcards | Quiz Questions |
 |---|---|---|---|
@@ -27,82 +47,189 @@ Built on the Elata Biosciences platform. Registered on Elata testnet (AppId: 146
 | 🏦 DeFi Fundamentals | 3 | 5 | 5 |
 | 🎨 NFTs & Tokens | 3 | 5 | 5 |
 
----
-
-## Focus States
-
-| State | BPM Range | Meaning |
-|---|---|---|
-| 😌 Very Calm | Below 65 BPM | Deeply relaxed — ideal for absorbing complex information |
-| 🎯 Focused | 65–80 BPM | Optimal learning zone — keep going! |
-| ⚡ Elevated | 80–95 BPM | Slightly heightened — take a breath and continue |
-| 🔥 Stressed | Above 95 BPM | High stress detected — consider a short break |
+Each module flows: **Lesson → Flashcards → Timed Quiz → Results**
 
 ---
 
-## Session Results
+## 🧬 Biosignal Integration
 
-At the end of every module, NeuroLearn delivers:
-- **Quiz Score** — percentage of correct answers with instant feedback
-- **Focus Score** — biometric score (0–100) based on average heart rate during the session
-- **Total Study Time** — full session duration tracked from module start to quiz completion
+NeuroLearn is built on the **Elata Biosciences rPPG platform** — a WebAssembly-powered remote photoplethysmography engine that reads heart rate through your webcam in real time. No wearable required.
 
----
+| Signal | What it measures |
+|---|---|
+| BPM (Heart Rate) | Real-time beats per minute via facial colour changes |
+| Focus Score | Derived from average BPM across the learning session |
+| Signal Quality | Confidence of the rPPG reading |
+| Confidence | Detection reliability score |
 
-## Tech Stack
-
-- **Frontend:** React + TypeScript (Vite)
-- **Biometrics:** Elata rPPG SDK (`@elata-biosciences/rppg-web`)
-- **Deployment:** Vercel
-- **Platform:** Elata Biosciences (docs.elata.bio)
-
----
-
-## Requirements
-
-- A modern browser with camera access (Chrome recommended)
-- Permission to use the camera
-- Good frontal lighting for accurate rPPG readings
-- `npm` to install dependencies
+**Focus States:**
+- 🟢 Very Calm (BPM < 65) — Exceptional absorption state
+- 🔵 Focused (BPM 65–79) — Optimal learning zone
+- 🟠 Elevated (BPM 80–94) — Take a breath, continue
+- 🔴 Stressed (BPM 95+) — Consider a short break
 
 ---
 
-## Run It Locally
+## 🏗️ Architecture
+
+```
+src/
+├── App.tsx              # Main app — all screens + rPPG wiring
+├── useStreak.ts         # Streak brain — XP, multiplier, freeze tokens (localStorage)
+├── useQuizTimer.ts      # Quiz engine — countdown, speed XP, combo tracker
+├── StreakBar.tsx         # Streak UI strip — home screen header component
+├── main.tsx             # App entry point
+├── styles.css           # Global styles
+└── vite-env.d.ts        # Vite type definitions
+```
+
+### State & Persistence
+- All streak and XP data persists in **localStorage** — survives refresh and browser close
+- No backend required for Phase 1
+- Quiz timer state is session-only (React state)
+
+### XP Formula
+```
+Question XP = Base XP (100) + Speed Bonus (0–50) + Combo Bonus (combo × 25, max 200)
+Session XP  = Sum of all question XP
+Lifetime XP = Session XP × Streak Multiplier (1.0 + streak × 0.1, max 2.5x)
+```
+
+---
+
+## 🗺️ Roadmap
+
+### ✅ v1 — Foundation
+- rPPG heart rate tracking via webcam
+- 4 Web3 learning modules (lesson + flashcard + quiz)
+- Focus Score from BPM data
+
+### ✅ v2 — Polish
+- Dual results screen (Quiz Score + Focus Score)
+- Improved UI and module navigation
+- BPM warm-up and signal quality indicators
+
+### ✅ v3 — Gamification (Current)
+- Daily streak system with XP multiplier
+- Timed quiz engine with speed bonus + combo multiplier
+- StreakBar UI component
+- XP tracking (session + lifetime)
+- Token-ready architecture (config hooks in place)
+
+### ⏳ v3 Phase 2 — Token Rewards + Leaderboard
+- Simulated ELT token rewards for quiz completions
+- XP-to-token conversion logic
+- Global leaderboard (all-time + weekly reset)
+- Personal rank tracker
+- Wallet connect scaffold (chain-agnostic, EVM-ready)
+
+### 🔮 v3 Phase 3 — BPM Intelligence Layer
+- BPM pattern logger per quiz session
+- Anomaly detection (spike = guessing vs. calm = knowledge)
+- Suspicion score (0–10 scale)
+- Session export schema (CSV/JSON) for Elata research dataset
+- GLADYS AI integration endpoint
+
+---
+
+## 🔑 Token Architecture (Beta)
+
+NeuroLearn has a token deployed within the Elata ecosystem (currently in beta). When the Elata platform goes live, the simulated reward system will connect directly to the on-chain contract.
+
+```
+Ownership Wallet:     0xa65ec2f67349c8c06912cbf7b2fb9e2cf54a0b58
+Contributor Split:    0x98bd9420e82a2ed7e7c85845120bb7c52ef81704
+Token Contract:       0x3c02fbab968542f5aeda45ed90075cb970590ede
+On-chain App ID:      144
+Target Chain:         EVM-compatible (Ethereum + L2s, to be confirmed at launch)
+```
+
+> The token is not yet live. The architecture is designed to swap from simulated balances to on-chain rewards by updating a single config variable when Elata goes live.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React + TypeScript |
+| Build tool | Vite |
+| Biosignal engine | `@elata-biosciences/rppg-web` (WASM) |
+| State | React hooks + localStorage |
+| Deployment | Vercel |
+| Wallet (future) | wagmi / ethers.js (EVM chain-agnostic) |
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+- Node.js 18+
+- A device with a webcam
+- Modern browser (Chrome recommended for best rPPG performance)
+
+### Installation
 
 ```bash
-git clone https://github.com/Ifeanyiuche98/Neurolearn.git
-cd Neurolearn/my-app
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/neurolearn.git
+
+# Navigate into the project
+cd neurolearn/my-app
+
+# Install dependencies
 npm install
+
+# Start the development server
 npm run dev
 ```
 
-Then open `http://localhost:5173` in your browser.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+> **Camera permission required.** NeuroLearn needs webcam access for the rPPG focus tracking. Allow camera access when prompted.
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+Output goes to the `dist/` folder. Deploy to Vercel, Netlify, or any static host.
 
 ---
 
-## How rPPG Works
+## 🌍 Why NeuroLearn Matters for Africa
 
-NeuroLearn reads your pulse through subtle changes in facial skin tone captured by your webcam — the same principle used in medical photoplethysmography (PPG), adapted for standard cameras. No wearable device or EEG headset needed.
+Web3 adoption in Africa is accelerating — but education infrastructure hasn't kept up. Most crypto education is passive: read an article, watch a video, forget it by morning.
 
-Powered by `createRppgSession()` from the `@elata-biosciences/rppg-web` SDK, using WASM-based processing entirely in the browser.
+NeuroLearn combines three things no other platform does together:
 
----
+1. **Biosignal feedback** — you can see your own focus state in real time, making learning self-aware
+2. **Gamified retention** — streaks, timers, and combos create the habit loop that keeps people coming back
+3. **Web3-native incentives** — token rewards align learning with real value, not just certificates
 
-## Version History
-
-| Version | Description |
-|---|---|
-| v2.0.0 | Added 4 Web3 learning modules with lessons, flashcards, quiz, Focus Score, and Quiz Score |
-| v1.0.0 | Initial release — real-time rPPG heart rate and focus state tracking |
+Built by **Ifeanyi Raymond Uche**, Co-founder of [African First Network (AFN)](https://github.com/YOUR_USERNAME) — a decentralized infrastructure initiative building community-owned wireless networks and tokenized ecosystems for African communities.
 
 ---
 
-## Built By
+## 🤝 Acknowledgements
 
-**Ifeanyi Raymond Uche** — Web3 builder and educator, Nigeria.
-Co-founder, African First Network (AFN).
-Trust Squad Member, Trust Wallet Nigeria.
+- **Andreas Melhede** — Elata Biosciences Co-founder. Feedback: *"Focus on daily return mechanics."* → Built the entire streak engine.
+- **Andrew** — Community feedback: *"Gamify the quiz with timers, add token rewards, build a leaderboard."* → Built the timed quiz engine + XP system.
+- **Elata Biosciences** — For the rPPG WebAssembly platform that makes focus tracking possible without any wearable hardware.
 
 ---
 
-*Powered by [Elata Biosciences](https://docs.elata.bio) rPPG technology.*
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+
+**NeuroLearn v3 · Powered by Elata rPPG · Built for Africa 🇳🇬**
+
+*Clarity over complexity. Utility over hype. Long-term vision over short-term gains.*
+
+</div>
