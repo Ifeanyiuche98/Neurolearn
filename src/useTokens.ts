@@ -10,7 +10,7 @@ import { useState, useCallback } from 'react';
 // ── Token config — real contract details, simulated balance ──────────────────
 export const TOKEN_CONFIG = {
   name:              'NeuroLearn Token',
-  symbol:            'ELT',
+  symbol:            'ELTA',
   contractAddress:   '0x3c02fbab968542f5aeda45ed90075cb970590ede',
   ownerWallet:       '0xa65ec2f67349c8c06912cbf7b2fb9e2cf54a0b58',
   contributorWallet: '0x98bd9420e82a2ed7e7c85845120bb7c52ef81704',
