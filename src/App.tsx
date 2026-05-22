@@ -19,9 +19,12 @@ import { useLeaderboard } from './useLeaderboard';
 import TokenWallet from './TokenWallet';
 import Leaderboard from './Leaderboard';
 
+// ── v3 Analytics import ───────────────────────────────────────────────────────
+import Analytics from './Analytics';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard';
+type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics';
 
 interface FlashCard { front: string; back: string; }
 interface QuizQuestion { question: string; options: string[]; correct: number; }
@@ -187,13 +190,32 @@ export default function App() {
   const secondaryBtnStyle: CSSProperties = { background: 'transparent', color: '#aaa', border: '1px solid #333', borderRadius: '8px', padding: '10px 20px', cursor: 'pointer', fontSize: '0.9rem' };
   const backBtnStyle: CSSProperties = { background: 'transparent', color: '#666', border: '1px solid #333', borderRadius: '6px', padding: '6px 12px', cursor: 'pointer', fontSize: '0.8rem' };
 
+  // ── v3 Phase 1 hooks ──────────────────────────────────────────────────────
   const streakData = useStreak();
   const quizTimer  = useQuizTimer();
   const [lastQuestionXP, setLastQuestionXP] = useState(0);
 
+  // ── v3 Phase 2 hooks ──────────────────────────────────────────────────────
   const tokenData       = useTokens();
   const leaderboardData = useLeaderboard();
 
+  // ── v3 Analytics: 5-tap logo gesture ─────────────────────────────────────
+  const [logoTaps, setLogoTaps] = useState(0);
+  const tapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleLogoTap = () => {
+    const next = logoTaps + 1;
+    if (next >= 5) {
+      setLogoTaps(0);
+      setScreen('analytics');
+      return;
+    }
+    setLogoTaps(next);
+    if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+    tapTimerRef.current = setTimeout(() => setLogoTaps(0), 3000);
+  };
+
+  // ── rPPG state ────────────────────────────────────────────────────────────
   const videoRef   = useRef<HTMLVideoElement>(null);
   const sessionRef = useRef<RppgSession | null>(null);
   const streamRef  = useRef<MediaStream | null>(null);
@@ -206,6 +228,7 @@ export default function App() {
   const bpmReadingsRef = useRef<number[]>([]);
   const timerRef       = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ── Learning state ────────────────────────────────────────────────────────
   const [screen, setScreen]               = useState<Screen>('home');
   const [activeModule, setActiveModule]   = useState<LearningModule | null>(null);
   const [lessonPage, setLessonPage]       = useState(0);
@@ -215,6 +238,7 @@ export default function App() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [quizScore, setQuizScore]         = useState(0);
 
+  // ── rPPG sync ─────────────────────────────────────────────────────────────
   const syncFromSession = useCallback(() => {
     const session = sessionRef.current;
     if (!session) return;
@@ -465,112 +489,47 @@ export default function App() {
 
     return (
       <div style={{ padding: '24px 0' }}>
-
-        {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <button onClick={() => setScreen('flashcard')} style={backBtnStyle}>Back to Flashcards</button>
           <span style={{ color: activeModule.color, fontWeight: 'bold' }}>{activeModule.icon} Quiz</span>
           <span style={{ color: '#555', marginLeft: 'auto', fontSize: '0.8rem' }}>Q{quizIndex + 1} of {activeModule.quiz.length}</span>
         </div>
-
-        {/* Timer panel */}
-        <div style={{
-          background: '#0f0f1a',
-          border: `2px solid ${answered ? '#4CAF5044' : isUrgent ? '#F4433666' : isWarning ? '#FF980044' : '#2196F344'}`,
-          borderRadius: '16px', padding: '16px 20px', marginBottom: '16px',
-          display: 'flex', alignItems: 'center', gap: '16px',
-          transition: 'border-color 0.3s',
-        }}>
-
-          {/* Circular SVG timer */}
+        <div style={{ background: '#0f0f1a', border: `2px solid ${answered ? '#4CAF5044' : isUrgent ? '#F4433666' : isWarning ? '#FF980044' : '#2196F344'}`, borderRadius: '16px', padding: '16px 20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '16px', transition: 'border-color 0.3s' }}>
           <div style={{ position: 'relative', flexShrink: 0 }}>
             {isUrgent && (
-              <div style={{
-                position: 'absolute', inset: '-6px', borderRadius: '50%',
-                border: '3px solid #F4433688',
-                animation: 'pulse 0.8s ease-in-out infinite',
-              }} />
+              <div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: '3px solid #F4433688', animation: 'pulse 0.8s ease-in-out infinite' }} />
             )}
             <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
               <circle cx="36" cy="36" r={RADIUS} fill="none" stroke="#1a1a2e" strokeWidth="6" />
-              <circle
-                cx="36" cy="36" r={RADIUS} fill="none"
-                stroke={circleColor} strokeWidth="6" strokeLinecap="round"
-                strokeDasharray={CIRCUMFERENCE} strokeDashoffset={strokeDashoffset}
-                style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }}
-              />
+              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke={circleColor} strokeWidth="6" strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={strokeDashoffset} style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }} />
             </svg>
-            <div style={{
-              position: 'absolute', inset: 0, display: 'flex',
-              alignItems: 'center', justifyContent: 'center',
-              fontSize: answered ? '1.4rem' : isUrgent ? '1.4rem' : '1.2rem',
-              fontWeight: 'bold', color: circleColor, transition: 'color 0.3s',
-            }}>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: answered ? '1.4rem' : isUrgent ? '1.4rem' : '1.2rem', fontWeight: 'bold', color: circleColor, transition: 'color 0.3s' }}>
               {answered ? '✓' : quizTimer.timeLeft}
             </div>
           </div>
-
-          {/* Status + bar + badges */}
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{
-                fontSize: '0.8rem', fontWeight: 600,
-                color: answered ? '#4CAF50' : isUrgent ? '#F44336' : isWarning ? '#FF9800' : '#2196F3',
-              }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: answered ? '#4CAF50' : isUrgent ? '#F44336' : isWarning ? '#FF9800' : '#2196F3' }}>
                 {answered ? '✅ Answered' : isUrgent ? '⚡ Hurry up!' : isWarning ? '⏳ Running low...' : '🕐 Time remaining'}
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#444' }}>
-                {answered ? 'Moving on...' : `${quizTimer.timeLeft}s left`}
-              </span>
+              <span style={{ fontSize: '0.75rem', color: '#444' }}>{answered ? 'Moving on...' : `${quizTimer.timeLeft}s left`}</span>
             </div>
-
-            {/* Thick gradient bar */}
             <div style={{ height: '14px', background: '#1a1a2e', borderRadius: '7px', overflow: 'hidden', marginBottom: '10px', border: '1px solid #2a2a3a' }}>
-              <div style={{
-                height: '100%',
-                width: `${answered ? 100 : quizTimer.timerPercent}%`,
-                background: answered
-                  ? '#4CAF50'
-                  : isUrgent
-                  ? 'linear-gradient(90deg, #F44336, #FF6B6B)'
-                  : isWarning
-                  ? 'linear-gradient(90deg, #FF9800, #FFB74D)'
-                  : 'linear-gradient(90deg, #2196F3, #64B5F6)',
-                borderRadius: '7px',
-                transition: 'width 0.9s linear, background 0.3s',
-              }} />
+              <div style={{ height: '100%', width: `${answered ? 100 : quizTimer.timerPercent}%`, background: answered ? '#4CAF50' : isUrgent ? 'linear-gradient(90deg, #F44336, #FF6B6B)' : isWarning ? 'linear-gradient(90deg, #FF9800, #FFB74D)' : 'linear-gradient(90deg, #2196F3, #64B5F6)', borderRadius: '7px', transition: 'width 0.9s linear, background 0.3s' }} />
             </div>
-
-            {/* Combo + XP badges */}
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-              {quizTimer.comboCount > 1 && (
-                <div style={{ background: '#FF980022', border: '1px solid #FF980066', borderRadius: '20px', padding: '3px 12px', color: '#FF9800', fontSize: '0.78rem', fontWeight: 'bold' }}>
-                  🔗 {quizTimer.comboCount}x Combo
-                </div>
-              )}
-              {lastQuestionXP > 0 && answered && (
-                <div style={{ background: '#2196F322', border: '1px solid #2196F366', borderRadius: '20px', padding: '3px 12px', color: '#2196F3', fontSize: '0.78rem', fontWeight: 'bold' }}>
-                  +{lastQuestionXP} XP
-                </div>
-              )}
-              {!answered && quizTimer.comboCount > 0 && (
-                <div style={{ background: '#4CAF5011', border: '1px solid #4CAF5033', borderRadius: '20px', padding: '3px 12px', color: '#4CAF5099', fontSize: '0.78rem' }}>
-                  {quizTimer.comboCount} correct in a row
-                </div>
-              )}
+              {quizTimer.comboCount > 1 && <div style={{ background: '#FF980022', border: '1px solid #FF980066', borderRadius: '20px', padding: '3px 12px', color: '#FF9800', fontSize: '0.78rem', fontWeight: 'bold' }}>🔗 {quizTimer.comboCount}x Combo</div>}
+              {lastQuestionXP > 0 && answered && <div style={{ background: '#2196F322', border: '1px solid #2196F366', borderRadius: '20px', padding: '3px 12px', color: '#2196F3', fontSize: '0.78rem', fontWeight: 'bold' }}>+{lastQuestionXP} XP</div>}
+              {!answered && quizTimer.comboCount > 0 && <div style={{ background: '#4CAF5011', border: '1px solid #4CAF5033', borderRadius: '20px', padding: '3px 12px', color: '#4CAF5099', fontSize: '0.78rem' }}>{quizTimer.comboCount} correct in a row</div>}
             </div>
           </div>
         </div>
-
-        {/* Time-out banner */}
         {selectedAnswer === -1 && (
           <div style={{ background: '#F4433622', border: '1px solid #F4433655', borderRadius: '10px', padding: '10px 16px', color: '#F44336', fontSize: '0.85rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '1.2rem' }}>⏱</span>
             <span>Time's up! The correct answer is highlighted below.</span>
           </div>
         )}
-
-        {/* Question + options */}
         <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
           <p style={{ color: '#fff', fontSize: '1.05rem', lineHeight: '1.65', marginBottom: '20px' }}>{q.question}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -589,8 +548,6 @@ export default function App() {
             })}
           </div>
         </div>
-
-        {/* Next button */}
         {answered && (
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button onClick={nextQuestion} style={{ ...primaryBtnStyle, background: activeModule.color }}>
@@ -598,26 +555,12 @@ export default function App() {
             </button>
           </div>
         )}
-
-        {/* Progress dots — active one expands */}
         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '20px' }}>
           {activeModule.quiz.map((_, i) => (
-            <div key={i} style={{
-              width: i === quizIndex ? '20px' : '8px', height: '8px', borderRadius: '4px',
-              background: i < quizIndex ? activeModule.color : i === quizIndex ? '#fff' : '#333',
-              transition: 'all 0.3s',
-            }} />
+            <div key={i} style={{ width: i === quizIndex ? '20px' : '8px', height: '8px', borderRadius: '4px', background: i < quizIndex ? activeModule.color : i === quizIndex ? '#fff' : '#333', transition: 'all 0.3s' }} />
           ))}
         </div>
-
-        {/* Pulse animation */}
-        <style>{`
-          @keyframes pulse {
-            0%   { transform: scale(1);   opacity: 0.8; }
-            50%  { transform: scale(1.2); opacity: 0.3; }
-            100% { transform: scale(1);   opacity: 0.8; }
-          }
-        `}</style>
+        <style>{`@keyframes pulse { 0%,100%{transform:scale(1);opacity:0.8} 50%{transform:scale(1.2);opacity:0.3} }`}</style>
       </div>
     );
   }
@@ -663,14 +606,14 @@ export default function App() {
         </div>
         <div style={{ background: '#1a1a10', borderRadius: '12px', padding: '14px 18px', marginBottom: '12px', border: '1px solid #FF980033', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Pending ELT Tokens</p>
+            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Pending ELTA Tokens</p>
             <p style={{ color: '#FF9800', fontSize: '1.2rem', fontWeight: 'bold' }}>
               {tokenData.claimableTokens > 0 ? `${tokenData.claimableTokens} ready to claim! 🎉` : `${tokenData.pendingXP.toLocaleString()} XP pending`}
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
             <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Token Balance</p>
-            <p style={{ color: '#FF9800', fontSize: '1.2rem', fontWeight: 'bold' }}>{tokenData.balance} ELT</p>
+            <p style={{ color: '#FF9800', fontSize: '1.2rem', fontWeight: 'bold' }}>{tokenData.balance} ELTA</p>
           </div>
         </div>
         <div style={{ background: '#0f0f1a', borderRadius: '12px', padding: '14px', textAlign: 'center', marginBottom: '12px', border: '1px solid #1a1a2a' }}>
@@ -693,13 +636,22 @@ export default function App() {
     );
   }
 
+  // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="app">
       <header className="topbar" aria-label="Application header">
-        <div className="brand">
+
+        {/* ── Edit 4a: Logo is now tappable — 5 taps opens analytics ────── */}
+        <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
           <span className="brand-mark" aria-hidden="true" />
           <span className="brand-name">NeuroLearn</span>
+          {logoTaps > 0 && logoTaps < 5 && (
+            <span style={{ fontSize: '0.6rem', color: '#2196F333', marginLeft: '4px' }}>
+              {'●'.repeat(logoTaps)}{'○'.repeat(5 - logoTaps)}
+            </span>
+          )}
         </div>
+
         <span className="topbar-sep" aria-hidden="true" />
         <span className="topbar-tagline">Web3 Learning Focus Tracker</span>
         <div className="topbar-spacer" />
@@ -718,6 +670,8 @@ export default function App() {
             {screen === 'quiz'        && renderQuiz()}
             {screen === 'results'     && renderResults()}
             {screen === 'leaderboard' && <Leaderboard leaderboardData={leaderboardData} onBack={backToHome} />}
+            {/* ── Edit 4b: Analytics screen ──────────────────────────────── */}
+            {screen === 'analytics'   && <Analytics onBack={backToHome} />}
           </div>
           <aside className="readouts" aria-label="Focus metrics">
             <div style={{ marginBottom: '14px' }}>
