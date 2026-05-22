@@ -114,7 +114,7 @@ export default function TokenWallet({ tokenData }: TokenWalletProps) {
           onClick={() => setShowInfo(v => !v)}
           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#2196F3', fontSize: '0.75rem', padding: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '4px' }}
         >
-          {showInfo ? '▲ Hide info' : '▼ What is ELT?'}
+          {showInfo ? '▲ Hide info' : '▼ What is ELTA?'}
         </button>
 
         {showInfo && (
