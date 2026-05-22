@@ -1,5 +1,5 @@
 // ─── useTokens.ts ─────────────────────────────────────────────────────────────
-// Simulated ELT token wallet for NeuroLearn v3 Phase 2.
+// Simulated ELTA token wallet for NeuroLearn v3 Phase 2.
 // Stores token balance in localStorage. References the real contract address
 // so the UI already shows live contract details even before on-chain is live.
 // One config variable swap connects this to the real chain when Elata launches.
