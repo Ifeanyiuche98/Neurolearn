@@ -16,12 +16,12 @@ export const TOKEN_CONFIG = {
   contributorWallet: '0x98bd9420e82a2ed7e7c85845120bb7c52ef81704',
   onChainAppId:      144,
   network:           'Elata Ecosystem (Beta — EVM on launch)',
-  XP_PER_TOKEN:      500, // 500 XP = 1 ELT token
+  XP_PER_TOKEN:      500, // 500 XP = 1 ELTA token
 };
  
 // ── Shape of token data saved to localStorage ─────────────────────────────────
 interface TokenData {
-  balance: number;        // Current ELT token balance (simulated)
+  balance: number;        // Current ELTA token balance (simulated)
   lifetimeClaimed: number;// Total tokens ever claimed
   pendingXP: number;      // XP accumulated but not yet converted to tokens
   lastClaimDate: string;  // ISO date of last claim
