@@ -160,7 +160,6 @@ export default function Analytics({ onBack }: AnalyticsProps) {
       {/* ── Score distribution ────────────────────────────────────────────────── */}
       <p style={sectionLabel}>Quiz score distribution</p>
       <div style={{ background: '#1a1a2e', borderRadius: '10px', padding: '14px', marginBottom: '10px', border: '1px solid #2a2a3a' }}>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
           <span style={{ color: '#4CAF50', fontSize: '0.8rem', minWidth: '90px' }}>🏆 Excellent (80%+)</span>
           <div style={barTrack}>
@@ -168,7 +167,6 @@ export default function Analytics({ onBack }: AnalyticsProps) {
           </div>
           <span style={{ color: '#4CAF50', fontSize: '0.8rem', minWidth: '40px', textAlign: 'right' }}>{data.excellentSessions}</span>
         </div>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
           <span style={{ color: '#FF9800', fontSize: '0.8rem', minWidth: '90px' }}>👍 Good (60–79%)</span>
           <div style={barTrack}>
@@ -176,7 +174,6 @@ export default function Analytics({ onBack }: AnalyticsProps) {
           </div>
           <span style={{ color: '#FF9800', fontSize: '0.8rem', minWidth: '40px', textAlign: 'right' }}>{data.goodSessions}</span>
         </div>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ color: '#F44336', fontSize: '0.8rem', minWidth: '90px' }}>📖 Practice (&lt;60%)</span>
           <div style={barTrack}>
@@ -245,12 +242,29 @@ export default function Analytics({ onBack }: AnalyticsProps) {
         </>
       )}
 
-      {/* ── Footer ────────────────────────────────────────────────────────────── */}
-      <div style={{ background: '#0f0f1a', borderRadius: '10px', padding: '12px 16px', marginTop: '16px', border: '1px solid #1a1a2a', textAlign: 'center' }}>
-        <p style={{ color: '#333', fontSize: '0.7rem', marginBottom: '2px' }}>
+      {/* ── Footer — upgraded for readability ─────────────────────────────────── */}
+      <div style={{
+        background: 'rgba(0, 229, 204, 0.04)',
+        border: '1px solid rgba(0, 229, 204, 0.2)',
+        borderRadius: '12px',
+        padding: '18px 20px',
+        marginTop: '20px',
+        textAlign: 'center',
+      }}>
+        <p style={{
+          color: '#00e5cc',
+          fontSize: '0.85rem',
+          fontWeight: 600,
+          marginBottom: '6px',
+          letterSpacing: '0.01em',
+        }}>
           NeuroLearn v3 · Powered by Elata Biosciences · Analytics Dashboard
         </p>
-        <p style={{ color: '#2a2a3a', fontSize: '0.65rem' }}>
+        <p style={{
+          color: '#7a9db0',
+          fontSize: '0.75rem',
+          lineHeight: 1.6,
+        }}>
           Data is stored locally on this device · No personal information collected
         </p>
       </div>

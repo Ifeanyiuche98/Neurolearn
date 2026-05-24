@@ -120,16 +120,16 @@ export default function TokenWallet({ tokenData }: TokenWalletProps) {
         {showInfo && (
           <div style={{ background: '#1a1a2e', borderRadius: '8px', padding: '12px 14px', marginBottom: '12px', border: '1px solid #2a2a3a' }}>
             <p style={{ color: '#aaa', fontSize: '0.78rem', lineHeight: '1.7', margin: 0 }}>
-              <strong style={{ color: '#FF9800' }}>ELT</strong> is the NeuroLearn Token built on the{' '}
+              <strong style={{ color: '#f59e0b' }}>ELTA</strong> is the NeuroLearn Token built on the{' '}
               <strong style={{ color: '#fff' }}>Elata Biosciences</strong> platform — a biosignal-powered
               Web3 ecosystem that uses rPPG heart rate tracking via webcam.
               <br /><br />
               The token contract is already deployed within the Elata ecosystem (currently in beta).
               Token rewards are <strong style={{ color: '#fff' }}>simulated</strong> during the beta phase —
-              when Elata goes live on-chain, your earned ELT will be redeemable directly from the contract below.
+              when Elata goes live on-chain, your earned ELTA will be redeemable directly from the contract below.
               <br /><br />
               <strong style={{ color: '#4CAF50' }}>How to earn:</strong> Complete quizzes → earn XP →
-              every {TOKEN_CONFIG.XP_PER_TOKEN} XP = 1 ELT token.
+              every {TOKEN_CONFIG.XP_PER_TOKEN} XP = 1 ELTA token.
             </p>
           </div>
         )}
