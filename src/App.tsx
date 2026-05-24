@@ -8,19 +8,16 @@ import {
 import rppgWasmJsUrl from '@elata-biosciences/rppg-web/pkg/rppg_wasm.js?url';
 import rppgWasmBinaryUrl from '@elata-biosciences/rppg-web/pkg/rppg_wasm_bg.wasm?url';
 
-// ── v3 Phase 1 imports ────────────────────────────────────────────────────────
-import { useStreak } from './useStreak';
-import { useQuizTimer } from './useQuizTimer';
-import StreakBar from './StreakBar';
-
-// ── v3 Phase 2 imports ────────────────────────────────────────────────────────
-import { useTokens } from './useTokens';
+// ── v3 imports ────────────────────────────────────────────────────────────────
+import { useStreak }      from './useStreak';
+import { useQuizTimer }   from './useQuizTimer';
+import { useTokens }      from './useTokens';
 import { useLeaderboard } from './useLeaderboard';
-import TokenWallet from './TokenWallet';
-import Leaderboard from './Leaderboard';
-
-// ── v3 Analytics import ───────────────────────────────────────────────────────
-import Analytics from './Analytics';
+import StreakBar           from './StreakBar';
+import TokenWallet         from './TokenWallet';
+import Leaderboard         from './Leaderboard';
+import Analytics           from './Analytics';
+import BpmIndicator        from './BpmIndicator';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -42,7 +39,7 @@ const MODULES: LearningModule[] = [
   {
     id: 'blockchain', title: 'Blockchain Basics',
     description: 'Understand what blockchain is and how it works from the ground up.',
-    color: '#2196F3', icon: '⛓️',
+    color: '#3d9eff', icon: '⛓️',
     lesson: [
       { title: 'What is a Blockchain?', content: `A blockchain is a special type of database that stores information in "blocks" that are chained together. Unlike a normal database controlled by one company, a blockchain is shared across thousands of computers worldwide — making it nearly impossible to hack or manipulate.\n\nEach block contains:\n• A list of transactions or data\n• A timestamp of when it was created\n• A unique fingerprint (called a "hash") of the previous block\n\nThis chaining of fingerprints is what makes blockchain so powerful. If someone tries to change an old block, its fingerprint changes — breaking the chain and alerting the entire network.` },
       { title: 'How Does Consensus Work?', content: `Since no single person controls a blockchain, how does the network agree on what is true? This is done through "consensus mechanisms" — rules that all participants follow.\n\nThe two most common are:\n\nProof of Work (PoW) — Used by Bitcoin. Miners compete to solve complex math puzzles. The winner adds the next block and earns a reward. This requires a lot of computing power.\n\nProof of Stake (PoS) — Used by Ethereum. Validators lock up crypto as collateral. They are chosen to validate blocks based on their stake. Far more energy-efficient than PoW.\n\nBoth methods make it extremely expensive to cheat the network.` },
@@ -66,7 +63,7 @@ const MODULES: LearningModule[] = [
   {
     id: 'wallets', title: 'Wallets & Security',
     description: 'Learn how crypto wallets work and how to keep your assets safe.',
-    color: '#9C27B0', icon: '🔐',
+    color: '#a855f7', icon: '🔐',
     lesson: [
       { title: 'What is a Crypto Wallet?', content: `A crypto wallet does NOT store your crypto. Your crypto lives on the blockchain. What a wallet stores is your private key — a secret code that proves you own the crypto at a specific address.\n\nThink of it like this:\n• Your wallet address = your bank account number (public, shareable)\n• Your private key = your PIN (secret, never share!)\n\nThere are two main types:\n\nHot Wallets — Connected to the internet (e.g. Trust Wallet, MetaMask). Convenient for daily use but slightly more vulnerable.\n\nCold Wallets — Offline hardware devices (e.g. Ledger). Most secure for storing large amounts long-term.` },
       { title: 'Seed Phrases — Your Master Key', content: `When you create a wallet, you are given a seed phrase — 12 or 24 random words in a specific order. This is the MOST important thing in crypto.\n\nYour seed phrase can:\n• Restore your wallet on any device if your phone is lost\n• Give full access to ALL wallets in that account\n\nNever:\n• Screenshot your seed phrase\n• Store it in cloud storage (Google Drive, iCloud, email)\n• Share it with ANYONE — not even "support staff"\n• Type it into any website\n\nWrite it on paper. Store it in a safe place. Some people use fireproof, waterproof metal backups.` },
@@ -90,7 +87,7 @@ const MODULES: LearningModule[] = [
   {
     id: 'defi', title: 'DeFi Fundamentals',
     description: 'Explore decentralized finance — banking without banks.',
-    color: '#00BCD4', icon: '🏦',
+    color: '#00e5cc', icon: '🏦',
     lesson: [
       { title: 'What is DeFi?', content: `DeFi stands for Decentralized Finance. It is a system of financial services — lending, borrowing, trading, earning interest — that runs on blockchain instead of banks.\n\nTraditional Finance:\n• You need a bank account (millions in Africa do not have one)\n• Banks set the interest rates and can change them anytime\n• Banks can freeze your account\n• Banks are closed on weekends and holidays\n\nDeFi:\n• Anyone with a smartphone and internet can access it\n• Smart contracts set the rules automatically and transparently\n• No one can freeze your funds\n• Available 24/7, 365 days a year\n\nDeFi is particularly powerful for Africa, where mobile penetration is high but banking access remains low.` },
       { title: 'Smart Contracts and Liquidity Pools', content: `Smart contracts are self-executing programs on the blockchain. When conditions are met, they execute automatically — no lawyer, bank, or middleman needed.\n\nExample: IF Person A sends 1 ETH AND Person B sends $3000 USDC to this contract, THEN automatically swap them. This happens instantly, transparently, and without a broker.\n\nLiquidity Pools are how DeFi exchanges work:\n• Users deposit token pairs (e.g. ETH + USDC) into a pool\n• Traders swap against this pool instead of matching with another buyer/seller\n• Liquidity providers earn a share of every trading fee\n\nThis replaces the traditional order book model used by stock exchanges.` },
@@ -114,7 +111,7 @@ const MODULES: LearningModule[] = [
   {
     id: 'nfts', title: 'NFTs & Tokens',
     description: 'Understand digital ownership, token types, and real-world use cases.',
-    color: '#FF9800', icon: '🎨',
+    color: '#f59e0b', icon: '🎨',
     lesson: [
       { title: 'What is an NFT?', content: `NFT stands for Non-Fungible Token. "Fungible" means interchangeable — one dollar is equal to any other dollar. "Non-fungible" means unique — no two are the same.\n\nAn NFT is a token on the blockchain that proves ownership of a unique digital or physical item.\n\nWhat can be an NFT?\n• Digital art\n• Music\n• In-game items\n• Certificates and diplomas\n• Property deeds\n• Event tickets\n\nKey insight: NFTs solve the problem of digital ownership. Before NFTs, anyone could copy a digital file. NFTs do not prevent copying — but they create a verifiable, immutable proof of who owns the original.` },
       { title: 'Token Standards and Types', content: `Tokens are digital assets issued on a blockchain. There are different standards with different rules:\n\nERC-20 — The most common standard. Fungible tokens used for currencies, governance, and utility (e.g. USDC, UNI, LINK).\n\nERC-721 — The NFT standard. Each token is unique and non-interchangeable. Used for art, collectibles, and digital identity.\n\nERC-1155 — Multi-token standard. A single contract can issue both fungible and non-fungible tokens. Perfect for gaming.\n\nBeyond Ethereum:\n• Solana uses SPL tokens\n• BNB Chain uses BEP-20\n• Each blockchain has its own standards, but the concepts are the same` },
@@ -150,17 +147,18 @@ function clamp01(n: number): number {
   return Math.min(1, Math.max(0, n));
 }
 function getFocusState(bpm: number | null | undefined) {
-  if (bpm == null) return { label: 'Warming up...', message: 'Stay still and face the camera to begin.', color: '#888' };
-  if (bpm < 65) return { label: 'Very Calm', message: 'You are very relaxed. Great state for absorbing new knowledge!', color: '#4CAF50' };
-  if (bpm < 80) return { label: 'Focused', message: 'Optimal focus zone! Keep learning — you are in the zone.', color: '#2196F3' };
-  if (bpm < 95) return { label: 'Elevated', message: 'Slightly elevated. Take a slow breath and continue.', color: '#FF9800' };
-  return { label: 'Stressed', message: 'High stress detected. Consider a short break before continuing.', color: '#F44336' };
+  if (bpm == null) return { label: 'Warming up...', message: 'Stay still and face the camera to begin.', color: '#7a9db0' };
+  if (bpm < 65)   return { label: 'Very Calm',  message: 'You are very relaxed. Great state for absorbing new knowledge!', color: '#22c55e' };
+  if (bpm < 80)   return { label: 'Focused',    message: 'Optimal focus zone! Keep learning — you are in the zone.',      color: '#00e5cc' };
+  if (bpm < 95)   return { label: 'Elevated',   message: 'Slightly elevated. Take a slow breath and continue.',           color: '#f59e0b' };
+  return               { label: 'Stressed',    message: 'High stress detected. Consider a short break before continuing.', color: '#ef4444' };
 }
 function getStatusMessage(diagnostics: RppgSessionDiagnostics | null): string {
   if (!diagnostics) return 'Starting session…';
   if (diagnostics.lastError) return diagnostics.lastError.message;
   if (diagnostics.backendMode !== 'wasm') return 'WASM backend not active.';
-  if (diagnostics.issues.includes('no_samples_yet') || diagnostics.issues.includes('insufficient_window')) return 'Warming up — hold still, face the camera.';
+  if (diagnostics.issues.includes('no_samples_yet') || diagnostics.issues.includes('insufficient_window'))
+    return 'Warming up — hold still, face the camera.';
   return 'Monitoring your focus…';
 }
 function getStatusTone(diagnostics: RppgSessionDiagnostics | null): 'live' | 'warn' | 'error' {
@@ -174,51 +172,61 @@ function formatTime(seconds: number): string {
   return `${m}:${s}`;
 }
 function getFocusScore(avgBpm: number | null) {
-  if (avgBpm == null) return { score: 0, label: 'No data collected', color: '#888' };
-  if (avgBpm < 65) return { score: 98, label: 'Exceptional Focus', color: '#4CAF50' };
-  if (avgBpm < 75) return { score: 90, label: 'Strong Focus', color: '#4CAF50' };
-  if (avgBpm < 85) return { score: 78, label: 'Good Focus', color: '#2196F3' };
-  if (avgBpm < 95) return { score: 62, label: 'Moderate Focus', color: '#FF9800' };
-  return { score: 45, label: 'High Stress Detected', color: '#F44336' };
+  if (avgBpm == null) return { score: 0,  label: 'No data collected',    color: '#7a9db0' };
+  if (avgBpm < 65)    return { score: 98, label: 'Exceptional Focus',    color: '#22c55e' };
+  if (avgBpm < 75)    return { score: 90, label: 'Strong Focus',         color: '#22c55e' };
+  if (avgBpm < 85)    return { score: 78, label: 'Good Focus',           color: '#00e5cc' };
+  if (avgBpm < 95)    return { score: 62, label: 'Moderate Focus',       color: '#f59e0b' };
+  return                   { score: 45, label: 'High Stress Detected',  color: '#ef4444' };
 }
+
+// ─── Shared inline style helpers ─────────────────────────────────────────────
+
+const card = (accent = 'rgba(255,255,255,0.06)'): CSSProperties => ({
+  background: 'var(--bg-card)',
+  border: `1px solid ${accent}`,
+  borderRadius: 'var(--radius-lg)',
+  padding: '20px',
+  boxShadow: 'var(--shadow-card)',
+});
+
+const pill = (bg: string, color: string): CSSProperties => ({
+  display: 'inline-flex', alignItems: 'center', gap: '4px',
+  background: bg, color,
+  borderRadius: 'var(--radius-pill)',
+  padding: '3px 12px',
+  fontSize: '0.72rem', fontWeight: 600,
+  whiteSpace: 'nowrap' as const,
+  border: `1px solid ${color}44`,
+});
 
 // ─── App Component ────────────────────────────────────────────────────────────
 
 export default function App() {
 
-  const primaryBtnStyle: CSSProperties = { background: '#2196F3', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 20px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' };
-  const secondaryBtnStyle: CSSProperties = { background: 'transparent', color: '#aaa', border: '1px solid #333', borderRadius: '8px', padding: '10px 20px', cursor: 'pointer', fontSize: '0.9rem' };
-  const backBtnStyle: CSSProperties = { background: 'transparent', color: '#666', border: '1px solid #333', borderRadius: '6px', padding: '6px 12px', cursor: 'pointer', fontSize: '0.8rem' };
-
-  // ── v3 Phase 1 hooks ──────────────────────────────────────────────────────
-  const streakData = useStreak();
-  const quizTimer  = useQuizTimer();
-  const [lastQuestionXP, setLastQuestionXP] = useState(0);
-
-  // ── v3 Phase 2 hooks ──────────────────────────────────────────────────────
+  // ── v3 hooks ──────────────────────────────────────────────────────────────
+  const streakData      = useStreak();
+  const quizTimer       = useQuizTimer();
   const tokenData       = useTokens();
   const leaderboardData = useLeaderboard();
+  const [lastQuestionXP, setLastQuestionXP] = useState(0);
 
-  // ── v3 Analytics: 5-tap logo gesture ─────────────────────────────────────
-  const [logoTaps, setLogoTaps] = useState(0);
-  const tapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // ── Analytics 5-tap ──────────────────────────────────────────────────────
+  const [logoTaps, setLogoTaps]   = useState(0);
+  const tapTimerRef               = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleLogoTap = () => {
     const next = logoTaps + 1;
-    if (next >= 5) {
-      setLogoTaps(0);
-      setScreen('analytics');
-      return;
-    }
+    if (next >= 5) { setLogoTaps(0); setScreen('analytics'); return; }
     setLogoTaps(next);
     if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
     tapTimerRef.current = setTimeout(() => setLogoTaps(0), 3000);
   };
 
   // ── rPPG state ────────────────────────────────────────────────────────────
-  const videoRef   = useRef<HTMLVideoElement>(null);
-  const sessionRef = useRef<RppgSession | null>(null);
-  const streamRef  = useRef<MediaStream | null>(null);
+  const videoRef    = useRef<HTMLVideoElement>(null);
+  const sessionRef  = useRef<RppgSession | null>(null);
+  const streamRef   = useRef<MediaStream | null>(null);
   const [status, setStatus]           = useState('Requesting camera…');
   const [metrics, setMetrics]         = useState<Metrics>(EMPTY_METRICS);
   const [diagnostics, setDiagnostics] = useState<RppgSessionDiagnostics | null>(null);
@@ -242,12 +250,10 @@ export default function App() {
   const syncFromSession = useCallback(() => {
     const session = sessionRef.current;
     if (!session) return;
-    const nextDiagnostics = session.getDiagnostics();
-    const nextMetrics     = session.getMetrics();
-    setMetrics(nextMetrics);
-    setDiagnostics(nextDiagnostics);
-    setStatus(getStatusMessage(nextDiagnostics));
-    if (nextMetrics.bpm != null) bpmReadingsRef.current.push(nextMetrics.bpm);
+    const d = session.getDiagnostics();
+    const m = session.getMetrics();
+    setMetrics(m); setDiagnostics(d); setStatus(getStatusMessage(d));
+    if (m.bpm != null) bpmReadingsRef.current.push(m.bpm);
   }, []);
 
   useEffect(() => {
@@ -258,11 +264,10 @@ export default function App() {
       if (!video) return;
       let stream: MediaStream;
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
-      } catch {
-        setStatus('Camera unavailable — allow access and reload.');
-        return;
-      }
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false,
+        });
+      } catch { setStatus('Camera unavailable — allow access and reload.'); return; }
       if (cancelled) { stream.getTracks().forEach(t => t.stop()); return; }
       streamRef.current = stream;
       video.srcObject = stream;
@@ -275,8 +280,8 @@ export default function App() {
           wasmJsUrl: rppgWasmJsUrl, wasmBinaryUrl: rppgWasmBinaryUrl,
           enableTracker: { minBpm: 55, maxBpm: 150, numParticles: 200 },
           roiSmoothingAlpha: 0.25, useSkinMask: true,
-          onDiagnostics: () => { syncFromSession(); },
-          onError: error => { setStatus(error.message); },
+          onDiagnostics: () => syncFromSession(),
+          onError: error => setStatus(error.message),
         });
         if (cancelled) { await session.dispose(); return; }
         sessionRef.current = session;
@@ -291,10 +296,11 @@ export default function App() {
       cancelled = true;
       if (intervalId) clearInterval(intervalId);
       if (sessionRef.current) { void sessionRef.current.dispose(); sessionRef.current = null; }
-      if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null; }
+      if (streamRef.current)  { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null; }
     };
   }, [syncFromSession]);
 
+  // ── Session controls ──────────────────────────────────────────────────────
   const startSession = () => {
     bpmReadingsRef.current = [];
     setSessionSeconds(0); setSessionSummary(null); setSessionActive(true);
@@ -305,19 +311,16 @@ export default function App() {
     setSessionActive(false);
     if (timerRef.current) clearInterval(timerRef.current);
     const readings = bpmReadingsRef.current;
-    const avgBpm = readings.length > 0 ? readings.reduce((a, b) => a + b, 0) / readings.length : null;
+    const avgBpm   = readings.length > 0 ? readings.reduce((a, b) => a + b, 0) / readings.length : null;
     setSessionSummary({ duration: sessionSeconds, avgBpm });
     if (mod) {
       const quizPct = Math.round((score / mod.quiz.length) * 100);
-      leaderboardData.addEntry({
-        moduleTitle: mod.title, moduleIcon: mod.icon,
-        quizScore: quizPct, focusScore: focusScoreValue,
-        xpEarned: sessionXP, streak: streakData.streak,
-      });
+      leaderboardData.addEntry({ moduleTitle: mod.title, moduleIcon: mod.icon, quizScore: quizPct, focusScore: focusScoreValue, xpEarned: sessionXP, streak: streakData.streak });
       tokenData.addPendingXP(sessionXP);
     }
   };
 
+  // ── Navigation ────────────────────────────────────────────────────────────
   const startModule = (mod: LearningModule) => {
     setActiveModule(mod); setLessonPage(0); setFlashcardIndex(0);
     setCardFlipped(false); setQuizIndex(0); setSelectedAnswer(null); setQuizScore(0);
@@ -348,12 +351,11 @@ export default function App() {
   const nextQuestion = () => {
     if (!activeModule) return;
     if (quizIndex < activeModule.quiz.length - 1) {
-      setQuizIndex(i => i + 1); setSelectedAnswer(null);
-      setLastQuestionXP(0); quizTimer.startTimer();
+      setQuizIndex(i => i + 1); setSelectedAnswer(null); setLastQuestionXP(0); quizTimer.startTimer();
     } else {
       const readings = bpmReadingsRef.current;
-      const avgBpm = readings.length > 0 ? readings.reduce((a, b) => a + b, 0) / readings.length : null;
-      const fs = getFocusScore(avgBpm);
+      const avgBpm   = readings.length > 0 ? readings.reduce((a, b) => a + b, 0) / readings.length : null;
+      const fs       = getFocusScore(avgBpm);
       const finalScore = quizScore + (activeModule && selectedAnswer === activeModule.quiz[quizIndex].correct ? 1 : 0);
       stopSession(activeModule, finalScore, quizTimer.totalQuizXP, fs.score);
       setScreen('results');
@@ -365,49 +367,79 @@ export default function App() {
   }, [screen, quizIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (quizTimer.timeExpired && selectedAnswer === null) {
-      setSelectedAnswer(-1); setLastQuestionXP(0);
-    }
+    if (quizTimer.timeExpired && selectedAnswer === null) { setSelectedAnswer(-1); setLastQuestionXP(0); }
   }, [quizTimer.timeExpired, selectedAnswer]);
 
   const backToHome = () => {
-    setScreen('home'); setActiveModule(null);
-    setSessionSummary(null); quizTimer.resetQuiz();
+    setScreen('home'); setActiveModule(null); setSessionSummary(null); quizTimer.resetQuiz();
   };
 
+  // ── Derived values ────────────────────────────────────────────────────────
   const statusTone     = getStatusTone(diagnostics);
   const readinessLabel = diagnostics?.estimationAvailable && metrics.bpm != null ? 'Ready' : 'Warm-up';
   const confidencePct  = Math.round(clamp01(metrics.confidence) * 100);
   const qualityPct     = Math.round(clamp01(metrics.signal_quality) * 100);
   const focusState     = getFocusState(metrics.bpm);
 
-  // ── Renderers ─────────────────────────────────────────────────────────────
+  // ── Screen renderers ──────────────────────────────────────────────────────
 
   function renderHome() {
     return (
-      <div style={{ padding: '24px 0' }}>
+      <div style={{ paddingTop: '8px' }} className="animate-in">
         <StreakBar streakData={streakData} />
         <TokenWallet tokenData={tokenData} />
+
+        {/* Leaderboard button */}
         <button
           onClick={() => setScreen('leaderboard')}
-          style={{ ...primaryBtnStyle, background: '#1a1a2e', border: '1px solid #2196F344', color: '#2196F3', width: '100%', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+          style={{
+            width: '100%', marginBottom: '20px', minHeight: '48px',
+            background: 'var(--bg-card)', border: '1px solid var(--border-soft)',
+            borderRadius: 'var(--radius-md)', color: '#00e5cc',
+            fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.88rem',
+            cursor: 'pointer', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', gap: '8px', transition: 'all 0.2s',
+          }}
         >
           🏆 View Leaderboard
           {leaderboardData.totalSessions > 0 && (
-            <span style={{ background: '#2196F333', borderRadius: '20px', padding: '1px 8px', fontSize: '0.75rem' }}>
+            <span style={pill('rgba(0,229,204,0.08)', '#00e5cc')}>
               {leaderboardData.totalSessions} session{leaderboardData.totalSessions !== 1 ? 's' : ''}
             </span>
           )}
         </button>
-        <h2 style={{ color: '#fff', marginBottom: '8px', fontSize: '1.4rem' }}>Choose a Learning Module</h2>
-        <p style={{ color: '#888', marginBottom: '24px', fontSize: '0.9rem' }}>Select a topic below. NeuroLearn will track your focus as you learn.</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+
+        {/* Module heading */}
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+          Choose a Module
+        </h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '16px' }}>
+          NeuroLearn tracks your focus as you learn.
+        </p>
+
+        {/* Module grid */}
+        <div className="module-grid">
           {MODULES.map(mod => (
-            <button key={mod.id} onClick={() => startModule(mod)} style={{ background: '#1a1a2e', border: `2px solid ${mod.color}`, borderRadius: '12px', padding: '20px', cursor: 'pointer', textAlign: 'left' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '8px' }}>{mod.icon}</div>
-              <div style={{ color: mod.color, fontWeight: 'bold', fontSize: '1rem', marginBottom: '6px' }}>{mod.title}</div>
-              <div style={{ color: '#aaa', fontSize: '0.8rem', lineHeight: '1.4' }}>{mod.description}</div>
-              <div style={{ marginTop: '12px', color: '#555', fontSize: '0.75rem' }}>{mod.lesson.length} lessons · {mod.flashcards.length} cards · {mod.quiz.length} questions</div>
+            <button
+              key={mod.id}
+              onClick={() => startModule(mod)}
+              className="module-card"
+              style={{ '--accent': mod.color } as CSSProperties}
+            >
+              <div style={{ fontSize: '1.8rem', marginBottom: '10px', lineHeight: 1 }}>{mod.icon}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem', color: mod.color, marginBottom: '6px', letterSpacing: '-0.01em' }}>
+                {mod.title}
+              </div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5, marginBottom: '12px' }}>
+                {mod.description}
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.68rem', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                <span>{mod.lesson.length} lessons</span>
+                <span>·</span>
+                <span>{mod.flashcards.length} cards</span>
+                <span>·</span>
+                <span>{mod.quiz.length} questions</span>
+              </div>
             </button>
           ))}
         </div>
@@ -420,25 +452,45 @@ export default function App() {
     const page   = activeModule.lesson[lessonPage];
     const isLast = lessonPage === activeModule.lesson.length - 1;
     return (
-      <div style={{ padding: '24px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-          <button onClick={backToHome} style={backBtnStyle}>Back to Modules</button>
-          <span style={{ color: activeModule.color, fontWeight: 'bold' }}>{activeModule.icon} {activeModule.title}</span>
-          <span style={{ color: '#555', marginLeft: 'auto', fontSize: '0.8rem' }}>Lesson {lessonPage + 1} of {activeModule.lesson.length}</span>
+      <div style={{ paddingTop: '8px' }} className="animate-in">
+        {/* Nav */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+          <button className="btn-ghost" onClick={backToHome}>← Modules</button>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>
+            {activeModule.icon} {activeModule.title}
+          </span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>
+            {lessonPage + 1}/{activeModule.lesson.length}
+          </span>
         </div>
-        <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '24px', marginBottom: '20px', borderLeft: `4px solid ${activeModule.color}`, maxHeight: '360px', overflowY: 'auto' }}>
-          <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.15rem' }}>{page.title}</h3>
-          <p style={{ color: '#ccc', lineHeight: '1.9', fontSize: '0.92rem', whiteSpace: 'pre-line' }}>{page.content}</p>
+
+        {/* Lesson card */}
+        <div style={{ ...card(`${activeModule.color}33`), borderLeft: `3px solid ${activeModule.color}`, maxHeight: '55vh', overflowY: 'auto', marginBottom: '16px' }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '14px', letterSpacing: '-0.02em' }}>
+            {page.title}
+          </h3>
+          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, fontSize: '0.88rem', whiteSpace: 'pre-line' }}>
+            {page.content}
+          </p>
         </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          {lessonPage > 0 ? <button onClick={() => setLessonPage(p => p - 1)} style={secondaryBtnStyle}>Previous</button> : <div />}
+
+        {/* Controls */}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          {lessonPage > 0
+            ? <button className="btn-secondary" onClick={() => setLessonPage(p => p - 1)}>Previous</button>
+            : <div />}
           <div style={{ flex: 1 }} />
           {!isLast
-            ? <button onClick={() => setLessonPage(p => p + 1)} style={{ ...primaryBtnStyle, background: activeModule.color }}>Next</button>
-            : <button onClick={goToFlashcards} style={{ ...primaryBtnStyle, background: activeModule.color }}>Start Flashcards</button>}
+            ? <button className="btn-primary" style={{ background: activeModule.color }} onClick={() => setLessonPage(p => p + 1)}>Next</button>
+            : <button className="btn-primary" style={{ background: activeModule.color }} onClick={goToFlashcards}>Flashcards →</button>}
         </div>
-        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '20px' }}>
-          {activeModule.lesson.map((_, i) => <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: i === lessonPage ? activeModule.color : '#333' }} />)}
+
+        {/* Dots */}
+        <div className="progress-dots" style={{ marginTop: '16px' }}>
+          {activeModule.lesson.map((_, i) => (
+            <div key={i} className={`progress-dot${i === lessonPage ? ' active' : i < lessonPage ? ' done' : ''}`}
+              style={{ width: i === lessonPage ? '20px' : '6px' }} />
+          ))}
         </div>
       </div>
     );
@@ -446,121 +498,189 @@ export default function App() {
 
   function renderFlashcards() {
     if (!activeModule) return null;
-    const card   = activeModule.flashcards[flashcardIndex];
+    const card2  = activeModule.flashcards[flashcardIndex];
     const isLast = flashcardIndex === activeModule.flashcards.length - 1;
     return (
-      <div style={{ padding: '24px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-          <button onClick={() => setScreen('lesson')} style={backBtnStyle}>Back to Lesson</button>
-          <span style={{ color: activeModule.color, fontWeight: 'bold' }}>{activeModule.icon} Flashcards</span>
-          <span style={{ color: '#555', marginLeft: 'auto', fontSize: '0.8rem' }}>Card {flashcardIndex + 1} of {activeModule.flashcards.length}</span>
+      <div style={{ paddingTop: '8px' }} className="animate-in">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+          <button className="btn-ghost" onClick={() => setScreen('lesson')}>← Lesson</button>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>
+            {activeModule.icon} Flashcards
+          </span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>
+            {flashcardIndex + 1}/{activeModule.flashcards.length}
+          </span>
         </div>
-        <p style={{ color: '#777', fontSize: '0.82rem', marginBottom: '14px', textAlign: 'center' }}>{cardFlipped ? 'Answer revealed! Ready for the next card?' : 'Tap the card to reveal the answer'}</p>
-        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? '#1a2a1a' : '#1a1a2e', border: `2px solid ${cardFlipped ? '#4CAF50' : activeModule.color}`, borderRadius: '16px', padding: '40px 24px', minHeight: '190px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '20px', transition: 'all 0.25s' }}>
-          <p style={{ color: '#555', fontSize: '0.7rem', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1.5px' }}>{cardFlipped ? 'ANSWER' : 'QUESTION'}</p>
-          <p style={{ color: '#fff', fontSize: '1.05rem', lineHeight: '1.7' }}>{cardFlipped ? card.back : card.front}</p>
+
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginBottom: '12px', textAlign: 'center' }}>
+          {cardFlipped ? 'Answer revealed — ready for next?' : 'Tap the card to reveal the answer'}
+        </p>
+
+        {/* Flip card */}
+        <div
+          onClick={() => setCardFlipped(f => !f)}
+          style={{
+            background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)',
+            border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`,
+            borderRadius: 'var(--radius-xl)', padding: '40px 24px',
+            minHeight: '200px', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+            textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s',
+            boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)',
+          }}
+        >
+          <p style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>
+            {cardFlipped ? 'ANSWER' : 'QUESTION'}
+          </p>
+          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.7, fontFamily: 'var(--font-body)' }}>
+            {cardFlipped ? card2.back : card2.front}
+          </p>
         </div>
+
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {cardFlipped && <button onClick={nextFlashcard} style={{ ...primaryBtnStyle, background: activeModule.color }}>{isLast ? 'Take Quiz' : 'Next Card'}</button>}
+          {cardFlipped && (
+            <button className="btn-primary" style={{ background: activeModule.color }} onClick={nextFlashcard}>
+              {isLast ? 'Take Quiz →' : 'Next Card →'}
+            </button>
+          )}
         </div>
-        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '20px' }}>
-          {activeModule.flashcards.map((_, i) => <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: i <= flashcardIndex ? activeModule.color : '#333' }} />)}
+
+        <div className="progress-dots">
+          {activeModule.flashcards.map((_, i) => (
+            <div key={i} className={`progress-dot${i === flashcardIndex ? ' active' : i < flashcardIndex ? ' done' : ''}`}
+              style={{ width: i === flashcardIndex ? '20px' : '6px' }} />
+          ))}
         </div>
       </div>
     );
   }
 
-  // ── v3 UPGRADED renderQuiz — prominent circular timer ─────────────────────
   function renderQuiz() {
     if (!activeModule) return null;
     const q        = activeModule.quiz[quizIndex];
     const answered = selectedAnswer !== null;
-
     const isUrgent  = quizTimer.timeLeft <= 5 && !answered;
     const isWarning = quizTimer.timeLeft <= 10 && !answered;
-
     const RADIUS = 28;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-    const strokeDashoffset = answered
-      ? 0
-      : CIRCUMFERENCE * (1 - quizTimer.timerPercent / 100);
-
-    const circleColor = answered ? '#4CAF50' : quizTimer.timerColor;
+    const strokeDashoffset = answered ? 0 : CIRCUMFERENCE * (1 - quizTimer.timerPercent / 100);
+    const circleColor = answered ? '#22c55e' : quizTimer.timerColor;
 
     return (
-      <div style={{ padding: '24px 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <button onClick={() => setScreen('flashcard')} style={backBtnStyle}>Back to Flashcards</button>
-          <span style={{ color: activeModule.color, fontWeight: 'bold' }}>{activeModule.icon} Quiz</span>
-          <span style={{ color: '#555', marginLeft: 'auto', fontSize: '0.8rem' }}>Q{quizIndex + 1} of {activeModule.quiz.length}</span>
+      <div style={{ paddingTop: '8px' }} className="animate-in">
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+          <button className="btn-ghost" onClick={() => setScreen('flashcard')}>← Flashcards</button>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>
+            {activeModule.icon} Quiz
+          </span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>
+            Q{quizIndex + 1}/{activeModule.quiz.length}
+          </span>
         </div>
-        <div style={{ background: '#0f0f1a', border: `2px solid ${answered ? '#4CAF5044' : isUrgent ? '#F4433666' : isWarning ? '#FF980044' : '#2196F344'}`, borderRadius: '16px', padding: '16px 20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '16px', transition: 'border-color 0.3s' }}>
+
+        {/* Timer panel */}
+        <div style={{
+          background: 'var(--bg-card)',
+          border: `1px solid ${answered ? 'rgba(34,197,94,0.25)' : isUrgent ? 'rgba(239,68,68,0.4)' : isWarning ? 'rgba(245,158,11,0.3)' : 'var(--pulse-border)'}`,
+          borderRadius: 'var(--radius-lg)', padding: '14px 16px', marginBottom: '14px',
+          display: 'flex', alignItems: 'center', gap: '14px', transition: 'border-color 0.3s',
+          boxShadow: isUrgent ? '0 0 20px rgba(239,68,68,0.1)' : 'var(--shadow-card)',
+        }}>
+          {/* SVG circle */}
           <div style={{ position: 'relative', flexShrink: 0 }}>
             {isUrgent && (
-              <div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: '3px solid #F4433688', animation: 'pulse 0.8s ease-in-out infinite' }} />
+              <div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: '2px solid rgba(239,68,68,0.5)', animation: 'pulse 0.8s ease-in-out infinite' }} />
             )}
             <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
-              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke="#1a1a2e" strokeWidth="6" />
-              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke={circleColor} strokeWidth="6" strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={strokeDashoffset} style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }} />
+              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke="var(--bg-surface)" strokeWidth="6" />
+              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke={circleColor} strokeWidth="6" strokeLinecap="round"
+                strokeDasharray={CIRCUMFERENCE} strokeDashoffset={strokeDashoffset}
+                style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }} />
             </svg>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: answered ? '1.4rem' : isUrgent ? '1.4rem' : '1.2rem', fontWeight: 'bold', color: circleColor, transition: 'color 0.3s' }}>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: answered ? '1.4rem' : '1.2rem', fontWeight: 800, color: circleColor }}>
               {answered ? '✓' : quizTimer.timeLeft}
             </div>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: answered ? '#4CAF50' : isUrgent ? '#F44336' : isWarning ? '#FF9800' : '#2196F3' }}>
+
+          {/* Status */}
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: answered ? '#22c55e' : isUrgent ? '#ef4444' : isWarning ? '#f59e0b' : '#00e5cc' }}>
                 {answered ? '✅ Answered' : isUrgent ? '⚡ Hurry up!' : isWarning ? '⏳ Running low...' : '🕐 Time remaining'}
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#444' }}>{answered ? 'Moving on...' : `${quizTimer.timeLeft}s left`}</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                {answered ? 'Next →' : `${quizTimer.timeLeft}s`}
+              </span>
             </div>
-            <div style={{ height: '14px', background: '#1a1a2e', borderRadius: '7px', overflow: 'hidden', marginBottom: '10px', border: '1px solid #2a2a3a' }}>
-              <div style={{ height: '100%', width: `${answered ? 100 : quizTimer.timerPercent}%`, background: answered ? '#4CAF50' : isUrgent ? 'linear-gradient(90deg, #F44336, #FF6B6B)' : isWarning ? 'linear-gradient(90deg, #FF9800, #FFB74D)' : 'linear-gradient(90deg, #2196F3, #64B5F6)', borderRadius: '7px', transition: 'width 0.9s linear, background 0.3s' }} />
+
+            {/* Bar */}
+            <div style={{ height: '12px', background: 'var(--bg-surface)', borderRadius: '6px', overflow: 'hidden', marginBottom: '8px', border: '1px solid rgba(255,255,255,0.04)' }}>
+              <div style={{
+                height: '100%',
+                width: `${answered ? 100 : quizTimer.timerPercent}%`,
+                background: answered ? '#22c55e' : isUrgent ? 'linear-gradient(90deg,#ef4444,#ff6b6b)' : isWarning ? 'linear-gradient(90deg,#f59e0b,#fbbf24)' : 'linear-gradient(90deg,#00e5cc,#3d9eff)',
+                borderRadius: '6px', transition: 'width 0.9s linear, background 0.3s',
+              }} />
             </div>
+
+            {/* Badges */}
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-              {quizTimer.comboCount > 1 && <div style={{ background: '#FF980022', border: '1px solid #FF980066', borderRadius: '20px', padding: '3px 12px', color: '#FF9800', fontSize: '0.78rem', fontWeight: 'bold' }}>🔗 {quizTimer.comboCount}x Combo</div>}
-              {lastQuestionXP > 0 && answered && <div style={{ background: '#2196F322', border: '1px solid #2196F366', borderRadius: '20px', padding: '3px 12px', color: '#2196F3', fontSize: '0.78rem', fontWeight: 'bold' }}>+{lastQuestionXP} XP</div>}
-              {!answered && quizTimer.comboCount > 0 && <div style={{ background: '#4CAF5011', border: '1px solid #4CAF5033', borderRadius: '20px', padding: '3px 12px', color: '#4CAF5099', fontSize: '0.78rem' }}>{quizTimer.comboCount} correct in a row</div>}
+              {quizTimer.comboCount > 1 && <span style={pill('rgba(245,158,11,0.1)', '#f59e0b')}>🔗 {quizTimer.comboCount}x Combo</span>}
+              {lastQuestionXP > 0 && answered && <span style={pill('rgba(0,229,204,0.1)', '#00e5cc')}>+{lastQuestionXP} XP</span>}
+              {!answered && quizTimer.comboCount > 0 && <span style={{ ...pill('rgba(34,197,94,0.06)', '#22c55e88'), border: 'none' }}>{quizTimer.comboCount} in a row</span>}
             </div>
           </div>
         </div>
+
+        {/* Time-out banner */}
         {selectedAnswer === -1 && (
-          <div style={{ background: '#F4433622', border: '1px solid #F4433655', borderRadius: '10px', padding: '10px 16px', color: '#F44336', fontSize: '0.85rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '1.2rem' }}>⏱</span>
-            <span>Time's up! The correct answer is highlighted below.</span>
+          <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 'var(--radius-md)', padding: '10px 14px', color: '#ef4444', fontSize: '0.82rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>⏱</span><span>Time's up! The correct answer is highlighted below.</span>
           </div>
         )}
-        <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '24px', marginBottom: '20px' }}>
-          <p style={{ color: '#fff', fontSize: '1.05rem', lineHeight: '1.65', marginBottom: '20px' }}>{q.question}</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
+        {/* Question */}
+        <div style={{ ...card(), marginBottom: '14px' }}>
+          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.65, marginBottom: '18px', fontWeight: 500 }}>
+            {q.question}
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {q.options.map((opt, idx) => {
-              let bg = '#0f0f1a', border = '#2a2a3a', color = '#ccc';
+              let bg = 'var(--bg-input)', border = 'rgba(255,255,255,0.06)', color = 'var(--text-secondary)';
               if (answered) {
-                if (idx === q.correct) { bg = '#1a2a1a'; border = '#4CAF50'; color = '#4CAF50'; }
-                else if (idx === selectedAnswer && selectedAnswer !== -1) { bg = '#2a1a1a'; border = '#F44336'; color = '#F44336'; }
+                if (idx === q.correct)                                    { bg = 'rgba(34,197,94,0.08)';  border = 'rgba(34,197,94,0.4)';  color = '#22c55e'; }
+                else if (idx === selectedAnswer && selectedAnswer !== -1) { bg = 'rgba(239,68,68,0.08)'; border = 'rgba(239,68,68,0.35)'; color = '#ef4444'; }
               }
               return (
                 <button key={idx} onClick={() => handleAnswer(idx)} disabled={answered}
-                  style={{ background: bg, border: `2px solid ${border}`, borderRadius: '8px', padding: '12px 16px', color, cursor: answered ? 'default' : 'pointer', textAlign: 'left', fontSize: '0.9rem', transition: 'all 0.2s' }}>
-                  <span style={{ fontWeight: 'bold', marginRight: '8px' }}>{String.fromCharCode(65 + idx)}.</span>{opt}
+                  style={{ background: bg, border: `1px solid ${border}`, borderRadius: 'var(--radius-md)', padding: '13px 16px', color, cursor: answered ? 'default' : 'pointer', textAlign: 'left', fontSize: '0.88rem', transition: 'all 0.2s', fontFamily: 'var(--font-body)', minHeight: '48px' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginRight: '10px', opacity: 0.5 }}>
+                    {String.fromCharCode(65 + idx)}
+                  </span>
+                  {opt}
                 </button>
               );
             })}
           </div>
         </div>
+
         {answered && (
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button onClick={nextQuestion} style={{ ...primaryBtnStyle, background: activeModule.color }}>
+            <button className="btn-primary" style={{ background: activeModule.color, color: '#020408' }} onClick={nextQuestion}>
               {quizIndex < activeModule.quiz.length - 1 ? 'Next Question →' : 'See Results 🎉'}
             </button>
           </div>
         )}
-        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '20px' }}>
+
+        <div className="progress-dots">
           {activeModule.quiz.map((_, i) => (
-            <div key={i} style={{ width: i === quizIndex ? '20px' : '8px', height: '8px', borderRadius: '4px', background: i < quizIndex ? activeModule.color : i === quizIndex ? '#fff' : '#333', transition: 'all 0.3s' }} />
+            <div key={i} className={`progress-dot${i === quizIndex ? ' active' : i < quizIndex ? ' done' : ''}`}
+              style={{ width: i === quizIndex ? '20px' : '6px' }} />
           ))}
         </div>
-        <style>{`@keyframes pulse { 0%,100%{transform:scale(1);opacity:0.8} 50%{transform:scale(1.2);opacity:0.3} }`}</style>
+
+        <style>{`@keyframes pulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.2);opacity:.3}}`}</style>
       </div>
     );
   }
@@ -570,65 +690,81 @@ export default function App() {
     const focusScore = getFocusScore(sessionSummary?.avgBpm ?? null);
     const quizPct    = Math.round((quizScore / activeModule.quiz.length) * 100);
     const sessionXP  = quizTimer.totalQuizXP;
+
     return (
-      <div style={{ padding: '24px 0' }}>
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🎉</div>
-          <h2 style={{ color: '#fff', marginBottom: '4px', fontSize: '1.4rem' }}>{activeModule.title} Complete!</h2>
-          <p style={{ color: '#888', fontSize: '0.9rem' }}>Here is your session breakdown</p>
+      <div style={{ paddingTop: '8px' }} className="animate-in">
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <div style={{ fontSize: '2.8rem', marginBottom: '8px' }}>🎉</div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '4px' }}>
+            {activeModule.title} Complete!
+          </h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Here is your session breakdown</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-          <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '20px', textAlign: 'center', border: '1px solid #2a2a3a' }}>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Quiz Score</p>
-            <p style={{ color: '#fff', fontSize: '2.4rem', fontWeight: 'bold', marginBottom: '4px' }}>{quizPct}%</p>
-            <p style={{ color: '#666', fontSize: '0.8rem' }}>{quizScore}/{activeModule.quiz.length} correct</p>
-            <p style={{ color: quizPct >= 80 ? '#4CAF50' : quizPct >= 60 ? '#FF9800' : '#F44336', fontSize: '0.85rem', marginTop: '10px' }}>
+
+        {/* Quiz + Focus scores */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+          <div style={card()}>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 600 }}>Quiz Score</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.04em', marginBottom: '2px' }}>{quizPct}%</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginBottom: '8px' }}>{quizScore}/{activeModule.quiz.length} correct</p>
+            <p style={{ color: quizPct >= 80 ? '#22c55e' : quizPct >= 60 ? '#f59e0b' : '#ef4444', fontSize: '0.78rem', fontWeight: 600 }}>
               {quizPct >= 80 ? 'Excellent!' : quizPct >= 60 ? 'Good effort!' : 'Keep practicing'}
             </p>
           </div>
-          <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '20px', textAlign: 'center', border: `1px solid ${focusScore.color}44` }}>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Focus Score</p>
-            <p style={{ color: focusScore.color, fontSize: '2.4rem', fontWeight: 'bold', marginBottom: '4px' }}>{focusScore.score}</p>
-            <p style={{ color: '#666', fontSize: '0.8rem' }}>{focusScore.label}</p>
-            <p style={{ color: '#555', fontSize: '0.75rem', marginTop: '10px' }}>Avg BPM: {sessionSummary?.avgBpm != null ? Math.round(sessionSummary.avgBpm) : 'N/A'}</p>
+          <div style={{ ...card(`${focusScore.color}22`) }}>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 600 }}>Focus Score</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 800, color: focusScore.color, letterSpacing: '-0.04em', marginBottom: '2px' }}>{focusScore.score}</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginBottom: '8px' }}>{focusScore.label}</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>Avg BPM: {sessionSummary?.avgBpm != null ? Math.round(sessionSummary.avgBpm) : 'N/A'}</p>
           </div>
         </div>
-        <div style={{ background: '#1a1a2e', borderRadius: '12px', padding: '16px 20px', marginBottom: '12px', border: '1px solid #2196F333', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+        {/* XP + Multiplier */}
+        <div style={{ ...card('var(--pulse-border)'), marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>XP Earned This Session</p>
-            <p style={{ color: '#2196F3', fontSize: '1.8rem', fontWeight: 'bold' }}>+{sessionXP.toLocaleString()} XP</p>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>XP This Session</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', fontWeight: 800, color: '#00e5cc', letterSpacing: '-0.04em' }}>+{sessionXP.toLocaleString()}</p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Streak Multiplier</p>
-            <p style={{ color: '#9C27B0', fontSize: '1.4rem', fontWeight: 'bold' }}>{streakData.xpMultiplier.toFixed(1)}x</p>
-            <p style={{ color: '#555', fontSize: '0.72rem' }}>{streakData.getStreakLabel()}</p>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Multiplier</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 800, color: '#a855f7' }}>{streakData.xpMultiplier.toFixed(1)}x</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.68rem' }}>{streakData.getStreakLabel()}</p>
           </div>
         </div>
-        <div style={{ background: '#1a1a10', borderRadius: '12px', padding: '14px 18px', marginBottom: '12px', border: '1px solid #FF980033', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+        {/* Token pending */}
+        <div style={{ ...card('rgba(245,158,11,0.2)'), background: 'rgba(245,158,11,0.04)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Pending ELTA Tokens</p>
-            <p style={{ color: '#FF9800', fontSize: '1.2rem', fontWeight: 'bold' }}>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Pending ELTA</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>
               {tokenData.claimableTokens > 0 ? `${tokenData.claimableTokens} ready to claim! 🎉` : `${tokenData.pendingXP.toLocaleString()} XP pending`}
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ color: '#888', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Token Balance</p>
-            <p style={{ color: '#FF9800', fontSize: '1.2rem', fontWeight: 'bold' }}>{tokenData.balance} ELTA</p>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Balance</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{tokenData.balance} ELTA</p>
           </div>
         </div>
-        <div style={{ background: '#0f0f1a', borderRadius: '12px', padding: '14px', textAlign: 'center', marginBottom: '12px', border: '1px solid #1a1a2a' }}>
-          <p style={{ color: '#555', fontSize: '0.75rem', marginBottom: '2px' }}>Lifetime XP</p>
-          <p style={{ color: '#fff', fontSize: '1.4rem', fontWeight: 'bold' }}>{streakData.totalXP.toLocaleString()} XP</p>
+
+        {/* Lifetime XP + Study time */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+          <div style={{ ...card(), textAlign: 'center' }}>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Lifetime XP</p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>{streakData.totalXP.toLocaleString()}</p>
+          </div>
+          <div style={{ ...card(), textAlign: 'center' }}>
+            <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Study Time</p>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '1.3rem', fontWeight: 600, color: 'var(--text-primary)' }}>{sessionSummary ? formatTime(sessionSummary.duration) : '—'}</p>
+          </div>
         </div>
-        <div style={{ background: '#0f0f1a', borderRadius: '12px', padding: '14px', textAlign: 'center', marginBottom: '20px', border: '1px solid #1a1a2a' }}>
-          <p style={{ color: '#555', fontSize: '0.75rem', marginBottom: '4px' }}>Total Study Time</p>
-          <p style={{ color: '#fff', fontSize: '1.6rem', fontWeight: 'bold' }}>{sessionSummary ? formatTime(sessionSummary.duration) : '—'}</p>
-        </div>
+
+        {/* Action buttons */}
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => setScreen('leaderboard')} style={{ ...primaryBtnStyle, flex: 1, background: '#1a1a2e', border: '1px solid #2196F344', color: '#2196F3' }}>
+          <button onClick={() => setScreen('leaderboard')} style={{ flex: 1, minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
             🏆 Leaderboard
           </button>
-          <button onClick={backToHome} style={{ ...primaryBtnStyle, flex: 2, background: activeModule.color }}>
+          <button className="btn-primary" onClick={backToHome} style={{ flex: 2, background: activeModule.color, color: '#020408' }}>
             Back to Modules
           </button>
         </div>
@@ -639,52 +775,75 @@ export default function App() {
   // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="app">
-      <header className="topbar" aria-label="Application header">
 
-        {/* ── Edit 4a: Logo is now tappable — 5 taps opens analytics ────── */}
+      {/* ── Top bar ──────────────────────────────────────────────────────── */}
+      <header className="topbar">
         <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
-          <span className="brand-mark" aria-hidden="true" />
+          <span className="brand-mark" />
           <span className="brand-name">NeuroLearn</span>
           {logoTaps > 0 && logoTaps < 5 && (
-            <span style={{ fontSize: '0.6rem', color: '#2196F333', marginLeft: '4px' }}>
+            <span style={{ fontSize: '0.55rem', color: 'var(--pulse-border)', marginLeft: '4px' }}>
               {'●'.repeat(logoTaps)}{'○'.repeat(5 - logoTaps)}
             </span>
           )}
         </div>
-
-        <span className="topbar-sep" aria-hidden="true" />
-        <span className="topbar-tagline">Web3 Learning Focus Tracker</span>
+        <span className="topbar-sep" />
+        <span className="topbar-tagline">Web3 Learning · Focus Tracker</span>
         <div className="topbar-spacer" />
         <div className={`session-chip session-chip--${statusTone}`}>
-          <span className={`status-dot${statusTone === 'error' ? ' error' : statusTone === 'warn' ? ' warn' : ''}`} aria-hidden="true" />
+          <span className={`status-dot${statusTone === 'error' ? ' error' : statusTone === 'warn' ? ' warn' : ''}`} />
           <span className="session-chip-text">{status}</span>
         </div>
       </header>
+
+      {/* ── Main ─────────────────────────────────────────────────────────── */}
       <main className="main">
-        <section className="stage" aria-labelledby="stage-heading">
-          <h1 id="stage-heading" className="visually-hidden">NeuroLearn Focus Session</h1>
-          <div className="stage-video-wrap" style={{ flex: 2, minWidth: 0 }}>
+        <section className="stage">
+          <h1 className="visually-hidden">NeuroLearn Focus Session</h1>
+
+          {/* ── Mobile: floating BPM indicator ─────────────────────────── */}
+          <div style={{ display: 'block' }} className="stage-content">
+
+            {/* Floating BPM pill — always visible on mobile */}
+            <BpmIndicator
+              metrics={metrics}
+              diagnostics={diagnostics}
+              sessionSeconds={sessionSeconds}
+              sessionActive={sessionActive}
+              onStartSession={startSession}
+              onStopSession={() => stopSession(null, 0, 0, 0)}
+              videoRef={videoRef}
+              confidencePct={confidencePct}
+              qualityPct={qualityPct}
+              focusState={focusState}
+              readinessLabel={readinessLabel}
+            />
+
+            {/* Screen content */}
             {screen === 'home'        && renderHome()}
             {screen === 'lesson'      && renderLesson()}
             {screen === 'flashcard'   && renderFlashcards()}
             {screen === 'quiz'        && renderQuiz()}
             {screen === 'results'     && renderResults()}
             {screen === 'leaderboard' && <Leaderboard leaderboardData={leaderboardData} onBack={backToHome} />}
-            {/* ── Edit 4b: Analytics screen ──────────────────────────────── */}
             {screen === 'analytics'   && <Analytics onBack={backToHome} />}
           </div>
-          <aside className="readouts" aria-label="Focus metrics">
-            <div style={{ marginBottom: '14px' }}>
+
+          {/* ── Desktop: full rPPG sidebar ──────────────────────────────── */}
+          <aside className="readouts">
+            <div>
               <div className="video-chrome">
-                <div className="video-chrome-corners" aria-hidden="true" />
                 <video ref={videoRef} autoPlay muted playsInline className="stage-video" />
                 <div className="video-label">
-                  <span className="video-label-dot" aria-hidden="true" />
+                  <span className="video-label-dot" />
                   Live input
                 </div>
               </div>
-              <p style={{ color: '#444', fontSize: '0.72rem', marginTop: '6px', textAlign: 'center' }}>Face the light · fill the frame · stay steady</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.65rem', marginTop: '6px', textAlign: 'center' }}>
+                Face the light · fill the frame · stay steady
+              </p>
             </div>
+
             <div className="bpm-block">
               <p className="bpm-label">Heart Rate</p>
               <div className="bpm-value-row">
@@ -693,33 +852,37 @@ export default function App() {
               </div>
               <p className="bpm-sub">{readinessLabel}</p>
             </div>
-            <div style={{ padding: '10px 12px', background: '#1a1a2e', borderRadius: '8px', marginBottom: '10px', borderLeft: `4px solid ${focusState.color}` }}>
-              <p style={{ color: focusState.color, fontWeight: 'bold', fontSize: '0.82rem', marginBottom: '3px' }}>{focusState.label}</p>
-              <p style={{ color: '#aaa', fontSize: '0.76rem', lineHeight: '1.4' }}>{focusState.message}</p>
+
+            <div style={{ background: `${focusState.color}0f`, border: `1px solid ${focusState.color}33`, borderRadius: 'var(--radius-md)', padding: '12px 14px' }}>
+              <p style={{ color: focusState.color, fontWeight: 700, fontSize: '0.82rem', marginBottom: '3px' }}>{focusState.label}</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5 }}>{focusState.message}</p>
             </div>
+
             <div className="meter-group">
               <div className="meter">
                 <div className="meter-head"><span>Confidence</span><span className="meter-pct">{confidencePct}%</span></div>
-                <div className="meter-track" role="presentation"><div className="meter-fill meter-fill--confidence" style={{ width: `${confidencePct}%` }} /></div>
+                <div className="meter-track"><div className="meter-fill meter-fill--confidence" style={{ width: `${confidencePct}%` }} /></div>
               </div>
               <div className="meter">
                 <div className="meter-head"><span>Signal quality</span><span className="meter-pct">{qualityPct}%</span></div>
-                <div className="meter-track" role="presentation"><div className="meter-fill meter-fill--quality" style={{ width: `${qualityPct}%` }} /></div>
+                <div className="meter-track"><div className="meter-fill meter-fill--quality" style={{ width: `${qualityPct}%` }} /></div>
               </div>
             </div>
-            <div style={{ marginTop: '12px', padding: '10px 12px', background: '#0f0f1a', borderRadius: '8px', textAlign: 'center' }}>
-              <p style={{ color: '#555', fontSize: '0.72rem', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>SESSION TIME</p>
-              <p style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '8px' }}>{formatTime(sessionSeconds)}</p>
+
+            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-md)', padding: '14px', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>SESSION TIME</p>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px' }}>{formatTime(sessionSeconds)}</p>
               {!sessionActive
-                ? <button onClick={startSession} style={{ background: '#2196F3', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 16px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.82rem' }}>Start Session</button>
-                : <button onClick={() => stopSession(null, 0, 0, 0)} style={{ background: '#F44336', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 16px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.82rem' }}>End Session</button>
+                ? <button className="btn-primary" style={{ width: '100%', fontSize: '0.8rem', padding: '8px 16px', minHeight: '36px' }} onClick={startSession}>Start Session</button>
+                : <button style={{ width: '100%', background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 'var(--radius-sm)', padding: '8px 16px', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem', fontFamily: 'var(--font-body)', minHeight: '36px' }} onClick={() => stopSession(null, 0, 0, 0)}>End Session</button>
               }
             </div>
           </aside>
         </section>
       </main>
+
       <footer className="footer">
-        <span>NeuroLearn v3 · Powered by Elata rPPG · Web3 Focus Tracker</span>
+        NeuroLearn v3 · Powered by Elata rPPG · Built for Africa 🇳🇬
       </footer>
     </div>
   );
