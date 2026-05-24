@@ -882,7 +882,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        NeuroLearn v3 · Powered by Elata rPPG · Built for Africa 🇳🇬
+        NeuroLearn v3 · Powered by Elata rPPG · Built for Everyone
       </footer>
     </div>
   );
