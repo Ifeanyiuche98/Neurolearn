@@ -18,6 +18,7 @@ import TokenWallet         from './TokenWallet';
 import Leaderboard         from './Leaderboard';
 import Analytics           from './Analytics';
 import BpmIndicator        from './BpmIndicator';
+import Onboarding, { useOnboarding } from './Onboarding'; // ── LINE 1 added
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -180,8 +181,6 @@ function getFocusScore(avgBpm: number | null) {
   return                   { score: 45, label: 'High Stress Detected',  color: '#ef4444' };
 }
 
-// ─── Shared inline style helpers ─────────────────────────────────────────────
-
 const card = (accent = 'rgba(255,255,255,0.06)'): CSSProperties => ({
   background: 'var(--bg-card)',
   border: `1px solid ${accent}`,
@@ -204,6 +203,9 @@ const pill = (bg: string, color: string): CSSProperties => ({
 
 export default function App() {
 
+  // ── LINE 2: Onboarding hook ───────────────────────────────────────────────
+  const { showOnboarding, completeOnboarding } = useOnboarding();
+
   // ── v3 hooks ──────────────────────────────────────────────────────────────
   const streakData      = useStreak();
   const quizTimer       = useQuizTimer();
@@ -211,7 +213,6 @@ export default function App() {
   const leaderboardData = useLeaderboard();
   const [lastQuestionXP, setLastQuestionXP] = useState(0);
 
-  // ── Analytics 5-tap ──────────────────────────────────────────────────────
   const [logoTaps, setLogoTaps]   = useState(0);
   const tapTimerRef               = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -223,7 +224,6 @@ export default function App() {
     tapTimerRef.current = setTimeout(() => setLogoTaps(0), 3000);
   };
 
-  // ── rPPG state ────────────────────────────────────────────────────────────
   const videoRef    = useRef<HTMLVideoElement>(null);
   const sessionRef  = useRef<RppgSession | null>(null);
   const streamRef   = useRef<MediaStream | null>(null);
@@ -236,7 +236,6 @@ export default function App() {
   const bpmReadingsRef = useRef<number[]>([]);
   const timerRef       = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ── Learning state ────────────────────────────────────────────────────────
   const [screen, setScreen]               = useState<Screen>('home');
   const [activeModule, setActiveModule]   = useState<LearningModule | null>(null);
   const [lessonPage, setLessonPage]       = useState(0);
@@ -246,7 +245,6 @@ export default function App() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [quizScore, setQuizScore]         = useState(0);
 
-  // ── rPPG sync ─────────────────────────────────────────────────────────────
   const syncFromSession = useCallback(() => {
     const session = sessionRef.current;
     if (!session) return;
@@ -300,7 +298,6 @@ export default function App() {
     };
   }, [syncFromSession]);
 
-  // ── Session controls ──────────────────────────────────────────────────────
   const startSession = () => {
     bpmReadingsRef.current = [];
     setSessionSeconds(0); setSessionSummary(null); setSessionActive(true);
@@ -320,7 +317,6 @@ export default function App() {
     }
   };
 
-  // ── Navigation ────────────────────────────────────────────────────────────
   const startModule = (mod: LearningModule) => {
     setActiveModule(mod); setLessonPage(0); setFlashcardIndex(0);
     setCardFlipped(false); setQuizIndex(0); setSelectedAnswer(null); setQuizScore(0);
@@ -374,71 +370,31 @@ export default function App() {
     setScreen('home'); setActiveModule(null); setSessionSummary(null); quizTimer.resetQuiz();
   };
 
-  // ── Derived values ────────────────────────────────────────────────────────
   const statusTone     = getStatusTone(diagnostics);
   const readinessLabel = diagnostics?.estimationAvailable && metrics.bpm != null ? 'Ready' : 'Warm-up';
   const confidencePct  = Math.round(clamp01(metrics.confidence) * 100);
   const qualityPct     = Math.round(clamp01(metrics.signal_quality) * 100);
   const focusState     = getFocusState(metrics.bpm);
 
-  // ── Screen renderers ──────────────────────────────────────────────────────
-
   function renderHome() {
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
         <StreakBar streakData={streakData} />
         <TokenWallet tokenData={tokenData} />
-
-        {/* Leaderboard button */}
-        <button
-          onClick={() => setScreen('leaderboard')}
-          style={{
-            width: '100%', marginBottom: '20px', minHeight: '48px',
-            background: 'var(--bg-card)', border: '1px solid var(--border-soft)',
-            borderRadius: 'var(--radius-md)', color: '#00e5cc',
-            fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.88rem',
-            cursor: 'pointer', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', gap: '8px', transition: 'all 0.2s',
-          }}
-        >
+        <button onClick={() => setScreen('leaderboard')} style={{ width: '100%', marginBottom: '20px', minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s' }}>
           🏆 View Leaderboard
-          {leaderboardData.totalSessions > 0 && (
-            <span style={pill('rgba(0,229,204,0.08)', '#00e5cc')}>
-              {leaderboardData.totalSessions} session{leaderboardData.totalSessions !== 1 ? 's' : ''}
-            </span>
-          )}
+          {leaderboardData.totalSessions > 0 && (<span style={pill('rgba(0,229,204,0.08)', '#00e5cc')}>{leaderboardData.totalSessions} session{leaderboardData.totalSessions !== 1 ? 's' : ''}</span>)}
         </button>
-
-        {/* Module heading */}
-        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '-0.02em' }}>
-          Choose a Module
-        </h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '16px' }}>
-          NeuroLearn tracks your focus as you learn.
-        </p>
-
-        {/* Module grid */}
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '-0.02em' }}>Choose a Module</h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '16px' }}>NeuroLearn tracks your focus as you learn.</p>
         <div className="module-grid">
           {MODULES.map(mod => (
-            <button
-              key={mod.id}
-              onClick={() => startModule(mod)}
-              className="module-card"
-              style={{ '--accent': mod.color } as CSSProperties}
-            >
+            <button key={mod.id} onClick={() => startModule(mod)} className="module-card" style={{ '--accent': mod.color } as CSSProperties}>
               <div style={{ fontSize: '1.8rem', marginBottom: '10px', lineHeight: 1 }}>{mod.icon}</div>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem', color: mod.color, marginBottom: '6px', letterSpacing: '-0.01em' }}>
-                {mod.title}
-              </div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5, marginBottom: '12px' }}>
-                {mod.description}
-              </div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem', color: mod.color, marginBottom: '6px', letterSpacing: '-0.01em' }}>{mod.title}</div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5, marginBottom: '12px' }}>{mod.description}</div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.68rem', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                <span>{mod.lesson.length} lessons</span>
-                <span>·</span>
-                <span>{mod.flashcards.length} cards</span>
-                <span>·</span>
-                <span>{mod.quiz.length} questions</span>
+                <span>{mod.lesson.length} lessons</span><span>·</span><span>{mod.flashcards.length} cards</span><span>·</span><span>{mod.quiz.length} questions</span>
               </div>
             </button>
           ))}
@@ -449,48 +405,26 @@ export default function App() {
 
   function renderLesson() {
     if (!activeModule) return null;
-    const page   = activeModule.lesson[lessonPage];
+    const page = activeModule.lesson[lessonPage];
     const isLast = lessonPage === activeModule.lesson.length - 1;
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
-        {/* Nav */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <button className="btn-ghost" onClick={backToHome}>← Modules</button>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>
-            {activeModule.icon} {activeModule.title}
-          </span>
-          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>
-            {lessonPage + 1}/{activeModule.lesson.length}
-          </span>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>{activeModule.icon} {activeModule.title}</span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>{lessonPage + 1}/{activeModule.lesson.length}</span>
         </div>
-
-        {/* Lesson card */}
         <div style={{ ...card(`${activeModule.color}33`), borderLeft: `3px solid ${activeModule.color}`, maxHeight: '55vh', overflowY: 'auto', marginBottom: '16px' }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '14px', letterSpacing: '-0.02em' }}>
-            {page.title}
-          </h3>
-          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, fontSize: '0.88rem', whiteSpace: 'pre-line' }}>
-            {page.content}
-          </p>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '14px', letterSpacing: '-0.02em' }}>{page.title}</h3>
+          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, fontSize: '0.88rem', whiteSpace: 'pre-line' }}>{page.content}</p>
         </div>
-
-        {/* Controls */}
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {lessonPage > 0
-            ? <button className="btn-secondary" onClick={() => setLessonPage(p => p - 1)}>Previous</button>
-            : <div />}
+          {lessonPage > 0 ? <button className="btn-secondary" onClick={() => setLessonPage(p => p - 1)}>Previous</button> : <div />}
           <div style={{ flex: 1 }} />
-          {!isLast
-            ? <button className="btn-primary" style={{ background: activeModule.color }} onClick={() => setLessonPage(p => p + 1)}>Next</button>
-            : <button className="btn-primary" style={{ background: activeModule.color }} onClick={goToFlashcards}>Flashcards →</button>}
+          {!isLast ? <button className="btn-primary" style={{ background: activeModule.color }} onClick={() => setLessonPage(p => p + 1)}>Next</button> : <button className="btn-primary" style={{ background: activeModule.color }} onClick={goToFlashcards}>Flashcards →</button>}
         </div>
-
-        {/* Dots */}
         <div className="progress-dots" style={{ marginTop: '16px' }}>
-          {activeModule.lesson.map((_, i) => (
-            <div key={i} className={`progress-dot${i === lessonPage ? ' active' : i < lessonPage ? ' done' : ''}`}
-              style={{ width: i === lessonPage ? '20px' : '6px' }} />
-          ))}
+          {activeModule.lesson.map((_, i) => (<div key={i} className={`progress-dot${i === lessonPage ? ' active' : i < lessonPage ? ' done' : ''}`} style={{ width: i === lessonPage ? '20px' : '6px' }} />))}
         </div>
       </div>
     );
@@ -498,58 +432,25 @@ export default function App() {
 
   function renderFlashcards() {
     if (!activeModule) return null;
-    const card2  = activeModule.flashcards[flashcardIndex];
+    const card2 = activeModule.flashcards[flashcardIndex];
     const isLast = flashcardIndex === activeModule.flashcards.length - 1;
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <button className="btn-ghost" onClick={() => setScreen('lesson')}>← Lesson</button>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>
-            {activeModule.icon} Flashcards
-          </span>
-          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>
-            {flashcardIndex + 1}/{activeModule.flashcards.length}
-          </span>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>{activeModule.icon} Flashcards</span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>{flashcardIndex + 1}/{activeModule.flashcards.length}</span>
         </div>
-
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginBottom: '12px', textAlign: 'center' }}>
-          {cardFlipped ? 'Answer revealed — ready for next?' : 'Tap the card to reveal the answer'}
-        </p>
-
-        {/* Flip card */}
-        <div
-          onClick={() => setCardFlipped(f => !f)}
-          style={{
-            background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)',
-            border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`,
-            borderRadius: 'var(--radius-xl)', padding: '40px 24px',
-            minHeight: '200px', display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-            textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s',
-            boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)',
-          }}
-        >
-          <p style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>
-            {cardFlipped ? 'ANSWER' : 'QUESTION'}
-          </p>
-          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.7, fontFamily: 'var(--font-body)' }}>
-            {cardFlipped ? card2.back : card2.front}
-          </p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginBottom: '12px', textAlign: 'center' }}>{cardFlipped ? 'Answer revealed — ready for next?' : 'Tap the card to reveal the answer'}</p>
+        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)', border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`, borderRadius: 'var(--radius-xl)', padding: '40px 24px', minHeight: '200px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s', boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)' }}>
+          <p style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>{cardFlipped ? 'ANSWER' : 'QUESTION'}</p>
+          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.7, fontFamily: 'var(--font-body)' }}>{cardFlipped ? card2.back : card2.front}</p>
         </div>
-
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {cardFlipped && (
-            <button className="btn-primary" style={{ background: activeModule.color }} onClick={nextFlashcard}>
-              {isLast ? 'Take Quiz →' : 'Next Card →'}
-            </button>
-          )}
+          {cardFlipped && (<button className="btn-primary" style={{ background: activeModule.color }} onClick={nextFlashcard}>{isLast ? 'Take Quiz →' : 'Next Card →'}</button>)}
         </div>
-
         <div className="progress-dots">
-          {activeModule.flashcards.map((_, i) => (
-            <div key={i} className={`progress-dot${i === flashcardIndex ? ' active' : i < flashcardIndex ? ' done' : ''}`}
-              style={{ width: i === flashcardIndex ? '20px' : '6px' }} />
-          ))}
+          {activeModule.flashcards.map((_, i) => (<div key={i} className={`progress-dot${i === flashcardIndex ? ' active' : i < flashcardIndex ? ' done' : ''}`} style={{ width: i === flashcardIndex ? '20px' : '6px' }} />))}
         </div>
       </div>
     );
@@ -557,74 +458,38 @@ export default function App() {
 
   function renderQuiz() {
     if (!activeModule) return null;
-    const q        = activeModule.quiz[quizIndex];
+    const q = activeModule.quiz[quizIndex];
     const answered = selectedAnswer !== null;
-    const isUrgent  = quizTimer.timeLeft <= 5 && !answered;
+    const isUrgent = quizTimer.timeLeft <= 5 && !answered;
     const isWarning = quizTimer.timeLeft <= 10 && !answered;
     const RADIUS = 28;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
     const strokeDashoffset = answered ? 0 : CIRCUMFERENCE * (1 - quizTimer.timerPercent / 100);
     const circleColor = answered ? '#22c55e' : quizTimer.timerColor;
-
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
-        {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
           <button className="btn-ghost" onClick={() => setScreen('flashcard')}>← Flashcards</button>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>
-            {activeModule.icon} Quiz
-          </span>
-          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>
-            Q{quizIndex + 1}/{activeModule.quiz.length}
-          </span>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>{activeModule.icon} Quiz</span>
+          <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>Q{quizIndex + 1}/{activeModule.quiz.length}</span>
         </div>
-
-        {/* Timer panel */}
-        <div style={{
-          background: 'var(--bg-card)',
-          border: `1px solid ${answered ? 'rgba(34,197,94,0.25)' : isUrgent ? 'rgba(239,68,68,0.4)' : isWarning ? 'rgba(245,158,11,0.3)' : 'var(--pulse-border)'}`,
-          borderRadius: 'var(--radius-lg)', padding: '14px 16px', marginBottom: '14px',
-          display: 'flex', alignItems: 'center', gap: '14px', transition: 'border-color 0.3s',
-          boxShadow: isUrgent ? '0 0 20px rgba(239,68,68,0.1)' : 'var(--shadow-card)',
-        }}>
-          {/* SVG circle */}
+        <div style={{ background: 'var(--bg-card)', border: `1px solid ${answered ? 'rgba(34,197,94,0.25)' : isUrgent ? 'rgba(239,68,68,0.4)' : isWarning ? 'rgba(245,158,11,0.3)' : 'var(--pulse-border)'}`, borderRadius: 'var(--radius-lg)', padding: '14px 16px', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '14px', transition: 'border-color 0.3s', boxShadow: isUrgent ? '0 0 20px rgba(239,68,68,0.1)' : 'var(--shadow-card)' }}>
           <div style={{ position: 'relative', flexShrink: 0 }}>
-            {isUrgent && (
-              <div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: '2px solid rgba(239,68,68,0.5)', animation: 'pulse 0.8s ease-in-out infinite' }} />
-            )}
+            {isUrgent && (<div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: '2px solid rgba(239,68,68,0.5)', animation: 'pulse 0.8s ease-in-out infinite' }} />)}
             <svg width="72" height="72" style={{ transform: 'rotate(-90deg)' }}>
               <circle cx="36" cy="36" r={RADIUS} fill="none" stroke="var(--bg-surface)" strokeWidth="6" />
-              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke={circleColor} strokeWidth="6" strokeLinecap="round"
-                strokeDasharray={CIRCUMFERENCE} strokeDashoffset={strokeDashoffset}
-                style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }} />
+              <circle cx="36" cy="36" r={RADIUS} fill="none" stroke={circleColor} strokeWidth="6" strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={strokeDashoffset} style={{ transition: 'stroke-dashoffset 0.9s linear, stroke 0.3s' }} />
             </svg>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: answered ? '1.4rem' : '1.2rem', fontWeight: 800, color: circleColor }}>
-              {answered ? '✓' : quizTimer.timeLeft}
-            </div>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: answered ? '1.4rem' : '1.2rem', fontWeight: 800, color: circleColor }}>{answered ? '✓' : quizTimer.timeLeft}</div>
           </div>
-
-          {/* Status */}
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: answered ? '#22c55e' : isUrgent ? '#ef4444' : isWarning ? '#f59e0b' : '#00e5cc' }}>
-                {answered ? '✅ Answered' : isUrgent ? '⚡ Hurry up!' : isWarning ? '⏳ Running low...' : '🕐 Time remaining'}
-              </span>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                {answered ? 'Next →' : `${quizTimer.timeLeft}s`}
-              </span>
+              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: answered ? '#22c55e' : isUrgent ? '#ef4444' : isWarning ? '#f59e0b' : '#00e5cc' }}>{answered ? '✅ Answered' : isUrgent ? '⚡ Hurry up!' : isWarning ? '⏳ Running low...' : '🕐 Time remaining'}</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{answered ? 'Next →' : `${quizTimer.timeLeft}s`}</span>
             </div>
-
-            {/* Bar */}
             <div style={{ height: '12px', background: 'var(--bg-surface)', borderRadius: '6px', overflow: 'hidden', marginBottom: '8px', border: '1px solid rgba(255,255,255,0.04)' }}>
-              <div style={{
-                height: '100%',
-                width: `${answered ? 100 : quizTimer.timerPercent}%`,
-                background: answered ? '#22c55e' : isUrgent ? 'linear-gradient(90deg,#ef4444,#ff6b6b)' : isWarning ? 'linear-gradient(90deg,#f59e0b,#fbbf24)' : 'linear-gradient(90deg,#00e5cc,#3d9eff)',
-                borderRadius: '6px', transition: 'width 0.9s linear, background 0.3s',
-              }} />
+              <div style={{ height: '100%', width: `${answered ? 100 : quizTimer.timerPercent}%`, background: answered ? '#22c55e' : isUrgent ? 'linear-gradient(90deg,#ef4444,#ff6b6b)' : isWarning ? 'linear-gradient(90deg,#f59e0b,#fbbf24)' : 'linear-gradient(90deg,#00e5cc,#3d9eff)', borderRadius: '6px', transition: 'width 0.9s linear, background 0.3s' }} />
             </div>
-
-            {/* Badges */}
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {quizTimer.comboCount > 1 && <span style={pill('rgba(245,158,11,0.1)', '#f59e0b')}>🔗 {quizTimer.comboCount}x Combo</span>}
               {lastQuestionXP > 0 && answered && <span style={pill('rgba(0,229,204,0.1)', '#00e5cc')}>+{lastQuestionXP} XP</span>}
@@ -632,54 +497,24 @@ export default function App() {
             </div>
           </div>
         </div>
-
-        {/* Time-out banner */}
-        {selectedAnswer === -1 && (
-          <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 'var(--radius-md)', padding: '10px 14px', color: '#ef4444', fontSize: '0.82rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>⏱</span><span>Time's up! The correct answer is highlighted below.</span>
-          </div>
-        )}
-
-        {/* Question */}
+        {selectedAnswer === -1 && (<div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 'var(--radius-md)', padding: '10px 14px', color: '#ef4444', fontSize: '0.82rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}><span>⏱</span><span>Time's up! The correct answer is highlighted below.</span></div>)}
         <div style={{ ...card(), marginBottom: '14px' }}>
-          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.65, marginBottom: '18px', fontWeight: 500 }}>
-            {q.question}
-          </p>
+          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.65, marginBottom: '18px', fontWeight: 500 }}>{q.question}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {q.options.map((opt, idx) => {
               let bg = 'var(--bg-input)', border = 'rgba(255,255,255,0.06)', color = 'var(--text-secondary)';
               if (answered) {
-                if (idx === q.correct)                                    { bg = 'rgba(34,197,94,0.08)';  border = 'rgba(34,197,94,0.4)';  color = '#22c55e'; }
+                if (idx === q.correct) { bg = 'rgba(34,197,94,0.08)'; border = 'rgba(34,197,94,0.4)'; color = '#22c55e'; }
                 else if (idx === selectedAnswer && selectedAnswer !== -1) { bg = 'rgba(239,68,68,0.08)'; border = 'rgba(239,68,68,0.35)'; color = '#ef4444'; }
               }
-              return (
-                <button key={idx} onClick={() => handleAnswer(idx)} disabled={answered}
-                  style={{ background: bg, border: `1px solid ${border}`, borderRadius: 'var(--radius-md)', padding: '13px 16px', color, cursor: answered ? 'default' : 'pointer', textAlign: 'left', fontSize: '0.88rem', transition: 'all 0.2s', fontFamily: 'var(--font-body)', minHeight: '48px' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginRight: '10px', opacity: 0.5 }}>
-                    {String.fromCharCode(65 + idx)}
-                  </span>
-                  {opt}
-                </button>
-              );
+              return (<button key={idx} onClick={() => handleAnswer(idx)} disabled={answered} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 'var(--radius-md)', padding: '13px 16px', color, cursor: answered ? 'default' : 'pointer', textAlign: 'left', fontSize: '0.88rem', transition: 'all 0.2s', fontFamily: 'var(--font-body)', minHeight: '48px' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginRight: '10px', opacity: 0.5 }}>{String.fromCharCode(65 + idx)}</span>{opt}</button>);
             })}
           </div>
         </div>
-
-        {answered && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button className="btn-primary" style={{ background: activeModule.color, color: '#020408' }} onClick={nextQuestion}>
-              {quizIndex < activeModule.quiz.length - 1 ? 'Next Question →' : 'See Results 🎉'}
-            </button>
-          </div>
-        )}
-
+        {answered && (<div style={{ display: 'flex', justifyContent: 'flex-end' }}><button className="btn-primary" style={{ background: activeModule.color, color: '#020408' }} onClick={nextQuestion}>{quizIndex < activeModule.quiz.length - 1 ? 'Next Question →' : 'See Results 🎉'}</button></div>)}
         <div className="progress-dots">
-          {activeModule.quiz.map((_, i) => (
-            <div key={i} className={`progress-dot${i === quizIndex ? ' active' : i < quizIndex ? ' done' : ''}`}
-              style={{ width: i === quizIndex ? '20px' : '6px' }} />
-          ))}
+          {activeModule.quiz.map((_, i) => (<div key={i} className={`progress-dot${i === quizIndex ? ' active' : i < quizIndex ? ' done' : ''}`} style={{ width: i === quizIndex ? '20px' : '6px' }} />))}
         </div>
-
         <style>{`@keyframes pulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.2);opacity:.3}}`}</style>
       </div>
     );
@@ -688,29 +523,21 @@ export default function App() {
   function renderResults() {
     if (!activeModule) return null;
     const focusScore = getFocusScore(sessionSummary?.avgBpm ?? null);
-    const quizPct    = Math.round((quizScore / activeModule.quiz.length) * 100);
-    const sessionXP  = quizTimer.totalQuizXP;
-
+    const quizPct = Math.round((quizScore / activeModule.quiz.length) * 100);
+    const sessionXP = quizTimer.totalQuizXP;
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
-        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <div style={{ fontSize: '2.8rem', marginBottom: '8px' }}>🎉</div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '4px' }}>
-            {activeModule.title} Complete!
-          </h2>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-primary)', letterSpacing: '-0.03em', marginBottom: '4px' }}>{activeModule.title} Complete!</h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Here is your session breakdown</p>
         </div>
-
-        {/* Quiz + Focus scores */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
           <div style={card()}>
             <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 600 }}>Quiz Score</p>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.04em', marginBottom: '2px' }}>{quizPct}%</p>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginBottom: '8px' }}>{quizScore}/{activeModule.quiz.length} correct</p>
-            <p style={{ color: quizPct >= 80 ? '#22c55e' : quizPct >= 60 ? '#f59e0b' : '#ef4444', fontSize: '0.78rem', fontWeight: 600 }}>
-              {quizPct >= 80 ? 'Excellent!' : quizPct >= 60 ? 'Good effort!' : 'Keep practicing'}
-            </p>
+            <p style={{ color: quizPct >= 80 ? '#22c55e' : quizPct >= 60 ? '#f59e0b' : '#ef4444', fontSize: '0.78rem', fontWeight: 600 }}>{quizPct >= 80 ? 'Excellent!' : quizPct >= 60 ? 'Good effort!' : 'Keep practicing'}</p>
           </div>
           <div style={{ ...card(`${focusScore.color}22`) }}>
             <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 600 }}>Focus Score</p>
@@ -719,8 +546,6 @@ export default function App() {
             <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>Avg BPM: {sessionSummary?.avgBpm != null ? Math.round(sessionSummary.avgBpm) : 'N/A'}</p>
           </div>
         </div>
-
-        {/* XP + Multiplier */}
         <div style={{ ...card('var(--pulse-border)'), marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>XP This Session</p>
@@ -732,22 +557,16 @@ export default function App() {
             <p style={{ color: 'var(--text-muted)', fontSize: '0.68rem' }}>{streakData.getStreakLabel()}</p>
           </div>
         </div>
-
-        {/* Token pending */}
         <div style={{ ...card('rgba(245,158,11,0.2)'), background: 'rgba(245,158,11,0.04)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Pending ELTA</p>
-            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>
-              {tokenData.claimableTokens > 0 ? `${tokenData.claimableTokens} ready to claim! 🎉` : `${tokenData.pendingXP.toLocaleString()} XP pending`}
-            </p>
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{tokenData.claimableTokens > 0 ? `${tokenData.claimableTokens} ready to claim! 🎉` : `${tokenData.pendingXP.toLocaleString()} XP pending`}</p>
           </div>
           <div style={{ textAlign: 'right' }}>
             <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Balance</p>
             <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{tokenData.balance} ELTA</p>
           </div>
         </div>
-
-        {/* Lifetime XP + Study time */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
           <div style={{ ...card(), textAlign: 'center' }}>
             <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Lifetime XP</p>
@@ -758,15 +577,9 @@ export default function App() {
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '1.3rem', fontWeight: 600, color: 'var(--text-primary)' }}>{sessionSummary ? formatTime(sessionSummary.duration) : '—'}</p>
           </div>
         </div>
-
-        {/* Action buttons */}
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => setScreen('leaderboard')} style={{ flex: 1, minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
-            🏆 Leaderboard
-          </button>
-          <button className="btn-primary" onClick={backToHome} style={{ flex: 2, background: activeModule.color, color: '#020408' }}>
-            Back to Modules
-          </button>
+          <button onClick={() => setScreen('leaderboard')} style={{ flex: 1, minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>🏆 Leaderboard</button>
+          <button className="btn-primary" onClick={backToHome} style={{ flex: 2, background: activeModule.color, color: '#020408' }}>Back to Modules</button>
         </div>
       </div>
     );
@@ -776,16 +589,15 @@ export default function App() {
   return (
     <div className="app">
 
+      {/* ── LINE 3: Onboarding overlay — shows once on first visit ───────── */}
+      {showOnboarding && <Onboarding onComplete={completeOnboarding} />}
+
       {/* ── Top bar ──────────────────────────────────────────────────────── */}
       <header className="topbar">
         <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
           <span className="brand-mark" />
           <span className="brand-name">NeuroLearn</span>
-          {logoTaps > 0 && logoTaps < 5 && (
-            <span style={{ fontSize: '0.55rem', color: 'var(--pulse-border)', marginLeft: '4px' }}>
-              {'●'.repeat(logoTaps)}{'○'.repeat(5 - logoTaps)}
-            </span>
-          )}
+          {logoTaps > 0 && logoTaps < 5 && (<span style={{ fontSize: '0.55rem', color: 'var(--pulse-border)', marginLeft: '4px' }}>{'●'.repeat(logoTaps)}{'○'.repeat(5 - logoTaps)}</span>)}
         </div>
         <span className="topbar-sep" />
         <span className="topbar-tagline">Web3 Learning · Focus Tracker</span>
@@ -800,26 +612,8 @@ export default function App() {
       <main className="main">
         <section className="stage">
           <h1 className="visually-hidden">NeuroLearn Focus Session</h1>
-
-          {/* ── Mobile: floating BPM indicator ─────────────────────────── */}
           <div style={{ display: 'block' }} className="stage-content">
-
-            {/* Floating BPM pill — always visible on mobile */}
-            <BpmIndicator
-              metrics={metrics}
-              diagnostics={diagnostics}
-              sessionSeconds={sessionSeconds}
-              sessionActive={sessionActive}
-              onStartSession={startSession}
-              onStopSession={() => stopSession(null, 0, 0, 0)}
-              videoRef={videoRef}
-              confidencePct={confidencePct}
-              qualityPct={qualityPct}
-              focusState={focusState}
-              readinessLabel={readinessLabel}
-            />
-
-            {/* Screen content */}
+            <BpmIndicator metrics={metrics} diagnostics={diagnostics} sessionSeconds={sessionSeconds} sessionActive={sessionActive} onStartSession={startSession} onStopSession={() => stopSession(null, 0, 0, 0)} videoRef={videoRef} confidencePct={confidencePct} qualityPct={qualityPct} focusState={focusState} readinessLabel={readinessLabel} />
             {screen === 'home'        && renderHome()}
             {screen === 'lesson'      && renderLesson()}
             {screen === 'flashcard'   && renderFlashcards()}
@@ -829,21 +623,14 @@ export default function App() {
             {screen === 'analytics'   && <Analytics onBack={backToHome} />}
           </div>
 
-          {/* ── Desktop: full rPPG sidebar ──────────────────────────────── */}
           <aside className="readouts">
             <div>
               <div className="video-chrome">
                 <video ref={videoRef} autoPlay muted playsInline className="stage-video" />
-                <div className="video-label">
-                  <span className="video-label-dot" />
-                  Live input
-                </div>
+                <div className="video-label"><span className="video-label-dot" />Live input</div>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.65rem', marginTop: '6px', textAlign: 'center' }}>
-                Face the light · fill the frame · stay steady
-              </p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.65rem', marginTop: '6px', textAlign: 'center' }}>Face the light · fill the frame · stay steady</p>
             </div>
-
             <div className="bpm-block">
               <p className="bpm-label">Heart Rate</p>
               <div className="bpm-value-row">
@@ -852,12 +639,10 @@ export default function App() {
               </div>
               <p className="bpm-sub">{readinessLabel}</p>
             </div>
-
             <div style={{ background: `${focusState.color}0f`, border: `1px solid ${focusState.color}33`, borderRadius: 'var(--radius-md)', padding: '12px 14px' }}>
               <p style={{ color: focusState.color, fontWeight: 700, fontSize: '0.82rem', marginBottom: '3px' }}>{focusState.label}</p>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5 }}>{focusState.message}</p>
             </div>
-
             <div className="meter-group">
               <div className="meter">
                 <div className="meter-head"><span>Confidence</span><span className="meter-pct">{confidencePct}%</span></div>
@@ -868,14 +653,12 @@ export default function App() {
                 <div className="meter-track"><div className="meter-fill meter-fill--quality" style={{ width: `${qualityPct}%` }} /></div>
               </div>
             </div>
-
             <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-md)', padding: '14px', textAlign: 'center' }}>
               <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>SESSION TIME</p>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px' }}>{formatTime(sessionSeconds)}</p>
               {!sessionActive
                 ? <button className="btn-primary" style={{ width: '100%', fontSize: '0.8rem', padding: '8px 16px', minHeight: '36px' }} onClick={startSession}>Start Session</button>
-                : <button style={{ width: '100%', background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 'var(--radius-sm)', padding: '8px 16px', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem', fontFamily: 'var(--font-body)', minHeight: '36px' }} onClick={() => stopSession(null, 0, 0, 0)}>End Session</button>
-              }
+                : <button style={{ width: '100%', background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 'var(--radius-sm)', padding: '8px 16px', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem', fontFamily: 'var(--font-body)', minHeight: '36px' }} onClick={() => stopSession(null, 0, 0, 0)}>End Session</button>}
             </div>
           </aside>
         </section>
