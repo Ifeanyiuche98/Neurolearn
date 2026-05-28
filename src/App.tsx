@@ -19,12 +19,11 @@ import Leaderboard         from './Leaderboard';
 import Analytics           from './Analytics';
 import BpmIndicator        from './BpmIndicator';
 import Onboarding, { useOnboarding } from './Onboarding';
-import { useTiers }        from './useTiers';   // ── CHANGE 1a
-import TierGate            from './TierGate';   // ── CHANGE 1b
+import { useTiers }        from './useTiers';
+import TierGate            from './TierGate';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-// ── CHANGE 4: 'tiergated' added to Screen type ───────────────────────────────
 type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics' | 'tiergated';
 
 interface FlashCard { front: string; back: string; }
@@ -40,78 +39,417 @@ interface LearningModule {
 // ─── Module Content ───────────────────────────────────────────────────────────
 
 const MODULES: LearningModule[] = [
+
+  // ── MODULE 1: BLOCKCHAIN BASICS ───────────────────────────────────────────
   {
     id: 'blockchain', title: 'Blockchain Basics',
     description: 'Understand what blockchain is and how it works from the ground up.',
     color: '#3d9eff', icon: '⛓️',
     lesson: [
-      { title: 'What is a Blockchain?', content: `A blockchain is a special type of database that stores information in "blocks" that are chained together. Unlike a normal database controlled by one company, a blockchain is shared across thousands of computers worldwide — making it nearly impossible to hack or manipulate.\n\nEach block contains:\n• A list of transactions or data\n• A timestamp of when it was created\n• A unique fingerprint (called a "hash") of the previous block\n\nThis chaining of fingerprints is what makes blockchain so powerful. If someone tries to change an old block, its fingerprint changes — breaking the chain and alerting the entire network.` },
-      { title: 'How Does Consensus Work?', content: `Since no single person controls a blockchain, how does the network agree on what is true? This is done through "consensus mechanisms" — rules that all participants follow.\n\nThe two most common are:\n\nProof of Work (PoW) — Used by Bitcoin. Miners compete to solve complex math puzzles. The winner adds the next block and earns a reward. This requires a lot of computing power.\n\nProof of Stake (PoS) — Used by Ethereum. Validators lock up crypto as collateral. They are chosen to validate blocks based on their stake. Far more energy-efficient than PoW.\n\nBoth methods make it extremely expensive to cheat the network.` },
-      { title: 'Why Does Blockchain Matter?', content: `Blockchain solves a problem called the "double-spend problem" — how do you stop someone from sending the same digital money to two people at once?\n\nBefore Bitcoin, you needed a bank to verify transactions. Blockchain removes that middleman. This has massive implications:\n\nFinance — Send money anywhere in the world without a bank, instantly and cheaply.\n\nHealthcare — Store medical records that only you can authorize access to.\n\nVoting — Create tamper-proof voting systems.\n\nAfrica specifically — Blockchain can provide financial services to millions of unbanked people who have a smartphone but no bank account.` },
+      {
+        title: 'What Is a Blockchain?',
+        content: `A blockchain is a new kind of database — one that no single person or company controls.
+
+Instead of storing data on one central server, a blockchain copies and shares its records across thousands of computers worldwide. Every participant holds the same version of the truth.
+
+Here is how it works:
+
+• Transactions are grouped into a block
+• Each block is given a unique digital fingerprint called a hash
+• That hash is embedded into the next block — creating a chain
+• Once recorded, no block can be changed without breaking every block after it
+
+This makes blockchain records tamper-proof, transparent, and permanent.
+
+Bitcoin introduced this concept in 2009. By 2026, blockchain technology underpins financial systems, identity platforms, supply chains, and decentralized applications used by millions of people globally.`
+      },
+      {
+        title: 'How Blockchains Reach Agreement',
+        content: `With no central authority, how does a blockchain decide what is true? Through a system called a consensus mechanism — a set of rules all participants follow to agree on valid transactions.
+
+The two most important mechanisms today:
+
+Proof of Work (PoW)
+Used by Bitcoin. Computers compete to solve complex mathematical puzzles. The winner adds the next block and earns a reward. This process, called mining, is energy-intensive but has secured Bitcoin for over 15 years.
+
+Proof of Stake (PoS)
+Used by Ethereum since 2022. Validators lock up cryptocurrency as collateral. The network selects them to confirm transactions based on their stake. Far more energy-efficient — Ethereum reduced its energy use by approximately 99.9% after switching.
+
+Both mechanisms make cheating the network extraordinarily expensive. To alter past records, an attacker would need to overpower the entire global network simultaneously.`
+      },
+      {
+        title: 'Why Blockchain Changes Everything',
+        content: `Before blockchain, digital transactions required a trusted middleman — a bank, payment processor, or government authority — to verify that the same money was not spent twice. This is known as the double-spend problem.
+
+Blockchain solves this without any middleman. Every transaction is verified by the network, recorded permanently, and visible to all.
+
+The implications are enormous:
+
+Finance — Send value anywhere in the world instantly, without a bank, for a fraction of traditional fees.
+
+Identity — Store and control your own credentials without relying on a central authority.
+
+Ownership — Prove ownership of digital assets through an immutable public record.
+
+Transparency — Every transaction on a public blockchain is auditable by anyone, anywhere.
+
+By 2026, institutional investors, governments, and global corporations actively use blockchain infrastructure. Spot Bitcoin ETFs launched in the US in January 2024 attracted tens of billions in institutional capital within months — cementing blockchain's place in mainstream finance.`
+      },
     ],
     flashcards: [
-      { front: 'What is a Block?', back: 'A container that holds a batch of verified transactions, a timestamp, and a hash linking it to the previous block.' },
-      { front: 'What is a Hash?', back: 'A unique digital fingerprint of data. If any data changes, the hash changes completely — making tampering immediately detectable.' },
-      { front: 'What is Decentralization?', back: 'No single person or company controls the network. Thousands of computers (nodes) share and verify the same data.' },
-      { front: 'What is Proof of Work?', back: 'A consensus method where miners solve math puzzles to earn the right to add a new block. Used by Bitcoin.' },
-      { front: 'What is a Node?', back: 'Any computer that participates in a blockchain network by storing a full copy of the chain and validating transactions.' },
+      {
+        front: 'What is a blockchain?',
+        back: 'A distributed, immutable ledger shared across thousands of computers. Transactions are grouped in blocks, cryptographically linked, and secured by network consensus. No single entity controls it.'
+      },
+      {
+        front: 'What is a hash?',
+        back: 'A unique digital fingerprint generated from a block\'s data. If any data changes, the hash changes completely — making tampering instantly detectable across the entire chain.'
+      },
+      {
+        front: 'What is Proof of Stake?',
+        back: 'A consensus mechanism where validators lock up cryptocurrency as collateral to earn the right to confirm transactions. Used by Ethereum since 2022. Far more energy-efficient than Proof of Work.'
+      },
+      {
+        front: 'What is the double-spend problem?',
+        back: 'The risk that the same digital funds could be spent more than once. Blockchain solves this by recording every transaction permanently on a public ledger verified by a global network.'
+      },
+      {
+        front: 'What is decentralization?',
+        back: 'The distribution of control across a global network of participants rather than a single authority. It removes single points of failure, censorship, and gatekeepers from financial and data systems.'
+      },
     ],
     quiz: [
-      { question: 'What makes it nearly impossible to change old data on a blockchain?', options: ['A central server protects it', 'Each block contains the fingerprint of the previous block', 'Blocks are encrypted with passwords', 'Government regulations protect it'], correct: 1 },
-      { question: 'What problem did Bitcoin originally solve?', options: ['Slow internet speeds', 'The double-spend problem', 'Password theft', 'Identity fraud'], correct: 1 },
-      { question: 'Which consensus method does Ethereum currently use?', options: ['Proof of Work', 'Proof of Authority', 'Proof of Stake', 'Proof of History'], correct: 2 },
-      { question: 'What is a node?', options: ['A type of cryptocurrency', 'A computer that participates in the blockchain network', 'A transaction fee', 'A type of wallet'], correct: 1 },
-      { question: 'Which of these is TRUE about blockchain?', options: ['It is controlled by one company', 'Only banks can use it', 'It is shared across thousands of computers', 'It only works with the internet, not computers'], correct: 2 },
+      {
+        question: 'What makes it nearly impossible to alter historical records on a blockchain?',
+        options: [
+          'A government agency monitors all transactions',
+          'Each block contains the cryptographic fingerprint of the previous block',
+          'Blocks are password-protected by the network founder',
+          'Only verified users can read the blockchain'
+        ],
+        correct: 1
+      },
+      {
+        question: 'Which consensus mechanism does Ethereum use since The Merge in 2022?',
+        options: [
+          'Proof of Work',
+          'Proof of Authority',
+          'Proof of History',
+          'Proof of Stake'
+        ],
+        correct: 3
+      },
+      {
+        question: 'What problem did Bitcoin originally solve?',
+        options: [
+          'Slow broadband internet speeds',
+          'The double-spend problem in digital transactions',
+          'Identity theft on social media platforms',
+          'International tax compliance'
+        ],
+        correct: 1
+      },
+      {
+        question: 'What happened when US spot Bitcoin ETFs launched in January 2024?',
+        options: [
+          'They were immediately shut down by regulators',
+          'They attracted tens of billions in institutional capital and became the fastest-growing ETF category in Wall Street history',
+          'They had no impact on Bitcoin\'s price or adoption',
+          'They were only available to government institutions'
+        ],
+        correct: 1
+      },
+      {
+        question: 'Which of these best describes a public blockchain?',
+        options: [
+          'A private database controlled by one corporation',
+          'A shared, transparent ledger anyone can read and verify, maintained by a decentralized network',
+          'A government-issued digital currency system',
+          'An encrypted messaging platform'
+        ],
+        correct: 1
+      },
     ],
   },
+
+  // ── MODULE 2: WALLETS & SECURITY ──────────────────────────────────────────
   {
     id: 'wallets', title: 'Wallets & Security',
     description: 'Learn how crypto wallets work and how to keep your assets safe.',
     color: '#a855f7', icon: '🔐',
     lesson: [
-      { title: 'What is a Crypto Wallet?', content: `A crypto wallet does NOT store your crypto. Your crypto lives on the blockchain. What a wallet stores is your private key — a secret code that proves you own the crypto at a specific address.\n\nThink of it like this:\n• Your wallet address = your bank account number (public, shareable)\n• Your private key = your PIN (secret, never share!)\n\nThere are two main types:\n\nHot Wallets — Connected to the internet (e.g. Trust Wallet, MetaMask). Convenient for daily use but slightly more vulnerable.\n\nCold Wallets — Offline hardware devices (e.g. Ledger). Most secure for storing large amounts long-term.` },
-      { title: 'Seed Phrases — Your Master Key', content: `When you create a wallet, you are given a seed phrase — 12 or 24 random words in a specific order. This is the MOST important thing in crypto.\n\nYour seed phrase can:\n• Restore your wallet on any device if your phone is lost\n• Give full access to ALL wallets in that account\n\nNever:\n• Screenshot your seed phrase\n• Store it in cloud storage (Google Drive, iCloud, email)\n• Share it with ANYONE — not even "support staff"\n• Type it into any website\n\nWrite it on paper. Store it in a safe place. Some people use fireproof, waterproof metal backups.` },
-      { title: 'Common Scams and How to Avoid Them', content: `Most crypto losses come not from hacking, but from social engineering — tricking people into giving away their keys.\n\nSeed phrase scams — Fake support agents ask for your seed phrase to "verify" your wallet. Legitimate services NEVER ask for this.\n\nFake websites — Scammers create exact copies of MetaMask, Trust Wallet, and exchanges. Always verify the URL carefully before connecting.\n\nSend X get 2X back — No legitimate person doubles your money. These are always scams, even if the account looks like a celebrity.\n\nRug pulls — New tokens launch with hype, founders collect investor money, then disappear. Research the team before investing.\n\nRule of thumb: If it sounds too good to be true, it is.` },
+      {
+        title: 'How Crypto Wallets Actually Work',
+        content: `A common misconception: crypto wallets do not store your cryptocurrency. Your assets live on the blockchain. What a wallet stores is your private key — the cryptographic proof that you own those assets.
+
+Think of it this way:
+• Your wallet address = your account number (public, shareable)
+• Your private key = your master password (secret, never share)
+• Your seed phrase = a human-readable backup of that key (12 or 24 words)
+
+Two fundamental types of wallets:
+
+Hot Wallets — Connected to the internet. Examples: Trust Wallet, MetaMask, Phantom. Convenient for everyday use and interacting with DeFi applications. Slightly more exposed to online threats.
+
+Cold Wallets — Offline hardware devices. Examples: Ledger Nano X, Trezor Model T. Your private key never touches the internet. The gold standard for securing significant holdings.
+
+The core principle of crypto security: Not your keys, not your coins. If a third party holds your private keys — as exchanges do — your assets are an IOU, not true ownership. The collapse of FTX in 2022, which lost approximately $8 billion in customer funds, proved this catastrophically.`
+      },
+      {
+        title: 'Seed Phrases and Key Management',
+        content: `Your seed phrase is the single most important piece of information in crypto. It is a sequence of 12 to 24 random words generated when you create a wallet. Anyone with these words can access every asset in your wallet — from any device, anywhere in the world.
+
+Protecting your seed phrase:
+
+✓ Write it on paper immediately
+✓ Store it in at least two secure physical locations
+✓ Consider a fireproof, waterproof metal backup for significant holdings
+✓ Verify your backup works before depositing any funds
+
+Never:
+✗ Screenshot or photograph your seed phrase
+✗ Store it in cloud storage, email, or messaging apps
+✗ Type it into any website or application
+✗ Share it with anyone — including support agents, moderators, or developers
+
+In 2025-2026, two advanced security upgrades have become standard for serious holders:
+
+Passphrase (25th word) — An additional word added to your seed phrase, creating a completely separate hidden wallet. Even if your seed phrase is discovered, funds remain protected.
+
+Multi-signature wallets — Require more than one private key to authorize transactions. Used by major organizations and high-net-worth individuals to eliminate single points of failure.`
+      },
+      {
+        title: 'The Threat Landscape in 2026',
+        content: `The majority of crypto losses come not from technical hacking but from social engineering — manipulating people into giving away their keys or approving malicious transactions.
+
+Critical threats to know in 2026:
+
+SIM-Swap Attacks — Criminals convince your mobile carrier to transfer your phone number to their device, intercepting SMS verification codes. Solution: remove SMS-based two-factor authentication from all crypto accounts immediately. Use an authenticator app like Google Authenticator or Authy instead.
+
+AI-Powered Phishing — Artificial intelligence now generates flawless phishing emails and deepfake video or voice impersonations of known figures. Verify any extraordinary request through multiple official channels before acting.
+
+Clipboard Hijacking — Malware silently replaces copied wallet addresses with an attacker's address. Always verify the first and last four characters of any address before confirming a transaction.
+
+Fake Wallet Apps — Fraudulent apps impersonate Trust Wallet, MetaMask, and others. Only download wallets from official websites or verified app store listings linked directly from the project's official site.
+
+Address Poisoning — Attackers send tiny transactions from addresses resembling your contacts, hoping you copy the wrong address from your history. Never copy recipient addresses from transaction history.
+
+Rule of thumb: No legitimate project, exchange, or support team will ever ask for your seed phrase or private key through any channel, ever.`
+      },
     ],
     flashcards: [
-      { front: 'What does a crypto wallet actually store?', back: 'Your private key — not your crypto itself. The crypto lives on the blockchain.' },
-      { front: 'What is a seed phrase?', back: '12 or 24 words that can fully restore your wallet. Must be kept secret and stored offline.' },
-      { front: 'What is a hot wallet?', back: 'A wallet connected to the internet, like Trust Wallet or MetaMask. Convenient but less secure than cold storage.' },
-      { front: 'What is a private key?', back: 'A secret code that proves ownership of your crypto address. Never share it with anyone, ever.' },
-      { front: 'What is a rug pull?', back: 'A scam where developers hype a project, collect investor funds, then abandon it and disappear with the money.' },
+      {
+        front: 'What does a crypto wallet actually store?',
+        back: 'Your private key — not your cryptocurrency. The crypto lives on the blockchain. The wallet is the tool that uses your private key to authorize transactions on your behalf.'
+      },
+      {
+        front: 'What is a seed phrase?',
+        back: 'A sequence of 12 to 24 words that serves as a human-readable backup of your private key. Anyone with these words has full access to your wallet. Store it offline, in a secure physical location.'
+      },
+      {
+        front: 'What is the difference between a hot and cold wallet?',
+        back: 'Hot wallets are internet-connected — convenient for daily use but more exposed to online threats. Cold wallets store private keys offline, making them immune to remote attacks. Best practice: hot wallet for daily use, cold wallet for significant holdings.'
+      },
+      {
+        front: 'What is a SIM-swap attack?',
+        back: 'A social engineering attack where a criminal convinces your mobile carrier to transfer your phone number to their device. They then intercept SMS verification codes. Mitigate by replacing SMS 2FA with an authenticator app on all crypto accounts.'
+      },
+      {
+        front: 'What is the core principle behind "not your keys, not your coins"?',
+        back: 'If a third party — like an exchange — holds your private keys, your crypto is an IOU from them, not true ownership. If they are hacked, go bankrupt, or freeze withdrawals, you have no recourse. Self-custody is the only true ownership.'
+      },
     ],
     quiz: [
-      { question: 'What does your crypto wallet actually store?', options: ['Your cryptocurrency coins', 'Your private key', 'Your transaction history', 'Your identity documents'], correct: 1 },
-      { question: 'Where should you store your seed phrase?', options: ['In Google Drive for easy access', 'Screenshot on your phone', 'Written on paper in a safe place', 'In your email drafts'], correct: 2 },
-      { question: 'What type of wallet is most secure for large amounts?', options: ['Hot wallet', 'Mobile wallet', 'Cold wallet (hardware)', 'Exchange wallet'], correct: 2 },
-      { question: 'A support agent asks for your seed phrase to fix your wallet. What do you do?', options: ['Provide it — they need it to help', 'Only give the first 6 words', 'Refuse — legitimate support never asks for this', 'Send it via encrypted message'], correct: 2 },
-      { question: 'What is a rug pull?', options: ['A type of hardware wallet', 'When developers abandon a project and steal investor funds', 'A network upgrade gone wrong', 'A government crypto ban'], correct: 1 },
+      {
+        question: 'What does a crypto wallet actually store?',
+        options: [
+          'Your cryptocurrency coins and tokens',
+          'Your private key, which proves ownership of assets on the blockchain',
+          'A backup copy of the blockchain',
+          'Your transaction history and receipts'
+        ],
+        correct: 1
+      },
+      {
+        question: 'The FTX exchange collapsed in 2022, losing approximately $8 billion in customer funds. What core lesson does this teach?',
+        options: [
+          'Crypto exchanges are always safe if they are large enough',
+          'Governments should control all crypto platforms',
+          'Keeping assets on an exchange means you do not truly own them — not your keys, not your coins',
+          'Bitcoin should be banned to prevent future collapses'
+        ],
+        correct: 2
+      },
+      {
+        question: 'A stranger contacts you claiming to be from your wallet\'s support team and asks for your seed phrase to resolve an issue. What do you do?',
+        options: [
+          'Provide it — support teams need it to verify your account',
+          'Share only the first six words as a partial verification',
+          'Refuse immediately — no legitimate service ever asks for your seed phrase',
+          'Send it via an encrypted messaging app for safety'
+        ],
+        correct: 2
+      },
+      {
+        question: 'Which two-factor authentication method is most vulnerable to SIM-swap attacks?',
+        options: [
+          'Google Authenticator app',
+          'Hardware security key (YubiKey)',
+          'SMS text message codes',
+          'Biometric fingerprint verification'
+        ],
+        correct: 2
+      },
+      {
+        question: 'What is clipboard hijacking malware?',
+        options: [
+          'Software that copies your seed phrase from cloud storage',
+          'Malware that silently replaces copied wallet addresses with an attacker\'s address when you paste',
+          'A virus that deletes your wallet application',
+          'Spyware that records your screen while you type passwords'
+        ],
+        correct: 1
+      },
     ],
   },
+
+  // ── MODULE 3: DEFI FUNDAMENTALS ───────────────────────────────────────────
   {
     id: 'defi', title: 'DeFi Fundamentals',
     description: 'Explore decentralized finance — banking without banks.',
     color: '#00e5cc', icon: '🏦',
     lesson: [
-      { title: 'What is DeFi?', content: `DeFi stands for Decentralized Finance. It is a system of financial services — lending, borrowing, trading, earning interest — that runs on blockchain instead of banks.\n\nTraditional Finance:\n• You need a bank account (millions in Africa do not have one)\n• Banks set the interest rates and can change them anytime\n• Banks can freeze your account\n• Banks are closed on weekends and holidays\n\nDeFi:\n• Anyone with a smartphone and internet can access it\n• Smart contracts set the rules automatically and transparently\n• No one can freeze your funds\n• Available 24/7, 365 days a year\n\nDeFi is particularly powerful for Africa, where mobile penetration is high but banking access remains low.` },
-      { title: 'Smart Contracts and Liquidity Pools', content: `Smart contracts are self-executing programs on the blockchain. When conditions are met, they execute automatically — no lawyer, bank, or middleman needed.\n\nExample: IF Person A sends 1 ETH AND Person B sends $3000 USDC to this contract, THEN automatically swap them. This happens instantly, transparently, and without a broker.\n\nLiquidity Pools are how DeFi exchanges work:\n• Users deposit token pairs (e.g. ETH + USDC) into a pool\n• Traders swap against this pool instead of matching with another buyer/seller\n• Liquidity providers earn a share of every trading fee\n\nThis replaces the traditional order book model used by stock exchanges.` },
-      { title: 'Yield, Risk and Opportunities', content: `DeFi offers ways to earn passive income with your crypto:\n\nLending — Deposit crypto, earn interest when others borrow it (e.g. Aave, Compound).\n\nYield Farming — Provide liquidity and earn token rewards on top of trading fees. High rewards, higher risk.\n\nStaking — Lock up tokens to help secure a network and earn rewards (e.g. staking ETH on Ethereum).\n\nDeFi Risks to know:\n• Smart contract bugs — Code errors can be exploited by attackers\n• Impermanent loss — Liquidity providers can lose value vs just holding\n• Rug pulls — Fake DeFi projects steal funds\n• High gas fees — Some blockchain transactions can be expensive\n\nAlways start small. Never invest more than you can afford to lose.` },
+      {
+        title: 'What Is Decentralized Finance?',
+        content: `Decentralized Finance — DeFi — rebuilds traditional financial services on blockchain. Lending, borrowing, trading, saving, and earning interest all happen through smart contracts, with no bank, broker, or intermediary involved.
+
+Traditional finance requires:
+• A bank account to access basic services
+• Credit history to borrow
+• Business hours to transact
+• Intermediaries who can freeze or restrict your access
+
+DeFi requires only:
+• A crypto wallet
+• An internet connection
+• No approval from anyone
+
+Smart contracts are the engine behind DeFi. They are self-executing programs deployed on a blockchain that automatically carry out financial transactions when predefined conditions are met. The code runs exactly as written — no human interference, no hidden terms.
+
+By 2026, DeFi has matured from an experimental concept into a multi-hundred-billion dollar ecosystem. Layer 2 networks — built on top of Ethereum — have reduced transaction fees to fractions of a cent, making DeFi genuinely accessible to everyday users for the first time at scale.`
+      },
+      {
+        title: 'How DeFi Protocols Work',
+        content: `DeFi is built from several interconnected protocol types, each replacing a different part of the traditional financial system.
+
+Decentralized Exchanges (DEXs)
+Trade tokens directly from your wallet with no company holding your funds. DEXs use liquidity pools instead of traditional order books. Users deposit token pairs into a pool — traders swap against that pool and liquidity providers earn a share of every trading fee. Leading DEXs include Uniswap on Ethereum and Jupiter on Solana.
+
+Lending and Borrowing
+Deposit crypto to earn interest, or borrow against your holdings without a credit check. Protocols like Aave and Compound set interest rates algorithmically based on supply and demand. Loans require over-collateralization — depositing more than you borrow — to protect the protocol against price volatility.
+
+Liquid Staking
+Stake assets like ETH and receive a tradeable receipt token in return. For example, staking ETH with Lido returns stETH, which accrues daily rewards while remaining usable across DeFi. In 2025-2026, liquid staking has become one of the most widely used DeFi strategies globally.
+
+Stablecoins
+The backbone of DeFi. Dollar-pegged assets like USDT and USDC provide a stable unit of account in an otherwise volatile market. Decentralized stablecoins like DAI are backed by on-chain collateral and governed by smart contracts — resistant to centralized censorship.`
+      },
+      {
+        title: 'DeFi Risks and Real Yields',
+        content: `DeFi offers genuine financial opportunity — but carries risks that every participant must understand before committing funds.
+
+Smart Contract Risk
+DeFi protocols run on code. Bugs or vulnerabilities in that code can be exploited. Even audited contracts have been hacked — the Ronin Bridge lost $625 million in 2022, Euler Finance lost $197 million in 2023. Never deposit more than you can afford to lose into any single protocol.
+
+Liquidation Risk
+Borrowing against collateral comes with a liquidation threshold. If your collateral value drops below the required ratio due to price movements, the protocol automatically sells your collateral to repay the loan. Monitor your health factor constantly when borrowing.
+
+Impermanent Loss
+When providing liquidity to a DEX pool, significant price divergence between your deposited tokens can leave you with less value than simply holding them. Understand this before providing liquidity.
+
+The 2026 Reality
+The era of unsustainable 1,000% APY yield farming fuelled by token inflation has largely ended. Credible DeFi protocols in 2026 compete on real yield — income derived from genuine economic activity such as lending fees, trading commissions, and protocol revenue. Real yield is sustainable. Inflated token rewards are not.
+
+Tools every DeFi user should know: DefiLlama for protocol data, Revoke.cash for managing token approvals, and Aave or Compound for entry-level lending.`
+      },
     ],
     flashcards: [
-      { front: 'What does DeFi stand for?', back: 'Decentralized Finance — financial services built on blockchain that operate without banks or other traditional intermediaries.' },
-      { front: 'What is a smart contract?', back: 'A self-executing program on the blockchain that automatically enforces agreed-upon rules when predefined conditions are met.' },
-      { front: 'What is a liquidity pool?', back: 'A pool of token pairs deposited by users that enables decentralized trading. Depositors earn a share of trading fees.' },
-      { front: 'What is yield farming?', back: 'Providing liquidity to DeFi protocols in exchange for token rewards. High potential returns but also comes with higher risk.' },
-      { front: 'What is impermanent loss?', back: 'A potential loss for liquidity providers when the price ratio of their deposited tokens changes significantly after deposit.' },
+      {
+        front: 'What is DeFi?',
+        back: 'Decentralized Finance — an ecosystem of financial services including lending, borrowing, trading, and saving built on blockchain networks. It operates through smart contracts with no banks or intermediaries required.'
+      },
+      {
+        front: 'What is a smart contract?',
+        back: 'A self-executing program deployed on a blockchain that automatically carries out transactions when predefined conditions are met. It runs exactly as written — no human intervention, no hidden terms, no possibility of interference.'
+      },
+      {
+        front: 'How do DEX liquidity pools work?',
+        back: 'Users deposit pairs of tokens into a shared pool. Traders swap against the pool rather than matching with individual buyers or sellers. Liquidity providers earn a share of every trading fee generated by the pool in proportion to their deposit.'
+      },
+      {
+        front: 'What is liquidation risk in DeFi lending?',
+        back: 'When you borrow against crypto collateral, if the collateral\'s value drops below the required threshold, the protocol automatically sells your collateral to repay the loan. Always monitor your health factor to avoid unexpected liquidation.'
+      },
+      {
+        front: 'What is liquid staking?',
+        back: 'A method of staking assets where you receive a tradeable receipt token representing your staked position plus accrued rewards. For example, staking ETH with Lido returns stETH — which earns staking yields while remaining usable across DeFi.'
+      },
     ],
     quiz: [
-      { question: 'What makes DeFi different from traditional banking?', options: ['It requires a credit score', 'It runs on blockchain with no central authority', 'It is only available in wealthy countries', 'Banks control it behind the scenes'], correct: 1 },
-      { question: 'What is a smart contract?', options: ['A legal document stored online', 'A self-executing program that runs on blockchain', 'A government-regulated financial agreement', 'An encrypted email contract'], correct: 1 },
-      { question: 'How do liquidity providers earn money in DeFi?', options: ['They earn salaries from the protocol team', 'They earn a share of trading fees', 'They earn by reporting scams', 'They earn government subsidies'], correct: 1 },
-      { question: 'Which of these is a real DeFi risk?', options: ['Internet connection fees', 'Smart contract bugs being exploited', 'Government bailouts', 'Market opening hours'], correct: 1 },
-      { question: 'Why is DeFi especially valuable in Africa?', options: ['African governments fully support it', 'It provides financial access to people without bank accounts', 'It is cheaper to mine crypto in Africa', 'African banks invented DeFi'], correct: 1 },
+      {
+        question: 'What is the key difference between DeFi and traditional finance?',
+        options: [
+          'DeFi is controlled by central banks and regulated institutions',
+          'DeFi requires a credit score and government-issued ID to access',
+          'DeFi operates through smart contracts on blockchain with no intermediaries — accessible to anyone with a wallet and internet connection',
+          'DeFi is only available to institutional investors and hedge funds'
+        ],
+        correct: 2
+      },
+      {
+        question: 'What is a smart contract?',
+        options: [
+          'A legal agreement drafted by lawyers and stored digitally',
+          'A self-executing program on a blockchain that automatically carries out transactions when conditions are met',
+          'A government-regulated financial instrument traded on exchanges',
+          'An AI system that manages investment portfolios automatically'
+        ],
+        correct: 1
+      },
+      {
+        question: 'How do liquidity providers earn money in a DEX pool?',
+        options: [
+          'They receive a salary paid by the DEX development team',
+          'They earn government-backed interest on their deposits',
+          'They earn a share of every trading fee generated by swaps through their pool',
+          'They earn rewards by reporting fraudulent transactions'
+        ],
+        correct: 2
+      },
+      {
+        question: 'What happened to the era of 1,000%+ APY yield farming in DeFi?',
+        options: [
+          'It continues today and is the primary way people use DeFi',
+          'It was banned by regulators in 2023',
+          'It largely ended as unsustainable — credible protocols in 2026 compete on real yield from genuine economic activity',
+          'It was replaced by government-backed stablecoin programs'
+        ],
+        correct: 2
+      },
+      {
+        question: 'What is impermanent loss?',
+        options: [
+          'The fee paid to validators for processing DeFi transactions',
+          'A potential loss for liquidity providers when the price ratio of their deposited tokens changes significantly after deposit',
+          'The penalty charged for withdrawing funds before a lock-up period ends',
+          'A tax applied to DeFi earnings by regulatory authorities'
+        ],
+        correct: 1
+      },
     ],
   },
+
+  // ── MODULE 4: NFTs & TOKENS — placeholder until Module 13 content is ready
   {
     id: 'nfts', title: 'NFTs & Tokens',
     description: 'Understand digital ownership, token types, and real-world use cases.',
@@ -119,7 +457,7 @@ const MODULES: LearningModule[] = [
     lesson: [
       { title: 'What is an NFT?', content: `NFT stands for Non-Fungible Token. "Fungible" means interchangeable — one dollar is equal to any other dollar. "Non-fungible" means unique — no two are the same.\n\nAn NFT is a token on the blockchain that proves ownership of a unique digital or physical item.\n\nWhat can be an NFT?\n• Digital art\n• Music\n• In-game items\n• Certificates and diplomas\n• Property deeds\n• Event tickets\n\nKey insight: NFTs solve the problem of digital ownership. Before NFTs, anyone could copy a digital file. NFTs do not prevent copying — but they create a verifiable, immutable proof of who owns the original.` },
       { title: 'Token Standards and Types', content: `Tokens are digital assets issued on a blockchain. There are different standards with different rules:\n\nERC-20 — The most common standard. Fungible tokens used for currencies, governance, and utility (e.g. USDC, UNI, LINK).\n\nERC-721 — The NFT standard. Each token is unique and non-interchangeable. Used for art, collectibles, and digital identity.\n\nERC-1155 — Multi-token standard. A single contract can issue both fungible and non-fungible tokens. Perfect for gaming.\n\nBeyond Ethereum:\n• Solana uses SPL tokens\n• BNB Chain uses BEP-20\n• Each blockchain has its own standards, but the concepts are the same` },
-      { title: 'Real-World Use Cases for NFTs', content: `Beyond digital art, NFTs have practical applications that matter for everyday life:\n\nEducation credentials — Your university degree as an NFT. Employers verify it instantly on the blockchain. No more fake certificates.\n\nMedical records — Your health history as an NFT that only you can authorize access to.\n\nDigital identity — A self-sovereign identity NFT that proves who you are without a government ID.\n\nTicketing — NFT event tickets that cannot be faked or scalped unfairly.\n\nLand registry in Africa — Many African countries have unreliable land records. NFT-based land deeds could prevent fraud and corruption permanently.\n\nThe hype cycle around JPEG NFTs will pass — but the underlying technology and its utility will remain.` },
+      { title: 'Real-World Use Cases for NFTs', content: `Beyond digital art, NFTs have practical applications that matter for everyday life:\n\nEducation credentials — Your university degree as an NFT. Employers verify it instantly on the blockchain. No more fake certificates.\n\nMedical records — Your health history as an NFT that only you can authorize access to.\n\nDigital identity — A self-sovereign identity NFT that proves who you are without a government ID.\n\nTicketing — NFT event tickets that cannot be faked or scalped unfairly.\n\nLand registry — Many countries have unreliable land records. NFT-based land deeds could prevent fraud and corruption permanently.\n\nThe hype cycle around JPEG NFTs will pass — but the underlying technology and its utility will remain.` },
     ],
     flashcards: [
       { front: 'What does NFT stand for?', back: 'Non-Fungible Token — a unique digital token on the blockchain that proves ownership of a specific item.' },
@@ -131,7 +469,7 @@ const MODULES: LearningModule[] = [
     quiz: [
       { question: 'What does "non-fungible" mean?', options: ['Cannot be traded', 'Unique and not interchangeable with another token', 'Stored offline', 'Backed by gold'], correct: 1 },
       { question: 'Which token standard is used for NFTs on Ethereum?', options: ['ERC-20', 'BEP-20', 'ERC-721', 'SPL'], correct: 2 },
-      { question: 'What real-world problem could NFTs help solve in Africa?', options: ['Slow mobile data', 'Unreliable land registry and fake certificates', 'Lack of smartphones', 'Power outages'], correct: 1 },
+      { question: 'What real-world problem could NFTs help solve?', options: ['Slow mobile data', 'Unreliable land registry and fake certificates', 'Lack of smartphones', 'Power outages'], correct: 1 },
       { question: 'What does ERC-20 represent?', options: ['A unique digital collectible', 'A fungible token standard for currencies and utility', 'A hardware wallet type', 'A DeFi protocol'], correct: 1 },
       { question: 'What does an NFT actually prove?', options: ['That you created the original file', 'Ownership of the original version of a digital asset', 'That no copies of the file exist', 'The current market value of the asset'], correct: 1 },
     ],
@@ -206,18 +544,13 @@ const pill = (bg: string, color: string): CSSProperties => ({
 
 export default function App() {
 
-  // ── Onboarding hook ───────────────────────────────────────────────────────
   const { showOnboarding, completeOnboarding } = useOnboarding();
 
-  // ── v3 hooks ──────────────────────────────────────────────────────────────
   const streakData      = useStreak();
   const quizTimer       = useQuizTimer();
   const tokenData       = useTokens();
   const leaderboardData = useLeaderboard();
-
-  // ── CHANGE 2: Tier hook — placed after tokenData ──────────────────────────
-  const tierData = useTiers(tokenData.balance, tokenData.spendTokens);
-
+  const tierData        = useTiers(tokenData.balance, tokenData.spendTokens);
   const [lastQuestionXP, setLastQuestionXP] = useState(0);
 
   const [logoTaps, setLogoTaps]   = useState(0);
@@ -324,7 +657,6 @@ export default function App() {
     }
   };
 
-  // ── CHANGE 3: startModule now checks tier access ──────────────────────────
   const startModule = (mod: LearningModule, moduleIndex: number) => {
     if (!tierData.canAccessModule(moduleIndex)) {
       setActiveModule(mod);
@@ -389,14 +721,11 @@ export default function App() {
   const qualityPct     = Math.round(clamp01(metrics.signal_quality) * 100);
   const focusState     = getFocusState(metrics.bpm);
 
-  // ── CHANGE 5 + 8: renderHome with tier badge and lock indicators ──────────
   function renderHome() {
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
         <StreakBar streakData={streakData} />
         <TokenWallet tokenData={tokenData} />
-
-        {/* CHANGE 8: Current tier + progress toward next tier */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-card)', border: '1px solid rgba(32,210,155,0.15)', borderRadius: 'var(--radius-md)', padding: '10px 14px', marginBottom: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Current Tier</span>
@@ -406,29 +735,22 @@ export default function App() {
           </div>
           {tierData.nextTier && (
             <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              {tierData.eltaNeeded > 0
-                ? `${tierData.eltaNeeded} ELTA to ${tierData.nextTier.label}`
-                : `Ready to unlock ${tierData.nextTier.label}!`}
+              {tierData.eltaNeeded > 0 ? `${tierData.eltaNeeded} ELTA to ${tierData.nextTier.label}` : `Ready to unlock ${tierData.nextTier.label}!`}
             </span>
           )}
         </div>
-
         <button onClick={() => setScreen('leaderboard')} style={{ width: '100%', marginBottom: '20px', minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s' }}>
           🏆 View Leaderboard
           {leaderboardData.totalSessions > 0 && (<span style={pill('rgba(0,229,204,0.08)', '#00e5cc')}>{leaderboardData.totalSessions} session{leaderboardData.totalSessions !== 1 ? 's' : ''}</span>)}
         </button>
-
         <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '-0.02em' }}>Choose a Module</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '16px' }}>NeuroLearn tracks your focus as you learn.</p>
-
-        {/* CHANGE 5: map now uses (mod, index) and shows lock badge */}
         <div className="module-grid">
           {MODULES.map((mod, index) => (
             <button key={mod.id} onClick={() => startModule(mod, index)} className="module-card" style={{ '--accent': mod.color } as CSSProperties}>
               <div style={{ fontSize: '1.8rem', marginBottom: '10px', lineHeight: 1 }}>{mod.icon}</div>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem', color: mod.color, marginBottom: '6px', letterSpacing: '-0.01em' }}>{mod.title}</div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5, marginBottom: '8px' }}>{mod.description}</div>
-              {/* Lock badge for gated modules */}
               {!tierData.canAccessModule(index) && (
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', padding: '3px 8px', fontSize: '10px', color: '#f59e0b', marginBottom: '8px', fontFamily: 'var(--font-mono)' }}>
                   🔒 Locked
@@ -626,7 +948,6 @@ export default function App() {
     );
   }
 
-  // ── CHANGE 6: TierGated screen renderer ───────────────────────────────────
   function renderTierGated() {
     if (!activeModule) return null;
     const moduleIndex = MODULES.findIndex(m => m.id === activeModule.id);
@@ -650,11 +971,7 @@ export default function App() {
   // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="app">
-
-      {/* Onboarding overlay — shows once on first visit */}
       {showOnboarding && <Onboarding onComplete={completeOnboarding} />}
-
-      {/* ── Top bar ──────────────────────────────────────────────────────── */}
       <header className="topbar">
         <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
           <span className="brand-mark" />
@@ -669,8 +986,6 @@ export default function App() {
           <span className="session-chip-text">{status}</span>
         </div>
       </header>
-
-      {/* ── Main ─────────────────────────────────────────────────────────── */}
       <main className="main">
         <section className="stage">
           <h1 className="visually-hidden">NeuroLearn Focus Session</h1>
@@ -683,10 +998,8 @@ export default function App() {
             {screen === 'results'     && renderResults()}
             {screen === 'leaderboard' && <Leaderboard leaderboardData={leaderboardData} onBack={backToHome} />}
             {screen === 'analytics'   && <Analytics onBack={backToHome} />}
-            {/* CHANGE 7: tiergated screen */}
             {screen === 'tiergated'   && renderTierGated()}
           </div>
-
           <aside className="readouts">
             <div>
               <div className="video-chrome">
@@ -727,7 +1040,6 @@ export default function App() {
           </aside>
         </section>
       </main>
-
       <footer className="footer">
         NeuroLearn v3 · Powered by Elata rPPG · Built for Everyone
       </footer>
