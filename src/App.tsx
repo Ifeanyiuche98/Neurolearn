@@ -18,11 +18,14 @@ import TokenWallet         from './TokenWallet';
 import Leaderboard         from './Leaderboard';
 import Analytics           from './Analytics';
 import BpmIndicator        from './BpmIndicator';
-import Onboarding, { useOnboarding } from './Onboarding'; // ── LINE 1 added
+import Onboarding, { useOnboarding } from './Onboarding';
+import { useTiers }        from './useTiers';   // ── CHANGE 1a
+import TierGate            from './TierGate';   // ── CHANGE 1b
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics';
+// ── CHANGE 4: 'tiergated' added to Screen type ───────────────────────────────
+type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics' | 'tiergated';
 
 interface FlashCard { front: string; back: string; }
 interface QuizQuestion { question: string; options: string[]; correct: number; }
@@ -203,7 +206,7 @@ const pill = (bg: string, color: string): CSSProperties => ({
 
 export default function App() {
 
-  // ── LINE 2: Onboarding hook ───────────────────────────────────────────────
+  // ── Onboarding hook ───────────────────────────────────────────────────────
   const { showOnboarding, completeOnboarding } = useOnboarding();
 
   // ── v3 hooks ──────────────────────────────────────────────────────────────
@@ -211,6 +214,10 @@ export default function App() {
   const quizTimer       = useQuizTimer();
   const tokenData       = useTokens();
   const leaderboardData = useLeaderboard();
+
+  // ── CHANGE 2: Tier hook — placed after tokenData ──────────────────────────
+  const tierData = useTiers(tokenData.balance, tokenData.spendTokens);
+
   const [lastQuestionXP, setLastQuestionXP] = useState(0);
 
   const [logoTaps, setLogoTaps]   = useState(0);
@@ -317,7 +324,13 @@ export default function App() {
     }
   };
 
-  const startModule = (mod: LearningModule) => {
+  // ── CHANGE 3: startModule now checks tier access ──────────────────────────
+  const startModule = (mod: LearningModule, moduleIndex: number) => {
+    if (!tierData.canAccessModule(moduleIndex)) {
+      setActiveModule(mod);
+      setScreen('tiergated');
+      return;
+    }
     setActiveModule(mod); setLessonPage(0); setFlashcardIndex(0);
     setCardFlipped(false); setQuizIndex(0); setSelectedAnswer(null); setQuizScore(0);
     setScreen('lesson');
@@ -376,23 +389,51 @@ export default function App() {
   const qualityPct     = Math.round(clamp01(metrics.signal_quality) * 100);
   const focusState     = getFocusState(metrics.bpm);
 
+  // ── CHANGE 5 + 8: renderHome with tier badge and lock indicators ──────────
   function renderHome() {
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
         <StreakBar streakData={streakData} />
         <TokenWallet tokenData={tokenData} />
+
+        {/* CHANGE 8: Current tier + progress toward next tier */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-card)', border: '1px solid rgba(32,210,155,0.15)', borderRadius: 'var(--radius-md)', padding: '10px 14px', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Current Tier</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.82rem', color: tierData.getTierByName(tierData.currentTier).color }}>
+              {tierData.getTierByName(tierData.currentTier).label}
+            </span>
+          </div>
+          {tierData.nextTier && (
+            <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+              {tierData.eltaNeeded > 0
+                ? `${tierData.eltaNeeded} ELTA to ${tierData.nextTier.label}`
+                : `Ready to unlock ${tierData.nextTier.label}!`}
+            </span>
+          )}
+        </div>
+
         <button onClick={() => setScreen('leaderboard')} style={{ width: '100%', marginBottom: '20px', minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s' }}>
           🏆 View Leaderboard
           {leaderboardData.totalSessions > 0 && (<span style={pill('rgba(0,229,204,0.08)', '#00e5cc')}>{leaderboardData.totalSessions} session{leaderboardData.totalSessions !== 1 ? 's' : ''}</span>)}
         </button>
+
         <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '-0.02em' }}>Choose a Module</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '16px' }}>NeuroLearn tracks your focus as you learn.</p>
+
+        {/* CHANGE 5: map now uses (mod, index) and shows lock badge */}
         <div className="module-grid">
-          {MODULES.map(mod => (
-            <button key={mod.id} onClick={() => startModule(mod)} className="module-card" style={{ '--accent': mod.color } as CSSProperties}>
+          {MODULES.map((mod, index) => (
+            <button key={mod.id} onClick={() => startModule(mod, index)} className="module-card" style={{ '--accent': mod.color } as CSSProperties}>
               <div style={{ fontSize: '1.8rem', marginBottom: '10px', lineHeight: 1 }}>{mod.icon}</div>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem', color: mod.color, marginBottom: '6px', letterSpacing: '-0.01em' }}>{mod.title}</div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5, marginBottom: '12px' }}>{mod.description}</div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: 1.5, marginBottom: '8px' }}>{mod.description}</div>
+              {/* Lock badge for gated modules */}
+              {!tierData.canAccessModule(index) && (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', padding: '3px 8px', fontSize: '10px', color: '#f59e0b', marginBottom: '8px', fontFamily: 'var(--font-mono)' }}>
+                  🔒 Locked
+                </div>
+              )}
               <div style={{ color: 'var(--text-muted)', fontSize: '0.68rem', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 <span>{mod.lesson.length} lessons</span><span>·</span><span>{mod.flashcards.length} cards</span><span>·</span><span>{mod.quiz.length} questions</span>
               </div>
@@ -585,11 +626,32 @@ export default function App() {
     );
   }
 
+  // ── CHANGE 6: TierGated screen renderer ───────────────────────────────────
+  function renderTierGated() {
+    if (!activeModule) return null;
+    const moduleIndex = MODULES.findIndex(m => m.id === activeModule.id);
+    return (
+      <div style={{ paddingTop: '8px' }} className="animate-in">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <button className="btn-ghost" onClick={backToHome}>← Modules</button>
+        </div>
+        <TierGate
+          tierData={tierData}
+          moduleIndex={moduleIndex}
+          moduleTitle={activeModule.title}
+          moduleIcon={activeModule.icon}
+          moduleColor={activeModule.color}
+          onUnlockSuccess={() => startModule(activeModule, moduleIndex)}
+        />
+      </div>
+    );
+  }
+
   // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="app">
 
-      {/* ── LINE 3: Onboarding overlay — shows once on first visit ───────── */}
+      {/* Onboarding overlay — shows once on first visit */}
       {showOnboarding && <Onboarding onComplete={completeOnboarding} />}
 
       {/* ── Top bar ──────────────────────────────────────────────────────── */}
@@ -621,6 +683,8 @@ export default function App() {
             {screen === 'results'     && renderResults()}
             {screen === 'leaderboard' && <Leaderboard leaderboardData={leaderboardData} onBack={backToHome} />}
             {screen === 'analytics'   && <Analytics onBack={backToHome} />}
+            {/* CHANGE 7: tiergated screen */}
+            {screen === 'tiergated'   && renderTierGated()}
           </div>
 
           <aside className="readouts">

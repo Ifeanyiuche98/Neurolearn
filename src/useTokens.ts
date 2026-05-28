@@ -35,6 +35,7 @@ export interface TokenReturn {
   claimableTokens: number;     // How many full tokens can be claimed right now
   addPendingXP: (xp: number) => void; // Called after a quiz session ends
   claimTokens: () => number;   // Converts pending XP to tokens, returns amount claimed
+  spendTokens: (amount: number) => boolean; // ── NEW: spends ELTA for tier unlocking, returns true if successful
   formatAddress: (addr: string) => string; // Shortens 0x address for display
 }
  
@@ -97,6 +98,20 @@ export function useTokens(): TokenReturn {
     setData(updated);
     return tokens;
   }, [data]);
+
+  // ── NEW: Spend tokens for tier unlocking ──────────────────────────────────
+  // Returns true if the spend succeeded, false if balance is insufficient.
+  // Called by useTiers when the user unlocks a new tier.
+  const spendTokens = useCallback((amount: number): boolean => {
+    if (data.balance < amount) return false;
+    const updated: TokenData = {
+      ...data,
+      balance: data.balance - amount,
+    };
+    saveData(updated);
+    setData(updated);
+    return true;
+  }, [data]);
  
   // Shortens a wallet address for display: 0xa65e...0b58
   const formatAddress = useCallback((addr: string): string => {
@@ -111,7 +126,7 @@ export function useTokens(): TokenReturn {
     claimableTokens,
     addPendingXP,
     claimTokens,
+    spendTokens,   // ── NEW
     formatAddress,
   };
 }
- 
