@@ -449,29 +449,164 @@ Tools every DeFi user should know: DefiLlama for protocol data, Revoke.cash for 
     ],
   },
 
-  // ── MODULE 4: NFTs & TOKENS — placeholder until Module 13 content is ready
+  // ── MODULE 4: NFTs & TOKENS -
   {
     id: 'nfts', title: 'NFTs & Tokens',
-    description: 'Understand digital ownership, token types, and real-world use cases.',
+    description: 'Understand digital ownership, token types, real utility, and how to evaluate crypto projects.',
     color: '#f59e0b', icon: '🎨',
     lesson: [
-      { title: 'What is an NFT?', content: `NFT stands for Non-Fungible Token. "Fungible" means interchangeable — one dollar is equal to any other dollar. "Non-fungible" means unique — no two are the same.\n\nAn NFT is a token on the blockchain that proves ownership of a unique digital or physical item.\n\nWhat can be an NFT?\n• Digital art\n• Music\n• In-game items\n• Certificates and diplomas\n• Property deeds\n• Event tickets\n\nKey insight: NFTs solve the problem of digital ownership. Before NFTs, anyone could copy a digital file. NFTs do not prevent copying — but they create a verifiable, immutable proof of who owns the original.` },
-      { title: 'Token Standards and Types', content: `Tokens are digital assets issued on a blockchain. There are different standards with different rules:\n\nERC-20 — The most common standard. Fungible tokens used for currencies, governance, and utility (e.g. USDC, UNI, LINK).\n\nERC-721 — The NFT standard. Each token is unique and non-interchangeable. Used for art, collectibles, and digital identity.\n\nERC-1155 — Multi-token standard. A single contract can issue both fungible and non-fungible tokens. Perfect for gaming.\n\nBeyond Ethereum:\n• Solana uses SPL tokens\n• BNB Chain uses BEP-20\n• Each blockchain has its own standards, but the concepts are the same` },
-      { title: 'Real-World Use Cases for NFTs', content: `Beyond digital art, NFTs have practical applications that matter for everyday life:\n\nEducation credentials — Your university degree as an NFT. Employers verify it instantly on the blockchain. No more fake certificates.\n\nMedical records — Your health history as an NFT that only you can authorize access to.\n\nDigital identity — A self-sovereign identity NFT that proves who you are without a government ID.\n\nTicketing — NFT event tickets that cannot be faked or scalped unfairly.\n\nLand registry — Many countries have unreliable land records. NFT-based land deeds could prevent fraud and corruption permanently.\n\nThe hype cycle around JPEG NFTs will pass — but the underlying technology and its utility will remain.` },
+      {
+        title: 'What Is an NFT? Ownership in the Digital Age',
+        content: `An NFT — Non-Fungible Token — is a unique digital asset recorded on a blockchain that proves ownership and authenticity of a specific item.
+
+The key word is non-fungible. Here is the difference:
+
+Fungible: A ₦1,000 note is fungible — your note and mine are identical and interchangeable.
+Non-Fungible: A signed certificate of land ownership is non-fungible — it refers to one specific piece of land that cannot be swapped for another.
+
+NFTs bring verifiable, unique ownership to the digital world.
+
+How an NFT is created:
+• Minting — Creating an NFT by recording a unique token on a blockchain. The token points to metadata (an image, file, or credential) stored on IPFS or Arweave — decentralized storage networks.
+• Smart Contract — Each NFT collection is governed by a smart contract defining rules: total supply, royalty percentages, transfer conditions.
+• Ownership Record — The blockchain permanently records who owns each NFT. Transfers are publicly verifiable. No company can revoke, delete, or alter this record.
+
+⚠️ Storage matters: The NFT token is on-chain, but the linked image or file is usually stored separately. If that storage is centralized (a regular company server), the image can disappear even if the token still exists. Decentralized storage on IPFS or Arweave is far more permanent.
+
+Key insight: NFTs do not prevent copying a digital file. But they create an immutable, verifiable proof of who owns the original — something that did not exist before blockchain.`
+      },
+      {
+        title: 'Real NFT Utility in 2026: Beyond the Hype',
+        content: `The 2021–2022 NFT bubble — where digital images sold for millions — collapsed when speculative money left the market. Most collections lost 90–99% of their value. But the technology itself did not disappear.
+
+In 2025–2026, NFTs have genuine utility in six areas:
+
+🎮 Gaming & Digital Ownership
+Traditional games: your items belong to the company. When the game shuts down, they disappear. NFT-based games let players truly own in-game assets, trade them freely, and carry value across platforms.
+
+🎵 Music & Creator Royalties
+Smart contracts embedded in music NFTs automatically pay the creator a royalty every time the NFT is resold — impossible in traditional music licensing. African musicians can reach global collectors directly, bypass labels, and embed permanent royalty rights into their work.
+
+🎟️ Event Tickets & Anti-Fraud
+An NFT ticket is verifiably authentic and impossible to duplicate. Smart contracts can limit resale prices or pay the venue a royalty on secondary sales. Nigerian concert promoters can use this to eliminate fake tickets and recapture scalper profits.
+
+🪪 Digital Identity & Credentials
+Academic certificates, professional licences, and membership credentials can be issued as NFTs — permanently verifiable, unforgeable, and controlled by the holder.
+
+Soulbound Tokens (SBTs) are a special type: non-transferable NFTs permanently tied to a wallet. They cannot be sold. Ideal for university degrees and professional licences. Nigeria's challenge with certificate forgery could be directly addressed by SBT-based degree verification.
+
+🏠 Real-World Asset Certificates
+Land titles, property deeds, gold certificates, and commodity ownership can be represented as NFTs — enabling fractional ownership and global tradability. African land registries exploring blockchain-based title deeds would make ownership permanently verifiable and impossible to forge.
+
+🎯 Loyalty Programs
+Brands are replacing traditional loyalty points with NFT-based rewards that customers genuinely own, can trade, and that create secondary market value.`
+      },
+      {
+        title: 'Token Standards & How to Evaluate Projects',
+        content: `Every token follows a technical standard — a set of rules defining how it is created, transferred, and used. Understanding standards tells you exactly what a token can do.
+
+The Major Token Standards:
+
+ERC-20 — Fungible tokens on Ethereum and all EVM chains (Arbitrum, Base, Polygon, BNB Chain). USDT, USDC, UNI, LINK, AAVE — all ERC-20. Used for currencies, governance, and utility.
+
+ERC-721 — The original NFT standard. Each token has a unique ID. No two are alike within the collection. Used for art, credentials, event tickets, land titles.
+
+ERC-1155 — Multi-token standard. One contract manages both fungible and non-fungible tokens. Batch transfers reduce gas costs dramatically. Ideal for gaming with complex asset economies.
+
+TRC-20 (Tron) — USDT on Tron is the most-used token in Nigerian P2P trading. Near-zero fees ($0.01–0.10). Conceptually identical to ERC-20 but cheaper.
+
+⚠️ Critical rule: Sending USDT on ERC-20 to a TRC-20 address (or vice versa) results in permanent loss of funds. Always verify the network before confirming any transfer.
+
+Tokenomics Basics: How to Evaluate a Token
+
+Tokenomics = token + economics. The economic design of a token determines whether it holds value long-term or collapses.
+
+Three things to always check:
+
+1. Supply — What is the maximum supply? What percentage is currently circulating? A token with only 5% circulating means 95% of tokens are locked and will eventually create sell pressure.
+
+2. Fully Diluted Valuation (FDV) — Current price × Maximum supply. This is the project's real total valuation. If FDV is 20–50x higher than market cap, massive future dilution is coming.
+
+3. Utility — What does the token actually do? Genuine utility (pay transaction fees, earn protocol revenue, governance that matters) sustains demand. Vague utility — like "ecosystem participation" — is a warning sign.
+
+🚩 Red Flags: Anonymous team with large token allocation. No vesting schedule. Token used only to earn more of the same token. No verifiable revenue. Promised returns with no clear source.
+
+✅ Green Flags: Experienced, verifiable team. 3–4 year vesting with 1-year cliff. High community allocation. Growing protocol revenue. Active GitHub.`
+      },
     ],
     flashcards: [
-      { front: 'What does NFT stand for?', back: 'Non-Fungible Token — a unique digital token on the blockchain that proves ownership of a specific item.' },
-      { front: 'What is ERC-20?', back: 'An Ethereum token standard for fungible tokens — interchangeable units used for currencies, governance, and utility.' },
-      { front: 'What is ERC-721?', back: 'The Ethereum standard for NFTs. Each token is unique and cannot be exchanged 1:1 with any other token.' },
-      { front: 'What problem do NFTs solve?', back: 'Digital ownership. They create a verifiable, immutable record of who owns the original version of a digital asset.' },
-      { front: 'What is ERC-1155?', back: 'A multi-token standard allowing one contract to manage both fungible and non-fungible tokens — ideal for gaming and complex apps.' },
+      {
+        front: 'What is the difference between fungible and non-fungible tokens?',
+        back: 'Fungible: every unit is identical and interchangeable — 1 USDT = any other 1 USDT. Non-fungible: every token is unique — NFT #1 is not equal to NFT #2. Fungible tokens are currencies and utility tokens. Non-fungible tokens represent unique ownership of specific assets.'
+      },
+      {
+        front: 'What are ERC-721 and ERC-1155, and when is each used?',
+        back: 'ERC-721: the original NFT standard — each token has a unique ID. Best for 1-of-1 art, credentials, and title deeds. ERC-1155: multi-token standard managing both fungible and non-fungible tokens in one contract, with gas-efficient batch transfers. Best for gaming economies with diverse asset types.'
+      },
+      {
+        front: 'What is a Soulbound Token (SBT)?',
+        back: 'A non-transferable NFT permanently tied to one wallet — it cannot be sold or moved. Used for credentials, achievements, and verified memberships. Ideal for university degrees, professional licences, and DAO membership — solving Nigeria\'s certificate forgery problem with unforgeable on-chain verification.'
+      },
+      {
+        front: 'What is Fully Diluted Valuation (FDV) and why does it matter?',
+        back: 'FDV = current price × maximum token supply. It shows the project\'s real total valuation if all tokens were circulating today. If FDV is 20–50x higher than market cap, most tokens are still locked — and when they unlock, they create enormous sell pressure. Always check FDV before investing.'
+      },
+      {
+        front: 'Why does TRC-20 USDT dominate African P2P trading, and what is the critical network rule?',
+        back: 'TRC-20 USDT runs on Tron, with transaction fees of just $0.01–0.10 vs $5–20+ on Ethereum mainnet. It dominates Nigerian P2P platforms like Binance P2P and Noones. Critical rule: sending USDT across the wrong network (e.g. ERC-20 to a TRC-20 address) results in permanent, unrecoverable loss of funds. Always verify the network before confirming.'
+      },
     ],
     quiz: [
-      { question: 'What does "non-fungible" mean?', options: ['Cannot be traded', 'Unique and not interchangeable with another token', 'Stored offline', 'Backed by gold'], correct: 1 },
-      { question: 'Which token standard is used for NFTs on Ethereum?', options: ['ERC-20', 'BEP-20', 'ERC-721', 'SPL'], correct: 2 },
-      { question: 'What real-world problem could NFTs help solve?', options: ['Slow mobile data', 'Unreliable land registry and fake certificates', 'Lack of smartphones', 'Power outages'], correct: 1 },
-      { question: 'What does ERC-20 represent?', options: ['A unique digital collectible', 'A fungible token standard for currencies and utility', 'A hardware wallet type', 'A DeFi protocol'], correct: 1 },
-      { question: 'What does an NFT actually prove?', options: ['That you created the original file', 'Ownership of the original version of a digital asset', 'That no copies of the file exist', 'The current market value of the asset'], correct: 1 },
+      {
+        question: 'A ₦1,000 note is fungible. What makes an NFT "non-fungible"?',
+        options: [
+          'It cannot be transferred to another wallet',
+          'It is unique — it cannot be exchanged 1:1 with any other token, even in the same collection',
+          'It is stored offline on a hardware device',
+          'It is backed by a physical commodity like gold'
+        ],
+        correct: 1
+      },
+      {
+        question: 'You want to send USDT to a friend in Lagos at near-zero cost. Which network should you use?',
+        options: [
+          'ERC-20 on Ethereum mainnet',
+          'TRC-20 on Tron',
+          'BTC on Bitcoin',
+          'SPL on Solana'
+        ],
+        correct: 1
+      },
+      {
+        question: 'A university issues your degree as a Soulbound Token (SBT). What is the key feature of an SBT?',
+        options: [
+          'It can be sold on OpenSea for profit',
+          'It is permanently tied to your wallet and cannot be transferred or sold',
+          'It expires after 10 years',
+          'It requires annual renewal fees paid in ETH'
+        ],
+        correct: 1
+      },
+      {
+        question: 'A new token has a market cap of $5 million but a Fully Diluted Valuation (FDV) of $500 million. What does this tell you?',
+        options: [
+          'The token is a guaranteed good investment at this low price',
+          'Only 1% of tokens are circulating — 99% are locked and will eventually enter the market, creating future sell pressure',
+          'The team has burned 99% of the supply permanently',
+          'The token is backed by $500 million in real assets'
+        ],
+        correct: 1
+      },
+      {
+        question: 'Which token standard allows a single smart contract to manage both fungible currencies and unique NFT items — making it ideal for blockchain games?',
+        options: [
+          'ERC-20',
+          'ERC-721',
+          'ERC-1155',
+          'TRC-20'
+        ],
+        correct: 2
+      },
     ],
   },
 ];
