@@ -22,6 +22,10 @@ import Onboarding, { useOnboarding } from './Onboarding';
 import { useTiers }        from './useTiers';
 import TierGate            from './TierGate';
 
+// ── Supabase username imports ─────────────────────────────────────────────────
+import { useUsername }    from './useUsername';
+import UsernamePrompt     from './UsernamePrompt';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics' | 'tiergated';
@@ -449,7 +453,7 @@ Tools every DeFi user should know: DefiLlama for protocol data, Revoke.cash for 
     ],
   },
 
-  // ── MODULE 4: NFTs & TOKENS -
+  // ── MODULE 4: NFTs & TOKENS — AfroLearn Institute Content (May 2026)
   {
     id: 'nfts', title: 'NFTs & Tokens',
     description: 'Understand digital ownership, token types, real utility, and how to evaluate crypto projects.',
@@ -681,6 +685,9 @@ export default function App() {
 
   const { showOnboarding, completeOnboarding } = useOnboarding();
 
+  // ── Username / Supabase ───────────────────────────────────────────────────
+  const { username, showPrompt, submitUsername } = useUsername();
+
   const streakData      = useStreak();
   const quizTimer       = useQuizTimer();
   const tokenData       = useTokens();
@@ -897,6 +904,12 @@ export default function App() {
             </button>
           ))}
         </div>
+        {/* Username display — bottom of home */}
+        {username && (
+          <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: '20px', fontFamily: 'var(--font-mono)' }}>
+            Playing as <span style={{ color: '#20d29b', fontWeight: 700 }}>{username}</span>
+          </p>
+        )}
       </div>
     );
   }
@@ -1106,6 +1119,9 @@ export default function App() {
   // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="app">
+      {/* Username prompt — shown once on first visit, before anything else */}
+      {showPrompt && <UsernamePrompt onSubmit={submitUsername} />}
+
       {showOnboarding && <Onboarding onComplete={completeOnboarding} />}
       <header className="topbar">
         <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
