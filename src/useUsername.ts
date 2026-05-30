@@ -19,7 +19,6 @@ async function getCountry(): Promise<string> {
     }
     return 'Unknown';
   } catch {
-    // Geolocation blocked or failed — continue anyway
     return 'Unknown';
   }
 }
@@ -36,19 +35,26 @@ async function registerUser(username: string): Promise<void> {
 
   const device_type = getDeviceType();
 
-  // Step 2 — Upsert into Supabase (insert if new, update if exists)
-  // This replaces the old select+insert pattern which was failing
-  // because .single() throws an error when zero rows are found
+  // Step 2 — Simple insert with smart error handling.
+  // If the username already exists (error code 23505), we treat it as
+  // success — the user is already registered, nothing more to do.
+  // Any other error gets logged clearly so we can see what went wrong.
   try {
-    const { error } = await supabase.from('users').upsert(
-      { username, country, device_type },
-      { onConflict: 'username' }
-    );
+    const { error } = await supabase.from('users').insert({
+      username,
+      country,
+      device_type,
+    });
 
     if (error) {
-      console.error('[NeuroLearn] Supabase upsert error:', error.message);
+      if (error.code === '23505') {
+        // Duplicate username — this is fine, user already registered
+        console.log('[NeuroLearn] Username already registered:', username);
+      } else {
+        console.error('[NeuroLearn] Supabase insert error:', error.code, error.message);
+      }
     } else {
-      console.log('[NeuroLearn] User registered:', username, '|', country, '|', device_type);
+      console.log('[NeuroLearn] User registered successfully:', username, '|', country, '|', device_type);
     }
   } catch (err) {
     console.error('[NeuroLearn] Registration failed unexpectedly:', err);
