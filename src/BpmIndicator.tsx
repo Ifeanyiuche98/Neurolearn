@@ -6,6 +6,7 @@
 
 import { useState, type CSSProperties } from 'react';
 import type { Metrics, RppgSessionDiagnostics } from '@elata-biosciences/rppg-web';
+import { useBpmGuard } from '../hooks/useBpmGuard';
 
 interface BpmIndicatorProps {
   metrics: Metrics;
@@ -38,6 +39,11 @@ export default function BpmIndicator({
   confidencePct, qualityPct, focusState, readinessLabel
 }: BpmIndicatorProps) {
   const [expanded, setExpanded] = useState(false);
+
+  // ── Cheat detection ──────────────────────────────────────────────────────────
+  const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds);
+  const isWarning = guard.suspicionLevel === 'low' || guard.suspicionLevel === 'high';
+  const isHighRisk = guard.suspicionLevel === 'high';
 
   const bpmReady = metrics.bpm != null && diagnostics?.estimationAvailable;
   const dotColor = bpmReady ? '#00e5cc' : '#f59e0b';
@@ -177,6 +183,49 @@ export default function BpmIndicator({
 
             </div>
           </div>
+
+          {/* ── Suspicion warning banner ──────────────────────────────────────── */}
+          {isWarning && (
+            <div style={{
+              marginTop: '10px',
+              padding: '8px 12px',
+              borderRadius: '10px',
+              background: isHighRisk
+                ? 'rgba(239, 68, 68, 0.08)'
+                : 'rgba(245, 158, 11, 0.08)',
+              border: `1px solid ${isHighRisk
+                ? 'rgba(239, 68, 68, 0.25)'
+                : 'rgba(245, 158, 11, 0.25)'}`,
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px',
+            }}>
+              {/* Icon */}
+              <span style={{ fontSize: '0.85rem', marginTop: '1px' }}>
+                {isHighRisk ? '⚠️' : '👁️'}
+              </span>
+              {/* Message */}
+              <div>
+                <p style={{
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: isHighRisk ? '#ef4444' : '#f59e0b',
+                  marginBottom: '2px',
+                }}>
+                  {isHighRisk ? 'Unusual signal detected' : 'Signal pattern notice'}
+                </p>
+                <p style={{
+                  fontSize: '0.62rem',
+                  color: '#7a9db0',
+                  lineHeight: 1.4,
+                }}>
+                  {isHighRisk
+                    ? 'Your biosignal looks unusually flat. Make sure your face fills the frame and you are in good light.'
+                    : 'Signal variance is lower than expected. Try adjusting your position or lighting.'}
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Meters */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '10px' }}>
