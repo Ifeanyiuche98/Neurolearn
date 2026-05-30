@@ -799,6 +799,7 @@ export default function App() {
 
   // ── Cheat detection ───────────────────────────────────────────────────────
   const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds);
+  console.log('[BpmGuard]', { bpm: metrics.bpm, confidencePct, sessionSeconds, suspicion: guard.suspicionLevel, variance: guard.bpmVariance, reasons: guard.flagReasons });
 
   // Running average of signal quality across the session
   const qualityHistoryRef = useRef<number[]>([]);
