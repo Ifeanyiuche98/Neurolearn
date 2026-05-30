@@ -6,7 +6,7 @@
 
 import { useState, type CSSProperties } from 'react';
 import type { Metrics, RppgSessionDiagnostics } from '@elata-biosciences/rppg-web';
-import { useBpmGuard } from '../hooks/useBpmGuard';
+import { useBpmGuard } from './hooks/useBpmGuard';
 
 interface BpmIndicatorProps {
   metrics: Metrics;
