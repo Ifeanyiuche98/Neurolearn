@@ -26,6 +26,10 @@ import TierGate            from './TierGate';
 import { useUsername }    from './useUsername';
 import UsernamePrompt     from './UsernamePrompt';
 
+// ── Cheat detection imports ───────────────────────────────────────────────────
+import { useBpmGuard }          from './hooks/useBpmGuard';
+import { logSuspiciousSession } from './lib/logSuspiciousSession';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics' | 'tiergated';
@@ -453,7 +457,7 @@ Tools every DeFi user should know: DefiLlama for protocol data, Revoke.cash for 
     ],
   },
 
-  // ── MODULE 4: NFTs & TOKENS — AfroLearn Institute Content (May 2026)
+  // ── MODULE 4: NFTs & TOKENS ───────────────────────────────────────────────
   {
     id: 'nfts', title: 'NFTs & Tokens',
     description: 'Understand digital ownership, token types, real utility, and how to evaluate crypto projects.',
@@ -786,6 +790,26 @@ export default function App() {
     timerRef.current = setInterval(() => setSessionSeconds(s => s + 1), 1000);
   };
 
+  // ── Derived signal values ─────────────────────────────────────────────────
+  const statusTone     = getStatusTone(diagnostics);
+  const readinessLabel = diagnostics?.estimationAvailable && metrics.bpm != null ? 'Ready' : 'Warm-up';
+  const confidencePct  = Math.round(clamp01(metrics.confidence) * 100);
+  const qualityPct     = Math.round(clamp01(metrics.signal_quality) * 100);
+  const focusState     = getFocusState(metrics.bpm);
+
+  // ── Cheat detection ───────────────────────────────────────────────────────
+  const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds);
+
+  // Running average of signal quality across the session
+  const qualityHistoryRef = useRef<number[]>([]);
+  if (qualityPct > 0) {
+    qualityHistoryRef.current.push(qualityPct);
+    if (qualityHistoryRef.current.length > 60) qualityHistoryRef.current.shift();
+  }
+  const avgQuality = qualityHistoryRef.current.length > 0
+    ? Math.round(qualityHistoryRef.current.reduce((a, b) => a + b, 0) / qualityHistoryRef.current.length)
+    : 0;
+
   const stopSession = (mod: LearningModule | null, score: number, sessionXP: number, focusScoreValue: number) => {
     setSessionActive(false);
     if (timerRef.current) clearInterval(timerRef.current);
@@ -796,6 +820,21 @@ export default function App() {
       const quizPct = Math.round((score / mod.quiz.length) * 100);
       leaderboardData.addEntry({ moduleTitle: mod.title, moduleIcon: mod.icon, quizScore: quizPct, focusScore: focusScoreValue, xpEarned: sessionXP, streak: streakData.streak });
       tokenData.addPendingXP(sessionXP);
+    }
+
+    // ── Log suspicious session to Supabase for Elata research ────────────────
+    if (guard.suspicionLevel !== 'none') {
+      void logSuspiciousSession({
+        username:      username ?? 'anonymous',
+        country:       '',
+        deviceType:    /Mobi/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+        sessionSeconds,
+        moduleTitle:   mod?.title ?? 'unknown',
+        quizScore:     mod ? Math.round((score / mod.quiz.length) * 100) : 0,
+        guard,
+        avgConfidence: confidencePct,
+        avgQuality,
+      });
     }
   };
 
@@ -857,12 +896,6 @@ export default function App() {
     setScreen('home'); setActiveModule(null); setSessionSummary(null); quizTimer.resetQuiz();
   };
 
-  const statusTone     = getStatusTone(diagnostics);
-  const readinessLabel = diagnostics?.estimationAvailable && metrics.bpm != null ? 'Ready' : 'Warm-up';
-  const confidencePct  = Math.round(clamp01(metrics.confidence) * 100);
-  const qualityPct     = Math.round(clamp01(metrics.signal_quality) * 100);
-  const focusState     = getFocusState(metrics.bpm);
-
   function renderHome() {
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
@@ -904,7 +937,6 @@ export default function App() {
             </button>
           ))}
         </div>
-        {/* Username display — bottom of home */}
         {username && (
           <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: '20px', fontFamily: 'var(--font-mono)' }}>
             Playing as <span style={{ color: '#20d29b', fontWeight: 700 }}>{username}</span>
@@ -1119,9 +1151,7 @@ export default function App() {
   // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="app">
-      {/* Username prompt — shown once on first visit, before anything else */}
       {showPrompt && <UsernamePrompt onSubmit={submitUsername} />}
-
       {showOnboarding && <Onboarding onComplete={completeOnboarding} />}
       <header className="topbar">
         <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
