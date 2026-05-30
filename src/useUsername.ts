@@ -13,32 +13,56 @@ function getDeviceType(): string {
 async function getCountry(): Promise<string> {
   try {
     const res = await fetch('https://ipapi.co/json/');
-    const data = await res.json();
-    return data.country_name || 'Unknown';
+    if (res.ok) {
+      const data = await res.json();
+      return data.country_name || 'Unknown';
+    }
+    return 'Unknown';
   } catch {
+    // Geolocation blocked or failed — continue anyway
     return 'Unknown';
   }
 }
 
 // ── Register user in Supabase ─────────────────────────────────────────────────
 async function registerUser(username: string): Promise<void> {
-  const country = await getCountry();
+  // Step 1 — Get country safely. If this fails, we still continue.
+  let country = 'Unknown';
+  try {
+    country = await getCountry();
+  } catch {
+    country = 'Unknown';
+  }
+
   const device_type = getDeviceType();
 
-  // Check if username already exists first
-  const { data: existing } = await supabase
-    .from('users')
-    .select('username')
-    .eq('username', username)
-    .single();
+  // Step 2 — Insert into Supabase with full error visibility
+  try {
+    // Check if username already exists first
+    const { data: existing } = await supabase
+      .from('users')
+      .select('username')
+      .eq('username', username)
+      .single();
 
-  // Only insert if username is new
-  if (!existing) {
-    await supabase.from('users').insert({
-      username,
-      country,
-      device_type,
-    });
+    // Only insert if username is new
+    if (!existing) {
+      const { error } = await supabase.from('users').insert({
+        username,
+        country,
+        device_type,
+      });
+
+      if (error) {
+        console.error('[NeuroLearn] Supabase insert error:', error.message);
+      } else {
+        console.log('[NeuroLearn] User registered successfully:', username, '|', country, '|', device_type);
+      }
+    } else {
+      console.log('[NeuroLearn] Username already exists in Supabase:', username);
+    }
+  } catch (err) {
+    console.error('[NeuroLearn] Registration failed unexpectedly:', err);
   }
 }
 
@@ -61,6 +85,7 @@ export function useUsername() {
     const cleaned = name.trim().slice(0, 20); // max 20 characters
     if (!cleaned) return;
 
+    // Save locally first — app works even if Supabase is unreachable
     localStorage.setItem('neurolearn_username', cleaned);
     setUsername(cleaned);
     setShowPrompt(false);
