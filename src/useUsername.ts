@@ -36,30 +36,19 @@ async function registerUser(username: string): Promise<void> {
 
   const device_type = getDeviceType();
 
-  // Step 2 — Insert into Supabase with full error visibility
+  // Step 2 — Upsert into Supabase (insert if new, update if exists)
+  // This replaces the old select+insert pattern which was failing
+  // because .single() throws an error when zero rows are found
   try {
-    // Check if username already exists first
-    const { data: existing } = await supabase
-      .from('users')
-      .select('username')
-      .eq('username', username)
-      .single();
+    const { error } = await supabase.from('users').upsert(
+      { username, country, device_type },
+      { onConflict: 'username' }
+    );
 
-    // Only insert if username is new
-    if (!existing) {
-      const { error } = await supabase.from('users').insert({
-        username,
-        country,
-        device_type,
-      });
-
-      if (error) {
-        console.error('[NeuroLearn] Supabase insert error:', error.message);
-      } else {
-        console.log('[NeuroLearn] User registered successfully:', username, '|', country, '|', device_type);
-      }
+    if (error) {
+      console.error('[NeuroLearn] Supabase upsert error:', error.message);
     } else {
-      console.log('[NeuroLearn] Username already exists in Supabase:', username);
+      console.log('[NeuroLearn] User registered:', username, '|', country, '|', device_type);
     }
   } catch (err) {
     console.error('[NeuroLearn] Registration failed unexpectedly:', err);
