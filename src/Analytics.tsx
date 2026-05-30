@@ -242,7 +242,7 @@ export default function Analytics({ onBack }: AnalyticsProps) {
         </>
       )}
 
-      {/* ── Footer — upgraded for readability ─────────────────────────────────── */}
+      {/* ── Footer — honest data disclosure ───────────────────────────────────── */}
       <div style={{
         background: 'rgba(0, 229, 204, 0.04)',
         border: '1px solid rgba(0, 229, 204, 0.2)',
@@ -265,7 +265,15 @@ export default function Analytics({ onBack }: AnalyticsProps) {
           fontSize: '0.75rem',
           lineHeight: 1.6,
         }}>
-          Data is stored locally on this device · No personal information collected
+          Biosignal &amp; focus data · Device only · Never uploaded
+        </p>
+        <p style={{
+          color: '#4a6a7a',
+          fontSize: '0.7rem',
+          lineHeight: 1.6,
+          marginTop: '4px',
+        }}>
+          Quiz scores shared globally for leaderboard · Username chosen by you
         </p>
       </div>
 
