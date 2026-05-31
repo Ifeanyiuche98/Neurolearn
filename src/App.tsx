@@ -813,6 +813,29 @@ export default function App() {
     ? Math.round(qualityHistoryRef.current.reduce((a, b) => a + b, 0) / qualityHistoryRef.current.length)
     : 0;
 
+  // ── Auto-log when suspicion hits HIGH during a live session ──────────────
+  // This fires without needing the user to end the session manually.
+  // A ref prevents the same event from being logged more than once per session.
+  const hasLoggedHighRef = useRef(false);
+  useEffect(() => {
+    if (guard.suspicionLevel === 'high' && !hasLoggedHighRef.current) {
+      hasLoggedHighRef.current = true;
+      void logSuspiciousSession({
+        username:      username ?? 'anonymous',
+        country:       '',
+        deviceType:    /Mobi/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+        sessionSeconds,
+        moduleTitle:   activeModule?.title ?? 'unknown',
+        quizScore:     0,
+        guard,
+        avgConfidence: confidencePct,
+        avgQuality,
+      });
+    }
+    // Reset the flag when session ends so it can fire again next session
+    if (!sessionActive) hasLoggedHighRef.current = false;
+  }, [guard.suspicionLevel, sessionActive]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const stopSession = (mod: LearningModule | null, score: number, sessionXP: number, focusScoreValue: number) => {
     setSessionActive(false);
     if (timerRef.current) clearInterval(timerRef.current);
