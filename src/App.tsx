@@ -818,8 +818,10 @@ export default function App() {
   // A ref prevents the same event from being logged more than once per session.
   const hasLoggedHighRef = useRef(false);
   useEffect(() => {
+    console.log('[AutoLog] effect fired:', guard.suspicionLevel, 'sessionActive:', sessionActive);
     if (guard.suspicionLevel === 'high' && !hasLoggedHighRef.current) {
       hasLoggedHighRef.current = true;
+      console.log('[AutoLog] Sending to Supabase now...');
       void logSuspiciousSession({
         username:      username ?? 'anonymous',
         country:       '',
