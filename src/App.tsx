@@ -798,8 +798,10 @@ export default function App() {
   const focusState     = getFocusState(metrics.bpm);
 
   // ── Cheat detection ───────────────────────────────────────────────────────
-  const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds);
-  console.log('[BpmGuard]', { bpm: metrics.bpm, confidencePct, sessionSeconds, suspicion: guard.suspicionLevel, variance: guard.bpmVariance, reasons: guard.flagReasons });
+  // warmupSeconds:0 — guard activates immediately without waiting for session timer
+  const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds, {
+    warmupSeconds: 0,
+  });
 
   // Running average of signal quality across the session
   const qualityHistoryRef = useRef<number[]>([]);
