@@ -12,7 +12,7 @@ export type SuspicionLevel = 'none' | 'low' | 'high';
 
 export interface BpmGuardResult {
   suspicionLevel: SuspicionLevel;
-  flagReasons: string[];        // e.g. ['flat_line', 'out_of_range']
+  flagReasons: string[];
   avgBpm: number;
   bpmVariance: number;
   minBpm: number;
@@ -21,45 +21,41 @@ export interface BpmGuardResult {
 }
 
 interface BpmGuardOptions {
-  // How many readings to keep in the rolling window (default: 30)
   windowSize?: number;
-  // Minimum seconds before we start judging — give rPPG time to warm up (default: 20)
   warmupSeconds?: number;
-  // Variance below this = suspiciously flat (default: 1.5)
   flatLineThreshold?: number;
-  // BPM below this is impossible for a living adult (default: 35)
   minHumanBpm?: number;
-  // BPM above this is impossible (default: 200)
   maxHumanBpm?: number;
-  // Only flag flat line if confidence is already decent (default: 60)
   minConfidenceToJudge?: number;
+  // How many seconds of null BPM (after signal was good) before flagging
+  nullDropoutSeconds?: number;
 }
 
 // ── The hook ──────────────────────────────────────────────────────────────────
 
 export function useBpmGuard(
-  // The live BPM value coming from the rPPG system (null = not ready yet)
   liveBpm: number | null | undefined,
-  // Current confidence % (0–100)
   confidencePct: number,
-  // How many seconds the session has been running
   sessionSeconds: number,
-  // Options to tune the detection
   options: BpmGuardOptions = {}
 ): BpmGuardResult {
 
   const {
-    windowSize          = 30,
-    warmupSeconds       = 20,
-    flatLineThreshold   = 1.5,
-    minHumanBpm         = 35,
-    maxHumanBpm         = 200,
-    minConfidenceToJudge = 60,
+    windowSize            = 30,
+    warmupSeconds         = 0,
+    flatLineThreshold     = 1.5,
+    minHumanBpm           = 35,
+    maxHumanBpm           = 200,
+    minConfidenceToJudge  = 60,
+    nullDropoutSeconds    = 15,
   } = options;
 
-  // ── Rolling window of recent BPM readings ──────────────────────────────────
-  // useRef means this list persists between renders without causing re-renders
+  // ── Rolling window of recent BPM readings ─────────────────────────────────
   const windowRef = useRef<number[]>([]);
+
+  // Track how long BPM has been null after a good signal was established
+  const nullStreakRef        = useRef(0);   // seconds BPM has been null
+  const hadGoodSignalRef     = useRef(false); // true once confidence was decent
 
   const [result, setResult] = useState<BpmGuardResult>({
     suspicionLevel: 'none',
@@ -72,15 +68,40 @@ export function useBpmGuard(
   });
 
   useEffect(() => {
-    // ── Ignore null/NaN readings ─────────────────────────────────────────────
-    if (liveBpm == null || Number.isNaN(liveBpm)) return;
 
-    // ── Add to rolling window ────────────────────────────────────────────────
+    // ── Track whether we ever had a good signal ───────────────────────────
+    if (confidencePct >= minConfidenceToJudge) {
+      hadGoodSignalRef.current = true;
+    }
+
+    // ── Handle null BPM — camera covered or signal lost ──────────────────
+    if (liveBpm == null || Number.isNaN(liveBpm)) {
+
+      // If we previously had a good signal and now have nothing — count it
+      if (hadGoodSignalRef.current) {
+        nullStreakRef.current += 1;
+      }
+
+      // Flag if null has persisted long enough
+      if (nullStreakRef.current >= nullDropoutSeconds) {
+        setResult(prev => ({
+          ...prev,
+          suspicionLevel: nullStreakRef.current >= nullDropoutSeconds * 2 ? 'high' : 'low',
+          flagReasons: ['signal_dropout'],
+        }));
+      }
+      return;
+    }
+
+    // BPM is back — reset the null streak
+    nullStreakRef.current = 0;
+
+    // ── Add to rolling window ─────────────────────────────────────────────
     const win = windowRef.current;
     win.push(liveBpm);
-    if (win.length > windowSize) win.shift(); // drop oldest reading
+    if (win.length > windowSize) win.shift();
 
-    // ── Not enough data yet — wait for warmup ────────────────────────────────
+    // ── Not enough data yet ───────────────────────────────────────────────
     if (sessionSeconds < warmupSeconds || win.length < 10) {
       setResult({
         suspicionLevel: 'none',
@@ -94,19 +115,16 @@ export function useBpmGuard(
       return;
     }
 
-    // ── Compute stats from the window ────────────────────────────────────────
+    // ── Compute stats ─────────────────────────────────────────────────────
     const avg    = win.reduce((a, b) => a + b, 0) / win.length;
     const minBpm = Math.min(...win);
     const maxBpm = Math.max(...win);
-
-    // Variance = average of squared distances from the mean
-    // A real heart at rest varies by at least 2–4 BPM naturally
     const variance = win.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / win.length;
 
-    // ── Check each flag condition ────────────────────────────────────────────
+    // ── Check each flag condition ─────────────────────────────────────────
     const reasons: string[] = [];
 
-    // 1. Flat line — only flag if confidence is decent (rules out bad lighting)
+    // 1. Flat line — only if confidence is decent (rules out bad lighting)
     if (variance < flatLineThreshold && confidencePct >= minConfidenceToJudge) {
       reasons.push('flat_line');
     }
@@ -115,15 +133,12 @@ export function useBpmGuard(
     if (avg < minHumanBpm) reasons.push('out_of_range_low');
     if (avg > maxHumanBpm) reasons.push('out_of_range_high');
 
-    // 3. Zero variance with high confidence — almost certainly a static image
+    // 3. Perfect zero variance with good confidence — static image
     if (variance === 0 && confidencePct >= minConfidenceToJudge) {
       reasons.push('zero_variance');
     }
 
-    // ── Decide suspicion level ───────────────────────────────────────────────
-    // 'high'  = two or more flags, or zero variance (very strong signal of cheating)
-    // 'low'   = one flag (could be unusual but worth watching)
-    // 'none'  = all clear
+    // ── Decide suspicion level ────────────────────────────────────────────
     let suspicionLevel: SuspicionLevel = 'none';
     if (reasons.includes('zero_variance') || reasons.length >= 2) {
       suspicionLevel = 'high';
@@ -135,14 +150,13 @@ export function useBpmGuard(
       suspicionLevel,
       flagReasons: reasons,
       avgBpm: Math.round(avg),
-      bpmVariance: Math.round(variance * 100) / 100, // 2 decimal places
+      bpmVariance: Math.round(variance * 100) / 100,
       minBpm,
       maxBpm,
       sampleCount: win.length,
     });
 
-  }, [liveBpm, sessionSeconds]); 
-  // ^ Re-runs every time a new BPM reading arrives or the timer ticks
+  }, [liveBpm, confidencePct, sessionSeconds]);
 
   return result;
 }
