@@ -801,6 +801,7 @@ export default function App() {
   // warmupSeconds:0 — guard activates immediately without waiting for session timer
   const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds, {
     warmupSeconds: 0,
+    nullDropoutSeconds: 8,
   });
 
   // Running average of signal quality across the session
