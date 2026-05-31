@@ -819,6 +819,11 @@ export default function App() {
   const hasLoggedHighRef = useRef(false);
   useEffect(() => {
     console.log('[AutoLog] effect fired:', guard.suspicionLevel, 'sessionActive:', sessionActive);
+    // Only reset the flag when a session genuinely ends
+    if (!sessionActive && hasLoggedHighRef.current) {
+      hasLoggedHighRef.current = false;
+      return;
+    }
     if (guard.suspicionLevel === 'high' && !hasLoggedHighRef.current) {
       hasLoggedHighRef.current = true;
       console.log('[AutoLog] Sending to Supabase now...');
@@ -834,8 +839,6 @@ export default function App() {
         avgQuality,
       });
     }
-    // Reset the flag when session ends so it can fire again next session
-    if (!sessionActive) hasLoggedHighRef.current = false;
   }, [guard.suspicionLevel, sessionActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const stopSession = (mod: LearningModule | null, score: number, sessionXP: number, focusScoreValue: number) => {
