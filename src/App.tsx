@@ -801,7 +801,6 @@ export default function App() {
   // warmupSeconds:0 — guard activates immediately without waiting for session timer
   const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds, {
     warmupSeconds: 0,
-    nullDropoutSeconds: 8,
   });
 
   // Running average of signal quality across the session
@@ -819,7 +818,6 @@ export default function App() {
   // A ref prevents the same event from being logged more than once per session.
   const hasLoggedHighRef = useRef(false);
   useEffect(() => {
-    console.log('[AutoLog] effect fired:', guard.suspicionLevel, 'sessionActive:', sessionActive);
     // Only reset the flag when a session genuinely ends
     if (!sessionActive && hasLoggedHighRef.current) {
       hasLoggedHighRef.current = false;
@@ -827,7 +825,6 @@ export default function App() {
     }
     if (guard.suspicionLevel === 'high' && !hasLoggedHighRef.current) {
       hasLoggedHighRef.current = true;
-      console.log('[AutoLog] Sending to Supabase now...');
       void logSuspiciousSession({
         username:      username ?? 'anonymous',
         country:       '',
