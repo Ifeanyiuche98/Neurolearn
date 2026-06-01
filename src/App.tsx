@@ -51,129 +51,369 @@ const MODULES: LearningModule[] = [
   // ── MODULE 1: BLOCKCHAIN BASICS ───────────────────────────────────────────
   {
     id: 'blockchain', title: 'Blockchain Basics',
-    description: 'Understand what blockchain is and how it works from the ground up.',
+    description: 'Understand what blockchain is, how it works, and why it is reshaping the world.',
     color: '#3d9eff', icon: '⛓️',
     lesson: [
       {
-        title: 'What Is a Blockchain?',
-        content: `A blockchain is a new kind of database — one that no single person or company controls.
+        title: 'What Is a Blockchain — And Why Did We Need It?',
+        content: `Imagine you lend your friend 5,000 Naira. No receipt. No witness. A week later he says it never happened. You have no proof. Now scale that problem to millions of strangers transacting across borders every single day — and you start to understand why blockchain was invented.
 
-Instead of storing data on one central server, a blockchain copies and shares its records across thousands of computers worldwide. Every participant holds the same version of the truth.
+Before blockchain, every digital transaction relied on a trusted middleman: a bank, a payment processor, a government registry. These institutions kept the "official" record of who owns what. The system worked — but it had serious weaknesses. Middlemen could be corrupt, hacked, or simply inaccessible. In 2008, during the biggest banking collapse in modern history, a person (or group) using the name Satoshi Nakamoto published a nine-page document with a radical idea: what if the record didn't belong to any single institution? What if everyone kept a copy — and the math made lying impossible?
 
-Here is how it works:
+That idea became Bitcoin. And the underlying technology became blockchain.
 
-• Transactions are grouped into a block
-• Each block is given a unique digital fingerprint called a hash
-• That hash is embedded into the next block — creating a chain
-• Once recorded, no block can be changed without breaking every block after it
+**So what exactly is a blockchain?**
 
-This makes blockchain records tamper-proof, transparent, and permanent.
+A blockchain is a shared digital record book — called a ledger — that is copied across thousands of computers around the world simultaneously. Every time a new transaction happens, it gets bundled together with other recent transactions into a "block." That block is then mathematically sealed and attached to the previous block — forming a chain. Hence: blockchain.
 
-Bitcoin introduced this concept in 2009. By 2026, blockchain technology underpins financial systems, identity platforms, supply chains, and decentralized applications used by millions of people globally.`
+Here is what makes it different from a normal database:
+
+• No single owner. A regular bank database is owned by the bank. A blockchain is owned by everyone and no one at the same time.
+• Tamper-proof. Once a block is added to the chain, changing it would require recalculating every block that came after it — across thousands of computers simultaneously. This is computationally impossible on a well-established network.
+• Always on. There is no head office, no closing time, no public holiday. The network runs 24 hours a day, 7 days a week, across every timezone on earth.
+
+**A real-world picture**
+
+Think of it like a community notice board in a small village. Everyone in the village has an identical copy of the board. When someone posts a new notice — say, "Kofi sold his bicycle to Tariq for 50 Ghana Cedis" — every villager updates their copy at the same time. If someone later tries to change their personal copy to say the price was 10 Cedis, the rest of the village's copies immediately contradict it. The fraud fails automatically.
+
+Blockchain works the same way — except the village has millions of participants, the notice board updates in seconds, and the math is cryptographically unbreakable.
+
+**The double-spending problem — solved**
+
+Digital money had one critical flaw before blockchain: a digital file can be copied. If your money is just a file on a computer, what stops you from copying it and spending it twice? This was called the double-spending problem, and it was why digital cash seemed impossible before 2008.
+
+Blockchain solved it by making every transaction visible to the entire network instantly. The moment you send 1 Bitcoin to someone, every node on the network records it. Trying to send that same Bitcoin to a second person milliseconds later? The network rejects it — the record already exists.
+
+Takeaway: Blockchain is a shared, tamper-proof record book maintained by thousands of computers worldwide. No single person controls it, no one can change past entries, and it runs without stopping. It solved a problem that had made trustless digital money impossible for decades.`
       },
       {
-        title: 'How Blockchains Reach Agreement',
-        content: `With no central authority, how does a blockchain decide what is true? Through a system called a consensus mechanism — a set of rules all participants follow to agree on valid transactions.
+        title: 'Inside a Blockchain — How Transactions Actually Work',
+        content: `Every time someone sends cryptocurrency — whether it is Bitcoin from Berlin, USDT from Bangkok, or SOL from São Paulo — a precise sequence of events happens behind the scenes. Most users never see it. But understanding it changes how you think about what "sending money" actually means.
 
-The two most important mechanisms today:
+Let's walk through a real transaction step by step.
 
-Proof of Work (PoW)
-Used by Bitcoin. Computers compete to solve complex mathematical puzzles. The winner adds the next block and earns a reward. This process, called mining, is energy-intensive but has secured Bitcoin for over 15 years.
+**Step 1 — You initiate the transaction**
 
-Proof of Stake (PoS)
-Used by Ethereum since 2022. Validators lock up cryptocurrency as collateral. The network selects them to confirm transactions based on their stake. Far more energy-efficient — Ethereum reduced its energy use by approximately 99.9% after switching.
+Sophie is a freelance designer in Amsterdam. She just completed a project for a client in Singapore who pays her in USDC (a dollar-backed stablecoin). Sophie opens her wallet app, enters the client's wallet address, types the amount, and hits send.
 
-Both mechanisms make cheating the network extraordinarily expensive. To alter past records, an attacker would need to overpower the entire global network simultaneously.`
+At this moment, her wallet uses her private key — a secret cryptographic code unique to her — to create a digital signature. This signature mathematically proves that Sophie authorized this transfer, without revealing the private key itself. Think of it like a wax seal on an envelope: anyone can verify it's yours, but only you can create it.
+
+**Step 2 — The transaction is broadcast to the network**
+
+Sophie's transaction is now announced to thousands of computers (called nodes) running the blockchain software around the world. Each node receives the transaction and begins checking it: Does Sophie's wallet actually hold enough USDC? Is the digital signature valid? Has this exact transaction been submitted before?
+
+This validation happens in seconds — not because one powerful computer processes it, but because thousands of computers check it simultaneously.
+
+**Step 3 — Transactions are grouped into a block**
+
+Sophie's transaction gets bundled with hundreds or thousands of other pending transactions into a new block. This block also contains a timestamp, a reference to the previous block (its cryptographic hash), and a unique fingerprint of all the transactions inside it.
+
+That reference to the previous block is crucial — it is what creates the "chain." Each block is mathematically locked to the one before it.
+
+**Step 4 — The network reaches consensus**
+
+Before this new block can be officially added to the blockchain, the network must agree it is valid. This agreement process is called a consensus mechanism. Different blockchains use different methods. The key point: no single authority decides. The network decides, collectively.
+
+**Step 5 — The block is added permanently**
+
+Once consensus is reached, the new block is added to the chain on every node simultaneously. Sophie's transaction is now permanent. It cannot be deleted, reversed, or altered. Her client's wallet now shows the USDC. Sophie's wallet no longer does.
+
+The entire process — from Sophie hitting send to the transaction being permanently recorded — takes anywhere from a few seconds (on Solana) to a few minutes (on Bitcoin).
+
+**What is a hash — and why does it matter?**
+
+A hash is a fixed-length digital fingerprint generated from any piece of data. Run the sentence "Sophie sent 500 USDC" through a hash function and you get a unique string of letters and numbers. Change even one character — "Sophie sent 499 USDC" — and the hash changes completely.
+
+Every block contains the hash of the previous block. This means if anyone tries to alter an old transaction, its hash changes — which breaks the link to the next block — which breaks every block after it. The entire chain from that point becomes invalid. Detecting tampering is instant and automatic.
+
+Takeaway: A blockchain transaction travels through five stages — initiation, broadcast, bundling, consensus, and permanent recording. Cryptographic hashes chain every block to the one before it, making the entire history tamper-proof. The math replaces the middleman.`
       },
       {
-        title: 'Why Blockchain Changes Everything',
-        content: `Before blockchain, digital transactions required a trusted middleman — a bank, payment processor, or government authority — to verify that the same money was not spent twice. This is known as the double-spend problem.
+        title: 'Consensus Mechanisms — How Thousands of Strangers Agree',
+        content: `Here is a genuinely strange problem: how do you get thousands of computers, owned by different people in different countries, who have never met and don't trust each other — to agree on the same version of the truth?
 
-Blockchain solves this without any middleman. Every transaction is verified by the network, recorded permanently, and visible to all.
+This is the consensus problem. And it is the most important engineering challenge blockchain had to solve. Without consensus, every node could have a different version of the ledger. The whole system would fall apart.
 
-The implications are enormous:
+The solution? Consensus mechanisms — rules that force the network to reach agreement without needing anyone in charge.
 
-Finance — Send value anywhere in the world instantly, without a bank, for a fraction of traditional fees.
+**Proof of Work — The Original Solution**
 
-Identity — Store and control your own credentials without relying on a central authority.
+Bitcoin's answer was Proof of Work (PoW). To add a new block to the chain, computers called miners must compete to solve a complex mathematical puzzle. The puzzle has no shortcut — the only way to solve it is by making billions of random guesses per second. The first miner to find the correct answer gets to add the next block and earns a reward in Bitcoin.
 
-Ownership — Prove ownership of digital assets through an immutable public record.
+This is "mining" — and it is intentionally expensive. It requires massive amounts of electricity and specialized hardware. Why make it hard? Because making it hard makes cheating unprofitable. If you wanted to alter the blockchain's history, you would need to redo the Proof of Work for every block after the one you changed — while the rest of the network keeps adding new blocks ahead of you. You would need to control more than 50% of the entire network's computing power. On Bitcoin, that would cost billions of dollars.
 
-Transparency — Every transaction on a public blockchain is auditable by anyone, anywhere.
+The trade-off: it works extraordinarily well for security — Bitcoin has run for over 15 years without a successful attack — but it consumes enormous amounts of energy. This is a genuine environmental concern the industry has grappled with seriously.
 
-By 2026, institutional investors, governments, and global corporations actively use blockchain infrastructure. Spot Bitcoin ETFs launched in the US in January 2024 attracted tens of billions in institutional capital within months — cementing blockchain's place in mainstream finance.`
+**Proof of Stake — The Energy-Efficient Alternative**
+
+Ethereum switched to Proof of Stake (PoS) in September 2022 in an event called "The Merge" — one of the most technically complex software upgrades in history.
+
+In Proof of Stake, there are no miners racing to solve puzzles. Instead, validators are chosen to create new blocks based on how much cryptocurrency they "stake" — meaning lock up as collateral. The more you stake, the higher your chance of being selected to validate the next block and earn the reward.
+
+If a validator tries to cheat — approving fraudulent transactions — they lose their staked funds. This is called "slashing." The economic punishment replaces the energy cost as the deterrent against dishonesty.
+
+The result: Ethereum's energy consumption dropped by approximately 99.9% after The Merge. The environmental argument against crypto weakened dramatically overnight.
+
+**Other mechanisms worth knowing:**
+
+Proof of History (PoH) — Used by Solana. Creates a cryptographic record of time, allowing the network to process over 50,000 transactions per second.
+
+Delegated Proof of Stake (DPoS) — Token holders vote for a smaller group of trusted validators, increasing speed at some cost to decentralization.
+
+**A worked example — Marcus in Lagos**
+
+Marcus runs a logistics company in Lagos and is exploring blockchain to track shipments across West Africa. Which blockchain should he use?
+
+• Maximum security, cost not a priority: Bitcoin (PoW)
+• Smart contracts, DeFi integration, reasonable fees: Ethereum (PoS)
+• Speed and very low fees for high-volume small transactions: Solana (PoH)
+
+The consensus mechanism isn't just a technical detail — it shapes everything about what a blockchain can do, how fast it runs, and how much it costs to use.
+
+Takeaway: Consensus mechanisms allow thousands of independent computers to agree on truth without trusting each other. Proof of Work uses energy expenditure as a deterrent. Proof of Stake uses locked capital. Both work — but they make different trade-offs between security, speed, energy use, and decentralization.`
+      },
+      {
+        title: 'Types of Blockchains — Not All Chains Are the Same',
+        content: `When most people hear "blockchain," they picture Bitcoin — open, public, accessible to anyone on earth. But Bitcoin is just one type. By 2026, the ecosystem has expanded into several distinct categories, each designed for different purposes, users, and trade-offs.
+
+**Public Blockchains — Open to the World**
+
+A public blockchain is open to anyone. Anyone can read the ledger, submit transactions, and run a node. No permission required.
+
+Examples: Bitcoin, Ethereum, Solana, BNB Chain.
+
+These are the most decentralized and transparent blockchains. The entire transaction history is visible to anyone with an internet connection. This transparency creates accountability and removes the need to trust any single institution.
+
+The trade-off: public chains are slower and more expensive than private alternatives, because every node must process every transaction, and consensus must be reached across the entire global network.
+
+**Private Blockchains — Controlled Access**
+
+A private blockchain is operated by a single organization. Only approved participants can join, read data, or submit transactions.
+
+Example: Hyperledger Fabric, used by IBM and enterprise clients.
+
+These are faster and more efficient — because there are fewer nodes and trust is already established. But they sacrifice decentralization entirely. A private blockchain is, in many ways, just a more sophisticated database.
+
+Use case: A bank processing thousands of internal transactions per second that needs auditability but not openness.
+
+**Consortium Blockchains — Shared Governance**
+
+A consortium blockchain sits between public and private. Governed by a group of organizations rather than one, with restricted access to approved members.
+
+Example: R3 Corda, used by a consortium of global banks for interbank settlement.
+
+**Layer 1 vs Layer 2 — The Scaling Solution**
+
+Layer 1 is the base blockchain — the foundation. Bitcoin and Ethereum are Layer 1s. They handle the final settlement of all transactions and provide ultimate security. But they have limits: Ethereum's base layer processes roughly 15–30 transactions per second. Visa processes 24,000.
+
+Layer 2 networks are built on top of Layer 1s to handle transactions faster and cheaper. They process batches of transactions off the main chain, then submit a compressed proof back to Layer 1 for final settlement. Think of Layer 1 as a supreme court — it handles the final ruling. Layer 2 is the lower court system handling daily volume.
+
+Examples of Ethereum Layer 2s: Arbitrum, Optimism, Base, zkSync.
+
+After Ethereum's Dencun upgrade in March 2024, Layer 2 fees dropped by over 90% — in some cases to fractions of a cent. DeFi that was previously only affordable for wealthy users became accessible to someone in Accra, Nairobi, or Jakarta sending $10.
+
+**A worked example — Priya in Mumbai**
+
+Priya is building a supply chain tracking system for a textile export company. She needs blockchain for auditability — but suppliers need data privacy and corporate clients require confidentiality.
+
+Her solution: a consortium blockchain shared between her company, trusted suppliers, and buyers. Shared tamper-proof records without exposing commercially sensitive data publicly — and without public network fees.
+
+**Modular Blockchains — The Frontier**
+
+The newest architectural approach separates blockchain functions into specialized layers: one layer handles execution, another handles consensus, another handles data availability. This modular approach, pioneered by projects like Celestia, allows each layer to be optimized independently — potentially solving the scalability challenges that have challenged blockchain engineers for years.
+
+Takeaway: Public blockchains offer openness and decentralization. Private and consortium chains offer control and speed. Layer 2 networks make public blockchains affordable and scalable. The right blockchain depends entirely on the problem being solved — and in 2026, there is a type for almost every use case.`
+      },
+      {
+        title: 'Why Blockchain Matters — Real Impact in the Real World',
+        content: `It is easy to talk about blockchain in the abstract — distributed ledgers, cryptographic hashes, consensus mechanisms. But the reason this technology matters is not the engineering. It is what the engineering makes possible for real people solving real problems.
+
+By 2026, blockchain is no longer experimental. It is active infrastructure used by millions of people daily — for payments, savings, identity, trade finance, healthcare, and governance.
+
+**Remittances — Cutting the Cost of Sending Money Home**
+
+Every year, hundreds of billions of dollars flow from diaspora communities back to families in developing countries. A Nigerian nurse in London sending money to Lagos. A Guatemalan construction worker in Houston supporting his family. A Filipino worker in Dubai funding her children's school fees.
+
+The traditional system charges 5–10% in fees and takes 3–5 business days. On a $300 transfer, that's up to $30 gone before the money arrives.
+
+Blockchain-based stablecoin transfers — particularly USDT on Tron's TRC-20 network — cost fractions of a cent and settle in seconds. The same $300 arrives as $299.99. For families living on those transfers, it is genuinely life-changing.
+
+**Financial Inclusion — Banking the Unbanked**
+
+Over 1.4 billion adults globally have no bank account. The reasons vary: no ID documents, no nearby bank branch, minimum balance requirements, or distrust of institutions that have failed them before.
+
+Blockchain requires none of that. All you need is a smartphone and internet connection. No credit history. No proof of address. No approval from a bank manager.
+
+James is a small trader in rural Kenya with no bank account but a basic Android phone. Through a mobile crypto wallet, he can hold dollar-equivalent savings in USDT, receive payments from clients in Nairobi, and access DeFi lending protocols — all without ever walking into a bank. This was not possible five years ago.
+
+**Real-World Asset Tokenization — Unlocking Frozen Capital**
+
+Much of the world's wealth is locked in illiquid assets: real estate, agricultural land, government bonds, private company shares. Selling a piece of farmland in rural Brazil takes months and requires lawyers, notaries, and significant fees.
+
+Tokenization converts these assets into blockchain tokens that can be bought, sold, and traded in fractions — instantly, globally, 24/7. BlackRock's tokenized money market fund launched on Ethereum in 2024 and exceeded $1 billion in assets within months. This is the world's largest asset manager using blockchain as financial infrastructure.
+
+**Decentralized Identity — Owning Your Own Credentials**
+
+In the current system, your identity is owned by institutions. Blockchain-based decentralized identity (DID) systems let individuals store verifiable credentials on-chain, controlled entirely by themselves. A refugee can prove their qualifications to a new employer without depending on a government database that may no longer exist. A student in Zimbabwe can present a blockchain-verified degree that cannot be questioned or denied.
+
+**DePIN — Communities Owning Their Own Infrastructure**
+
+Decentralized Physical Infrastructure Networks allow communities to deploy their own wireless nodes and earn crypto rewards for providing coverage. In areas where traditional infrastructure investment has never arrived, DePIN offers connectivity owned by the community itself.
+
+Takeaway: Blockchain's real-world impact spans remittances, financial inclusion, asset tokenization, identity, supply chains, and community infrastructure. The technology matters not because of its elegance but because of what it enables — the ability for anyone, anywhere, to participate in global economic systems without needing permission from an institution.`
+      },
+      {
+        title: "Blockchain's Future — What 2026 and Beyond Looks Like",
+        content: `Blockchain in 2026 looks very different from blockchain in 2017 — and dramatically different from what most people still imagine when they hear the word "crypto." The industry has grown up. The speculation has matured into infrastructure. And several developments have fundamentally changed what the technology is capable of and who it serves.
+
+**What has already changed — the facts of 2025–2026**
+
+Bitcoin is no longer just for technologists and speculators. In January 2024, the US SEC approved spot Bitcoin Exchange-Traded Funds — allowing ordinary investors to buy exposure to Bitcoin through normal brokerage accounts, the same way they buy stocks. Within months, BlackRock's Bitcoin ETF became one of the fastest-growing ETFs in Wall Street history. Pension funds, sovereign wealth managers, and Fortune 500 treasury departments now hold Bitcoin directly.
+
+Bitcoin reached a new all-time high of $126,080 in October 2025. The "will Bitcoin survive?" question has been answered. The question now is: what role does it play in the global financial system?
+
+Ethereum's infrastructure costs have collapsed. After the Dencun upgrade in March 2024, transaction fees on Layer 2 networks dropped by over 90%. DeFi protocols that were previously only affordable for large transactions are now accessible at scale — including to users in Africa and Southeast Asia making small, frequent transactions.
+
+Regulatory clarity is arriving. The EU's MiCA regulation came into full effect in 2025, providing a comprehensive legal framework for crypto businesses across 27 countries. The United States passed federal crypto legislation clarifying asset classification. The era of regulatory ambiguity is ending — which is broadly good for the industry's long-term legitimacy.
+
+**AI and blockchain — a convergence with real consequences**
+
+By 2025–2026, artificial intelligence agents are executing on-chain transactions autonomously. An AI agent can manage a DeFi portfolio — depositing into lending protocols, shifting liquidity, and withdrawing in response to risk signals — all without human intervention. This convergence cuts both ways: it makes DeFi more efficient and accessible, but raises new questions about accountability and security.
+
+**The regulatory picture globally**
+
+Nigeria's SEC and Central Bank have updated frameworks for Virtual Asset Service Providers. Rwanda and Mauritius are positioning as crypto-friendly financial hubs. Nigeria's eNaira — Africa's first Central Bank Digital Currency — has undergone multiple upgrades. CBDCs are government-controlled, making them fundamentally different from decentralized crypto, but they represent official acknowledgment that digital money is the future.
+
+**What to watch for the rest of 2026**
+
+• Bitcoin's post-halving trajectory — the April 2024 halving reduced miner rewards to 3.125 BTC per block. Historically, halvings precede significant price appreciation.
+• The Layer 2 wars — Arbitrum, Base, Optimism, and zkSync competing intensely for developer activity. Base, built by Coinbase, has emerged as a strong contender for consumer applications.
+• Tokenized government bonds — multiple governments exploring blockchain-based treasury issuance. Could become one of the largest use cases by volume in 2–3 years.
+• DePIN expansion — community-owned wireless networks, storage nodes, and energy grids gaining real-world traction globally.
+
+**An honest assessment**
+
+Blockchain is not a solution to every problem. User experience remains genuinely difficult — seed phrases, gas fees, and wallet addresses confuse newcomers. The industry is improving (Account Abstraction makes wallets programmable and user-friendly) but the gap with traditional apps remains real. Scalability is improving but not fully solved. Bitcoin's energy consumption is real.
+
+Lena is a developer in Berlin building a DeFi protocol. Ahmad is a remittance sender in Dubai supporting family in Karachi. Maria is a farmer in Brazil hoping to access global capital through tokenization. All three are connected to a technology that did not exist 17 years ago and that none of them would have predicted would become this relevant to their lives.
+
+Blockchain is infrastructure now. Not hype. Not experiment. Infrastructure — with all the messiness, progress, and ongoing work that word implies.
+
+Takeaway: By 2026, blockchain has transitioned from speculative technology to active global infrastructure. Bitcoin ETFs, Ethereum's scaling upgrades, regulatory frameworks, and AI convergence have all accelerated this shift. Real challenges remain — UX, scalability, energy — but the trajectory is clear: this technology is embedding itself into the foundations of global finance, identity, and infrastructure.`
       },
     ],
     flashcards: [
       {
         front: 'What is a blockchain?',
-        back: 'A distributed, immutable ledger shared across thousands of computers. Transactions are grouped in blocks, cryptographically linked, and secured by network consensus. No single entity controls it.'
+        back: 'A shared digital ledger copied across thousands of computers worldwide. Transactions are grouped into blocks, each mathematically sealed and linked to the previous one. No single entity controls it, and past records cannot be altered.'
       },
       {
-        front: 'What is a hash?',
-        back: 'A unique digital fingerprint generated from a block\'s data. If any data changes, the hash changes completely — making tampering instantly detectable across the entire chain.'
+        front: 'What was the double-spending problem — and how did blockchain solve it?',
+        back: 'The risk that the same digital money could be copied and spent twice. Blockchain solved it by broadcasting every transaction to the entire network instantly. Once recorded, the network rejects any attempt to spend the same funds again.'
       },
       {
-        front: 'What is Proof of Stake?',
-        back: 'A consensus mechanism where validators lock up cryptocurrency as collateral to earn the right to confirm transactions. Used by Ethereum since 2022. Far more energy-efficient than Proof of Work.'
+        front: 'What is a cryptographic hash?',
+        back: 'A fixed-length digital fingerprint generated from any piece of data. Each block contains the hash of the previous block. Changing even one character in any block changes its hash — breaking the chain and making tampering instantly detectable.'
       },
       {
-        front: 'What is the double-spend problem?',
-        back: 'The risk that the same digital funds could be spent more than once. Blockchain solves this by recording every transaction permanently on a public ledger verified by a global network.'
+        front: 'What is Proof of Work (PoW)?',
+        back: 'A consensus mechanism where miners compete to solve complex mathematical puzzles to add new blocks. The first to solve it earns a cryptocurrency reward. Highly secure but energy-intensive. Used by Bitcoin.'
       },
       {
-        front: 'What is decentralization?',
-        back: 'The distribution of control across a global network of participants rather than a single authority. It removes single points of failure, censorship, and gatekeepers from financial and data systems.'
+        front: 'What is Proof of Stake (PoS) and how does it differ from PoW?',
+        back: 'Validators are chosen to create blocks based on how much cryptocurrency they stake as collateral. Cheating results in losing staked funds ("slashing"). Uses ~99.9% less energy than Proof of Work. Used by Ethereum since The Merge in 2022.'
+      },
+      {
+        front: 'What is the difference between Layer 1 and Layer 2 blockchains?',
+        back: 'Layer 1 is the base blockchain (e.g. Bitcoin, Ethereum) that handles final settlement and security. Layer 2 networks (e.g. Arbitrum, Base) are built on top to process transactions faster and cheaper, then settle compressed proofs back to Layer 1.'
+      },
+      {
+        front: 'What are the five stages of a blockchain transaction?',
+        back: '1) Initiation — user signs with private key. 2) Broadcast — sent to network nodes. 3) Bundling — grouped with other transactions into a block. 4) Consensus — network agrees on validity. 5) Permanent recording — block added to every node simultaneously.'
+      },
+      {
+        front: 'What is Real-World Asset (RWA) tokenization?',
+        back: 'Converting physical or traditional financial assets — like property, government bonds, or agricultural land — into blockchain tokens. Allows assets to be bought, sold, and traded in fractions, globally, 24/7, without traditional intermediaries.'
       },
     ],
     quiz: [
       {
-        question: 'What makes it nearly impossible to alter historical records on a blockchain?',
+        question: 'What fundamental problem did blockchain technology solve that had previously made trustless digital money impossible?',
         options: [
-          'A government agency monitors all transactions',
-          'Each block contains the cryptographic fingerprint of the previous block',
-          'Blocks are password-protected by the network founder',
-          'Only verified users can read the blockchain'
+          'The bandwidth problem — slow internet connections could not support digital payments',
+          'The double-spending problem — digital files could be copied and spent multiple times',
+          'The inflation problem — governments kept printing too much money',
+          'The identity problem — no one could prove who they were online'
         ],
         correct: 1
       },
       {
-        question: 'Which consensus mechanism does Ethereum use since The Merge in 2022?',
+        question: 'In a blockchain, what is the purpose of including the previous block\'s hash in every new block?',
         options: [
-          'Proof of Work',
-          'Proof of Authority',
-          'Proof of History',
-          'Proof of Stake'
+          'To speed up transaction processing by referencing past data',
+          'To identify which miner created the previous block',
+          'To cryptographically chain blocks together so tampering with any block breaks all subsequent blocks',
+          'To store a backup copy of the previous block\'s transactions'
         ],
-        correct: 3
+        correct: 2
       },
       {
-        question: 'What problem did Bitcoin originally solve?',
+        question: 'Ethereum switched from Proof of Work to Proof of Stake in 2022. What was the primary result?',
         options: [
-          'Slow broadband internet speeds',
-          'The double-spend problem in digital transactions',
-          'Identity theft on social media platforms',
-          'International tax compliance'
-        ],
-        correct: 1
-      },
-      {
-        question: 'What happened when US spot Bitcoin ETFs launched in January 2024?',
-        options: [
-          'They were immediately shut down by regulators',
-          'They attracted tens of billions in institutional capital and became the fastest-growing ETF category in Wall Street history',
-          'They had no impact on Bitcoin\'s price or adoption',
-          'They were only available to government institutions'
+          'Ethereum transactions became free',
+          'Energy consumption dropped by approximately 99.9%',
+          'Transaction fees were reduced to zero',
+          'The number of validators increased by 99.9%'
         ],
         correct: 1
       },
       {
-        question: 'Which of these best describes a public blockchain?',
+        question: 'What process does the network use to agree that a new block of transactions is valid — without any single authority deciding?',
         options: [
-          'A private database controlled by one corporation',
-          'A shared, transparent ledger anyone can read and verify, maintained by a decentralized network',
-          'A government-issued digital currency system',
-          'An encrypted messaging platform'
+          'Digital signature verification by the wallet provider',
+          'Government-issued approval from a regulatory body',
+          'A consensus mechanism — decentralized rules all nodes follow to reach agreement',
+          'Manual review by the blockchain\'s founding team'
+        ],
+        correct: 2
+      },
+      {
+        question: 'A hospital group wants to share patient records across 5 partner clinics with full auditability, but cannot expose data publicly. Which blockchain type is most appropriate?',
+        options: [
+          'Public blockchain like Ethereum',
+          'Layer 2 network like Arbitrum',
+          'Consortium blockchain shared between the partner organizations',
+          'Bitcoin mainnet'
+        ],
+        correct: 2
+      },
+      {
+        question: 'What made Ethereum-based DeFi significantly more affordable for everyday users in 2024?',
+        options: [
+          'Bitcoin\'s fourth halving reduced overall crypto fees',
+          'Ethereum\'s Dencun upgrade reduced Layer 2 transaction fees by over 90%',
+          'African governments removed taxes on crypto transactions',
+          'Ethereum switched to Proof of Stake, directly reducing gas fees'
+        ],
+        correct: 1
+      },
+      {
+        question: 'What is "slashing" in a Proof of Stake blockchain?',
+        options: [
+          'The process of cutting transaction fees in half during network upgrades',
+          'The penalty where a validator loses their staked funds for attempting to approve fraudulent transactions',
+          'The mechanism for removing duplicate transactions from a block',
+          'A security upgrade that permanently removes old blockchain data'
+        ],
+        correct: 1
+      },
+      {
+        question: 'Which of the following best describes why blockchain is especially impactful for international remittance senders?',
+        options: [
+          'Blockchain transactions are anonymous, protecting senders from government surveillance',
+          'Blockchain eliminates the 5–10% fees and multi-day delays of traditional remittance services, with stablecoin transfers costing fractions of a cent',
+          'Blockchain converts money automatically into the recipient\'s local currency',
+          'Blockchain remittances are backed by government guarantees unlike traditional wire transfers'
         ],
         correct: 1
       },
@@ -183,140 +423,346 @@ By 2026, institutional investors, governments, and global corporations actively 
   // ── MODULE 2: WALLETS & SECURITY ──────────────────────────────────────────
   {
     id: 'wallets', title: 'Wallets & Security',
-    description: 'Learn how crypto wallets work and how to keep your assets safe.',
+    description: 'Master crypto wallets, seed phrase protection, and the 2026 threat landscape.',
     color: '#a855f7', icon: '🔐',
     lesson: [
       {
-        title: 'How Crypto Wallets Actually Work',
-        content: `A common misconception: crypto wallets do not store your cryptocurrency. Your assets live on the blockchain. What a wallet stores is your private key — the cryptographic proof that you own those assets.
+        title: 'Crypto Wallets — What They Are and How They Really Work',
+        content: `Picture this: Amara, a graphic designer in Accra, just received her first crypto payment for a logo project — 50 USDT sent to her wallet address. She opens her Trust Wallet app and sees the balance. She assumes the money is "inside her phone." It is not. And understanding why matters enormously for her security.
 
-Think of it this way:
-• Your wallet address = your account number (public, shareable)
-• Your private key = your master password (secret, never share)
-• Your seed phrase = a human-readable backup of that key (12 or 24 words)
+Your crypto does not live in your wallet. It lives on the blockchain — a permanent public record maintained by thousands of computers worldwide. What your wallet actually stores is your private key: a secret cryptographic code that proves you are the rightful owner of those assets and authorizes you to move them. Think of the blockchain as a giant public safety deposit vault, and your private key as the only key that opens your box.
 
-Two fundamental types of wallets:
+This distinction is not just academic. It means that if your phone is destroyed, your crypto is not gone — as long as you have your private key backup. It also means that if someone steals your private key, they can drain your wallet from anywhere in the world, on any device, instantly.
 
-Hot Wallets — Connected to the internet. Examples: Trust Wallet, MetaMask, Phantom. Convenient for everyday use and interacting with DeFi applications. Slightly more exposed to online threats.
+Three pieces of information define your wallet identity:
 
-Cold Wallets — Offline hardware devices. Examples: Ledger Nano X, Trezor Model T. Your private key never touches the internet. The gold standard for securing significant holdings.
+• Your wallet address — a long string of letters and numbers, like a bank account number. You share this freely to receive funds. It is public.
+• Your private key — the cryptographic secret that authorizes transactions. Never share this with anyone, ever.
+• Your seed phrase — 12 to 24 random words generated when you create your wallet. This is a human-readable backup of your private key. Anyone with these words can access your entire wallet from any device on earth.
 
-The core principle of crypto security: Not your keys, not your coins. If a third party holds your private keys — as exchanges do — your assets are an IOU, not true ownership. The collapse of FTX in 2022, which lost approximately $8 billion in customer funds, proved this catastrophically.`
+The most fundamental division in crypto storage is who controls those keys.
+
+Custodial wallets — where an exchange or company holds your keys — are convenient but risky. When FTX collapsed in November 2022, approximately $8 billion in customer funds disappeared because users had trusted the exchange with custody of their keys. Their crypto was not theirs. It was an IOU from a company that turned out to be insolvent.
+
+Non-custodial wallets — where you hold your own keys — give you complete ownership and sovereignty. No company can freeze your funds, go bankrupt with your assets, or block your withdrawals. The trade-off is personal responsibility: if you lose your seed phrase and your device breaks, no one can help you recover your funds.
+
+The principle the entire industry has learned the hard way: Not your keys, not your coins.
+
+Takeaway: A crypto wallet stores your private key, not your crypto. Your assets live on the blockchain. The most important decision you make in crypto is whether you hold your own keys or trust a third party — and the consequences of that choice are absolute.`
       },
       {
-        title: 'Seed Phrases and Key Management',
-        content: `Your seed phrase is the single most important piece of information in crypto. It is a sequence of 12 to 24 random words generated when you create a wallet. Anyone with these words can access every asset in your wallet — from any device, anywhere in the world.
+        title: 'Hot Wallets, Cold Wallets, and Choosing the Right One',
+        content: `Not all wallets are created equal. Beyond the custodial vs. non-custodial question, wallets also differ in how they connect to the internet — and that difference defines their security profile.
 
-Protecting your seed phrase:
+Hot wallets are internet-connected. Cold wallets are offline. That single distinction is the most important factor in protecting significant crypto holdings.
 
-✓ Write it on paper immediately
-✓ Store it in at least two secure physical locations
-✓ Consider a fireproof, waterproof metal backup for significant holdings
-✓ Verify your backup works before depositing any funds
+Hot Wallets — Convenience for Daily Use
 
-Never:
-✗ Screenshot or photograph your seed phrase
-✗ Store it in cloud storage, email, or messaging apps
-✗ Type it into any website or application
-✗ Share it with anyone — including support agents, moderators, or developers
+Think of a hot wallet like the cash in your physical wallet. You carry some for everyday spending — enough for daily needs, not your life savings.
 
-In 2025-2026, two advanced security upgrades have become standard for serious holders:
+Mobile wallets are the most widely used hot wallet type, especially across Africa and Southeast Asia where smartphone penetration is high. Apps like Trust Wallet, MetaMask Mobile, and Phantom run on your phone, supporting multiple blockchains and giving you access to DeFi, P2P trading, and payments anywhere with a signal.
 
-Passphrase (25th word) — An additional word added to your seed phrase, creating a completely separate hidden wallet. Even if your seed phrase is discovered, funds remain protected.
+Browser extension wallets — MetaMask, Phantom, Rabby — connect seamlessly to DeFi protocols and Web3 applications directly from your desktop browser. They are essential for interacting with DEXs, NFT platforms, and lending protocols.
 
-Multi-signature wallets — Require more than one private key to authorize transactions. Used by major organizations and high-net-worth individuals to eliminate single points of failure.`
+Desktop wallets like Exodus store your private keys on your computer's hard drive. More secure than web-based options, but dependent on keeping your computer malware-free.
+
+The weakness of all hot wallets: they exist in internet-connected environments that are actively targeted by hackers, phishing sites, and malware. They are appropriate for amounts you are actively using — not for long-term holdings.
+
+Cold Wallets — The Security Gold Standard
+
+Hardware wallets are physical devices — resembling a USB drive — that store your private keys entirely offline. When you make a transaction, it is signed on the device itself, meaning your private key never touches an internet-connected computer. Even if the computer you connect it to is compromised, the key stays safe on the device.
+
+Leading hardware wallets in 2026: Ledger Nano X (multi-chain, Bluetooth), Ledger Flex (touchscreen), Trezor Model T, Trezor Safe 3. Prices range from $50 to $200.
+
+Critical warning: Only purchase hardware wallets directly from the manufacturer's official website — ledger.com or trezor.io. Never buy from marketplace sellers, secondhand markets, or unofficial resellers. A tampered hardware wallet can steal your funds the moment you use it.
+
+Two newer wallet types worth knowing:
+
+Multi-signature wallets require more than one private key to authorize any transaction — for example, 2 of 3 designated keys must sign before funds move. Used by DAOs, companies, and serious individual holders. Safe (formerly Gnosis Safe) is the industry standard. Eliminates single points of failure entirely.
+
+Account abstraction wallets (new in 2025–2026) make wallets programmable — adding features like social recovery (regain access without a seed phrase using trusted contacts), gasless transactions, and daily spending limits. Coinbase Smart Wallet and Argent are leading examples. Expect these features to become standard across major wallets through 2026.
+
+A practical framework: hot wallet for daily use and DeFi, hardware wallet for significant holdings, multi-sig for large organizational or high-value personal treasuries.
+
+Takeaway: Hot wallets offer convenience but exposure to online threats. Cold wallets — especially hardware wallets — provide maximum security by keeping private keys offline. Your security setup should match the value you are protecting: treat significant holdings like savings, not spending money.`
       },
       {
-        title: 'The Threat Landscape in 2026',
-        content: `The majority of crypto losses come not from technical hacking but from social engineering — manipulating people into giving away their keys or approving malicious transactions.
+        title: 'Seed Phrases — The Master Key You Cannot Afford to Lose',
+        content: `Here is a scenario that plays out somewhere in the world every single day. David, a developer in Nairobi, buys his first significant amount of Bitcoin. He sets up a hardware wallet, writes his 24-word seed phrase on a piece of paper, and tucks it inside a notebook on his bookshelf. Eight months later, a small kitchen fire damages his home. The notebook — and his seed phrase — are ash. His Bitcoin is perfectly safe on the blockchain. But David can never access it again. Not ever.
 
-Critical threats to know in 2026:
+Your seed phrase is simultaneously the most powerful and most fragile thing in your crypto life.
 
-SIM-Swap Attacks — Criminals convince your mobile carrier to transfer your phone number to their device, intercepting SMS verification codes. Solution: remove SMS-based two-factor authentication from all crypto accounts immediately. Use an authenticator app like Google Authenticator or Authy instead.
+What it is: When you create any non-custodial wallet — mobile, desktop, or hardware — the wallet generates a sequence of 12 to 24 random words. This seed phrase is a human-readable encoding of your master private key. It is not specific to one device or one app. Anyone who types those words into any compatible wallet app, anywhere in the world, gains complete, permanent access to all assets in that wallet.
 
-AI-Powered Phishing — Artificial intelligence now generates flawless phishing emails and deepfake video or voice impersonations of known figures. Verify any extraordinary request through multiple official channels before acting.
+What this means for security is stark: your seed phrase is your crypto. Protecting it is not optional.
 
-Clipboard Hijacking — Malware silently replaces copied wallet addresses with an attacker's address. Always verify the first and last four characters of any address before confirming a transaction.
+How to store your seed phrase correctly:
 
-Fake Wallet Apps — Fraudulent apps impersonate Trust Wallet, MetaMask, and others. Only download wallets from official websites or verified app store listings linked directly from the project's official site.
+Write it down immediately — by hand, in ink — the moment you create your wallet. Never type it into any digital device for storage purposes. Never take a photo of it. Never paste it into a notes app, cloud document, or messaging platform. Digital storage is a compromise waiting to happen.
 
-Address Poisoning — Attackers send tiny transactions from addresses resembling your contacts, hoping you copy the wrong address from your history. Never copy recipient addresses from transaction history.
+Store it in at least two physically separate, secure locations. A fireproof safe at home plus a secure location elsewhere — a trusted family member's property, a safety deposit box, a second secure location you control. If one location is destroyed, the second survives.
 
-Rule of thumb: No legitimate project, exchange, or support team will ever ask for your seed phrase or private key through any channel, ever.`
+For holdings above roughly $1,000 equivalent, consider a metal backup. Stainless steel seed phrase storage devices — like the Cryptosteel Capsule or Keystone Tablet — survive fire up to 1,400°C, water damage, and physical impact. Paper does not.
+
+Advanced protection — the passphrase (25th word): Major hardware wallets support an optional passphrase — an additional secret word or phrase you add to your seed phrase. This creates a completely separate wallet derived from the same seed. Even if someone finds your physical seed phrase backup, they cannot access your funds without also knowing the passphrase. Store the passphrase separately from the seed phrase. Critical warning: the passphrase is not stored on the device and cannot be recovered if forgotten. Losing it means permanent loss of funds. Memorize it or store it with extreme care.
+
+What never to do:
+
+✗ Store your seed phrase in any digital format — no photos, no cloud notes, no messages
+✗ Type it into any website, app, or form — ever
+✗ Share it with anyone — no support agent, moderator, developer, or friend
+✗ Store only one copy — one fire, flood, or theft ends everything
+
+One final principle worth understanding: verifying your backup. Before you deposit significant funds into any wallet, test your seed phrase. Restore the wallet on a second device using only the seed phrase. Confirm it works. Catching a transcription error before there is money at stake costs nothing. Catching it after could cost everything.
+
+Takeaway: Your seed phrase is your master key to your crypto. Lose it and your funds are gone forever. Store it in multiple secure physical locations, consider metal backups for significant holdings, and never expose it to any digital system. The passphrase adds a powerful second layer — but it must be protected just as carefully.`
+      },
+      {
+        title: 'The 2026 Threat Landscape — How Attackers Actually Steal Crypto',
+        content: `The popular image of a crypto hack involves sophisticated programmers breaching encrypted servers. The reality is far more human. The overwhelming majority of crypto theft in 2025–2026 does not involve breaking cryptography at all. It involves manipulating people — convincing them to hand over their keys, click a malicious link, or approve a transaction they do not fully understand.
+
+Understanding the specific tactics attackers use is your most important security tool.
+
+SIM-Swap Attacks — A Critical Warning
+
+Tunde is a crypto trader in Lagos. He uses his phone number for SMS-based two-factor authentication on his exchange account. One afternoon, a criminal calls his mobile network provider, pretends to be Tunde, and convinces a customer service agent to transfer his phone number to a new SIM card. Within minutes, the attacker intercepts an SMS verification code, resets Tunde's exchange password, and withdraws everything.
+
+SIM-swap attacks have cost crypto users tens of millions of dollars in 2024–2025. They exploit a human weakness at mobile carriers — not any technical flaw in your wallet.
+
+The fix is immediate and non-negotiable: remove SMS-based two-factor authentication from every crypto account right now. Replace it with an authenticator app — Google Authenticator or Authy — or a hardware security key like a YubiKey. Also contact your mobile carrier and set a SIM lock or port-out protection PIN that must be verified before any SIM changes can be made.
+
+AI-Powered Phishing and Deepfakes — New in 2025–2026
+
+Artificial intelligence has made phishing dramatically more dangerous. Scammers now use AI to generate emails and messages that are grammatically perfect, personally tailored to the target, and indistinguishable from legitimate communications. More alarming: deepfake technology now enables convincing video and voice impersonations of known figures — crypto educators, project founders, even people you know personally.
+
+Real examples from 2025: a deepfake video of a well-known educator announcing a fake airdrop. A voice call impersonating a Binance support agent. A fake Zoom meeting with an AI-generated "team member" asking for a seed phrase for "verification."
+
+Mitigation: verify any extraordinary claim through multiple official channels before acting. Check official websites, official social media accounts, and official Discord or Telegram channels independently — never through links provided in the suspicious message itself. If someone you recognize makes an unusual request, verify through a completely separate channel before responding.
+
+Fake Wallet Apps
+
+Fraudulent apps designed to look identical to Trust Wallet, MetaMask, and other popular wallets appear regularly on app stores and circulate via WhatsApp and Telegram groups. Once installed, they capture your seed phrase at setup and drain your funds immediately.
+
+The Trust Wallet official app is published by DApps Platform, Inc. MetaMask is published by ConsenSys. Check the developer name in the app store before installing — and only follow download links from the project's official verified website, never from links in messages.
+
+Clipboard Hijacking
+
+Malware silently monitors your clipboard. When you copy a wallet address, it replaces it with the attacker's address before you paste. You confirm what looks like the right address — and the funds go to the attacker.
+
+Always verify the first four and last four characters of any wallet address before confirming a transaction. Do not rely on the middle — attackers generate addresses that match the beginning and end of your intended recipient's address.
+
+Address Poisoning
+
+Attackers send tiny transactions to your wallet from addresses that closely resemble your known contacts — differing only in a few middle characters. They are hoping you will copy the "familiar-looking" address from your transaction history for a future large payment.
+
+Never copy recipient addresses from your transaction history. Always use the full, verified address provided directly by the recipient through a trusted channel.
+
+Pig Butchering — Long-Term Confidence Scams
+
+This scam involves building a relationship — often romantic — with a target over weeks or months, then introducing a fake crypto investment platform that shows fictional profits. When the victim tries to withdraw, they are asked for more fees, taxes, or deposits until they are completely drained. These scams are responsible for billions in global losses annually and are operated by organized criminal networks.
+
+If someone you met online introduces a crypto investment opportunity: stop. Research the platform independently. If you cannot withdraw freely at any time, it is a scam.
+
+Takeaway: The 2026 threat landscape is dominated by social engineering — not technical hacking. SIM-swaps, AI-powered phishing, fake apps, clipboard hijackers, and long-term confidence scams are the primary vectors. The defense is vigilance, verification, and never sharing your seed phrase or private key with any person or system under any circumstances.`
+      },
+      {
+        title: 'Advanced Security — Protecting Serious Holdings',
+        content: `There is a meaningful difference between someone holding $200 in crypto on a mobile wallet and someone managing $10,000 or more across multiple assets and protocols. The basic security practices — strong passwords, authenticator app, hardware wallet — are necessary for everyone. But serious holders need a more systematic approach.
+
+This lesson is for anyone who takes their crypto security beyond the basics.
+
+Device and Operational Security
+
+Your biggest attack surface is not your wallet — it is the environment your wallet lives in. A browser full of extensions, a phone used for social media and crypto simultaneously, a laptop that clicks email links and also connects to DeFi: these are vulnerabilities waiting to be exploited.
+
+A dedicated device strategy eliminates this risk. Use a separate browser — Brave or Firefox — exclusively for crypto activities. Keep general browsing in a different browser entirely. Better still, use a separate device for crypto: a clean phone used only for wallet management and authenticator apps, never for social media or messaging. Minimize browser extensions to the absolute minimum — every extension is a potential attack vector, and malicious extensions have drained wallets by capturing seed phrases entered into browser-based wallets.
+
+Bookmark every exchange, DeFi protocol, and wallet interface you use — and access them only through those bookmarks. Never type crypto URLs directly or follow links from messages. Phishing sites use domains like "uniswap-app.com" instead of "app.uniswap.org" — check the exact domain before connecting your wallet.
+
+Smart Contract and Token Approval Security
+
+Every time you connect a wallet to a DeFi protocol and click "Approve," you may be granting that smart contract permission to spend your tokens indefinitely — until you revoke it. Most users accumulate dozens of forgotten approvals across protocols they no longer use.
+
+Run Revoke.cash monthly. It shows every active token approval across your wallets on Ethereum, Arbitrum, BNB Chain, and other EVM chains, and lets you revoke them in one click. This is one of the most underused security practices in DeFi.
+
+Before confirming any significant transaction, use Rabby Wallet's built-in transaction simulation, or the Fire browser extension — both show you exactly what a transaction will do to your wallet before you sign. A few seconds of simulation has saved many wallets from malicious approvals.
+
+Exchange Account Hardening
+
+Enable withdrawal address whitelisting on every exchange you use. Once enabled, withdrawals can only go to pre-approved addresses — even if an attacker gains full account access, they cannot send funds to a new address. Most exchanges apply a 24–48 hour delay before newly added addresses become active, giving you time to notice and respond.
+
+Set an anti-phishing code on Binance and any other exchange that supports it. This is a personal code that appears in every official email from the exchange. If you receive an email without your code, it is phishing — regardless of how convincing it looks.
+
+Portfolio Risk Architecture
+
+Advanced security extends beyond technical measures to how you structure your holdings. Never hold more than 20–25% of your crypto on a single exchange, in a single protocol, or in a single wallet. Concentration is a risk vector — one hack, one collapse, one regulatory action should not be able to destroy your entire portfolio.
+
+Maintain stablecoin reserves — USDT or USDC — that are readily accessible and not locked in illiquid positions. Know in advance how you would convert to fiat quickly if needed. Having a plan prevents panic decisions in a crisis.
+
+For holdings above $10,000 equivalent, consider a multi-signature wallet structure through Safe (formerly Gnosis Safe). A 2-of-3 multi-sig with keys on separate hardware wallets in separate locations means any single compromise cannot move funds.
+
+Finally: consider what happens to your crypto if something happens to you. Document recovery instructions — without exposing the seed phrase directly — for a trusted person. Shamir's Secret Sharing (supported natively by Trezor hardware wallets) splits your seed phrase into multiple shares where only a subset is needed to recover — eliminating the single point of failure of a traditional backup.
+
+Takeaway: Advanced security means systematic thinking about your entire setup — not just individual practices. Dedicated devices, browser hygiene, token approval management, exchange hardening, portfolio diversification, and contingency planning together create a security posture that protects against both technical attacks and the unpredictable.`
+      },
+      {
+        title: 'Crypto Communities — How to Learn, Contribute, and Stay Safe',
+        content: `No one navigates crypto alone. The technology moves faster than any individual can track, the scam landscape evolves weekly, and the knowledge gap between beginners and experienced participants is significant. Crypto communities are where that gap closes — where people learn from each other, share security warnings in real time, build relationships, and find opportunities.
+
+But communities are also where scammers hunt for victims. Understanding both sides of community participation is essential.
+
+Where Crypto Communities Live in 2026
+
+X (formerly Twitter) is the primary real-time hub of global crypto conversation. Breaking news, founder announcements, market analysis, and community debates all happen here first. X Spaces — live audio conversations — have become a major format for project AMAs, educational discussions, and community calls. Follow verified project accounts, credible analysts, and experienced educators. Apply critical thinking to everything you read before acting on it.
+
+Telegram dominates in Africa, Asia, and emerging markets. Most crypto projects maintain official Telegram groups for announcements and community chat. P2P trading groups, local Web3 communities, and scam alert channels are all active on Telegram. The critical safety rule: legitimate admins and moderators in Telegram groups will never DM you first offering investments, airdrops, or support. Any unsolicited DM from someone claiming to be from a project is almost certainly a scam.
+
+Discord is the primary platform for DeFi protocols, NFT projects, and developer communities. Serious Web3 projects maintain active Discord servers with channels for announcements, governance, support, and discussion. Discord is where the most engaged community members participate and where project opportunities — whitelists, alpha testing, early access — are often distributed first.
+
+In-person events have grown significantly across Africa. Organizations and community groups run city-level meetups in Lagos, Nairobi, Accra, and Johannesburg that combine education, networking, and hands-on demonstrations. These events are among the most effective tools for genuine financial empowerment at the community level — converting abstract concepts into practical skills with real people.
+
+How to Participate Well
+
+The strongest communities are built by members who give as much as they take. Share relevant news. Answer beginner questions. Flag scams when you see them. Support educational initiatives. A community where everyone only consumes information is a weak community — and a vulnerable one.
+
+Ask questions freely, but always cross-reference important information before acting. One community member's opinion — however confident — is not financial advice. Use communities for learning and signal discovery, then verify through official sources and your own research before making any financial decision.
+
+Contribute with accuracy. Before sharing news, verify it through at least one reputable source: CoinDesk, CoinTelegraph, Decrypt, The Block, or official project documentation. Misinformation in crypto communities causes real financial harm.
+
+Report scams and suspicious activity immediately. Fake giveaways, phishing links, impersonation accounts, and suspicious solicitations should be flagged to moderators the moment you see them. Protecting the community is a shared responsibility.
+
+Community Safety Red Flags
+
+• Anyone DMing you first with an investment opportunity, airdrop, or support offer
+• "Guaranteed returns" or "risk-free" investment platforms introduced by community contacts
+• Requests to connect your wallet to a link shared in a group or DM
+• Pressure to act immediately — urgency is a manipulation tactic, not a legitimate feature of any real opportunity
+• Requests for your seed phrase or private key for any reason, by any person, in any channel
+
+Trusted Information Sources
+
+For news and market data: CoinDesk, CoinTelegraph, Decrypt, Blockworks, The Block.
+For DeFi data: DefiLlama (TVL, protocol revenue), Token Terminal (protocol earnings).
+For market data: CoinGecko, CoinMarketCap.
+For security: Revoke.cash, Scam Sniffer browser extension, Etherscan/Solscan for transaction verification.
+
+Takeaway: Crypto communities accelerate learning, surface real-time security warnings, and create genuine opportunities — but they also attract scammers who specifically target engaged community members. Participate generously, verify independently, and treat any unsolicited DM or investment offer with immediate suspicion. Your community is an asset. Protect it.`
       },
     ],
     flashcards: [
       {
-        front: 'What does a crypto wallet actually store?',
-        back: 'Your private key — not your cryptocurrency. The crypto lives on the blockchain. The wallet is the tool that uses your private key to authorize transactions on your behalf.'
+        front: 'What does a crypto wallet actually store — and where does your crypto live?',
+        back: 'A wallet stores your private key — not your cryptocurrency. Your crypto lives on the blockchain. The wallet uses your private key to prove ownership and authorize transactions. If your phone is destroyed but your seed phrase is safe, your crypto is recoverable.'
       },
       {
-        front: 'What is a seed phrase?',
-        back: 'A sequence of 12 to 24 words that serves as a human-readable backup of your private key. Anyone with these words has full access to your wallet. Store it offline, in a secure physical location.'
+        front: 'What is the difference between a custodial and non-custodial wallet?',
+        back: 'Custodial: a third party (like an exchange) holds your private keys. Convenient but risky — if they collapse, your funds are gone (see FTX 2022). Non-custodial: you hold your own keys. Full ownership and sovereignty, but full personal responsibility. Not your keys, not your coins.'
       },
       {
-        front: 'What is the difference between a hot and cold wallet?',
-        back: 'Hot wallets are internet-connected — convenient for daily use but more exposed to online threats. Cold wallets store private keys offline, making them immune to remote attacks. Best practice: hot wallet for daily use, cold wallet for significant holdings.'
+        front: 'What is the difference between a hot wallet and a cold wallet?',
+        back: 'Hot wallets are internet-connected (Trust Wallet, MetaMask) — convenient for daily use but exposed to online threats. Cold wallets store private keys offline (Ledger, Trezor) — immune to remote attacks. Use hot wallets for daily spending, cold wallets for significant holdings.'
       },
       {
-        front: 'What is a SIM-swap attack?',
-        back: 'A social engineering attack where a criminal convinces your mobile carrier to transfer your phone number to their device. They then intercept SMS verification codes. Mitigate by replacing SMS 2FA with an authenticator app on all crypto accounts.'
+        front: 'What is a seed phrase and how should it be stored?',
+        back: '12–24 random words that are a human-readable backup of your private key. Anyone with these words controls your wallet from any device. Write it by hand, store in two physically separate secure locations, consider metal backup for significant holdings. Never photograph, type, or share it digitally.'
       },
       {
-        front: 'What is the core principle behind "not your keys, not your coins"?',
-        back: 'If a third party — like an exchange — holds your private keys, your crypto is an IOU from them, not true ownership. If they are hacked, go bankrupt, or freeze withdrawals, you have no recourse. Self-custody is the only true ownership.'
+        front: 'What is a SIM-swap attack and how do you stop it?',
+        back: 'A criminal convinces your mobile carrier to transfer your phone number to their SIM, then intercepts SMS verification codes to access your accounts. Fix: remove SMS 2FA from all crypto accounts immediately. Replace with Google Authenticator, Authy, or a YubiKey. Set a SIM lock PIN with your carrier.'
+      },
+      {
+        front: 'What is clipboard hijacking and how do you defend against it?',
+        back: 'Malware silently replaces a wallet address you copy with the attacker\'s address before you paste. You confirm what looks right — funds go to the attacker. Defense: always verify the first 4 and last 4 characters of any wallet address before confirming any transaction.'
+      },
+      {
+        front: 'What is a passphrase (25th word) and what does it protect against?',
+        back: 'An optional secret word added to your seed phrase that creates a completely separate hidden wallet. Even if an attacker finds your physical seed phrase backup, they cannot access your funds without the passphrase. Warning: the passphrase cannot be recovered if forgotten — store it separately and securely.'
+      },
+      {
+        front: 'What is address poisoning and how do you avoid it?',
+        back: 'Attackers send tiny transactions from addresses that closely resemble your known contacts, hoping you copy the wrong address from your transaction history for a future large payment. Defense: never copy recipient addresses from transaction history. Always get the full address directly from the recipient through a verified channel.'
       },
     ],
     quiz: [
       {
-        question: 'What does a crypto wallet actually store?',
+        question: 'Amara\'s phone is stolen. She had a Trust Wallet with 200 USDT. She also wrote down her 24-word seed phrase and stored it securely at home. What happens to her funds?',
         options: [
-          'Your cryptocurrency coins and tokens',
-          'Your private key, which proves ownership of assets on the blockchain',
-          'A backup copy of the blockchain',
-          'Your transaction history and receipts'
+          'The funds are lost because the wallet app was on the stolen phone',
+          'The funds are safe — she can restore her wallet on a new device using her seed phrase',
+          'The funds are frozen by Trust Wallet until she proves her identity',
+          'The thief can access the funds because they have her phone'
         ],
         correct: 1
       },
       {
-        question: 'The FTX exchange collapsed in 2022, losing approximately $8 billion in customer funds. What core lesson does this teach?',
+        question: 'FTX collapsed in 2022, losing approximately $8 billion in customer funds. Which wallet type were affected users relying on?',
         options: [
-          'Crypto exchanges are always safe if they are large enough',
-          'Governments should control all crypto platforms',
-          'Keeping assets on an exchange means you do not truly own them — not your keys, not your coins',
-          'Bitcoin should be banned to prevent future collapses'
+          'Non-custodial hardware wallets',
+          'Multi-signature wallets',
+          'Custodial wallets — FTX held their private keys',
+          'Paper wallets stored offline'
         ],
         correct: 2
       },
       {
-        question: 'A stranger contacts you claiming to be from your wallet\'s support team and asks for your seed phrase to resolve an issue. What do you do?',
+        question: 'You receive a DM on Telegram from someone claiming to be a Trust Wallet support agent, saying your account has an issue and asking for your seed phrase to verify ownership. What do you do?',
         options: [
-          'Provide it — support teams need it to verify your account',
-          'Share only the first six words as a partial verification',
-          'Refuse immediately — no legitimate service ever asks for your seed phrase',
-          'Send it via an encrypted messaging app for safety'
+          'Provide it — support teams need it to verify accounts',
+          'Share only the first 6 words as partial verification',
+          'Ignore and report it — no legitimate service ever asks for your seed phrase',
+          'Ask them to verify their identity first, then share it'
         ],
         correct: 2
       },
       {
-        question: 'Which two-factor authentication method is most vulnerable to SIM-swap attacks?',
+        question: 'What is the most effective replacement for SMS-based two-factor authentication on crypto accounts?',
         options: [
-          'Google Authenticator app',
-          'Hardware security key (YubiKey)',
-          'SMS text message codes',
-          'Biometric fingerprint verification'
+          'Email-based verification codes',
+          'A biometric fingerprint on your phone screen',
+          'An authenticator app like Google Authenticator or Authy, or a hardware key like YubiKey',
+          'A backup phone number from a different carrier'
         ],
         correct: 2
       },
       {
-        question: 'What is clipboard hijacking malware?',
+        question: 'You are about to send $500 worth of crypto to a friend. You copy their address and are about to confirm. What should you do before hitting send?',
         options: [
-          'Software that copies your seed phrase from cloud storage',
-          'Malware that silently replaces copied wallet addresses with an attacker\'s address when you paste',
-          'A virus that deletes your wallet application',
-          'Spyware that records your screen while you type passwords'
+          'Send a small test transaction of $1 first to confirm the address',
+          'Verify the first 4 and last 4 characters of the pasted address match what your friend sent you',
+          'Check if the address appears in your recent transaction history',
+          'Nothing — copied addresses are always accurate'
         ],
         correct: 1
+      },
+      {
+        question: 'What does Revoke.cash do, and why should DeFi users run it regularly?',
+        options: [
+          'It converts your crypto back to fiat currency at the best rate',
+          'It audits and revokes token approvals you have granted to smart contracts — removing persistent permissions that could be exploited',
+          'It monitors your wallet for suspicious incoming transactions',
+          'It backs up your seed phrase to a secure cloud server'
+        ],
+        correct: 1
+      },
+      {
+        question: 'A new online contact introduces you to a crypto investment platform showing strong returns. When you try to withdraw your profits, you are told to pay a "tax fee" first. What is this?',
+        options: [
+          'A standard regulatory requirement for crypto withdrawals',
+          'A pig butchering scam — a long-term confidence scam designed to extract maximum funds before disappearing',
+          'A legitimate anti-money laundering verification process',
+          'A temporary liquidity issue that all platforms experience'
+        ],
+        correct: 1
+      },
+      {
+        question: 'Which of the following is a green flag that a crypto community is legitimate and worth engaging with?',
+        options: [
+          'Admins frequently DM members with exclusive investment opportunities',
+          'The community promises guaranteed returns for members who recruit others',
+          'Moderators actively flag and remove scam links, answer questions transparently, and never ask for private keys',
+          'New members are required to share their wallet balance to prove they are serious'
+        ],
+        correct: 2
       },
     ],
   },
@@ -324,135 +770,328 @@ Rule of thumb: No legitimate project, exchange, or support team will ever ask fo
   // ── MODULE 3: DEFI FUNDAMENTALS ───────────────────────────────────────────
   {
     id: 'defi', title: 'DeFi Fundamentals',
-    description: 'Explore decentralized finance — banking without banks.',
+    description: 'Explore decentralized finance — banking without banks, borders, or business hours.',
     color: '#00e5cc', icon: '🏦',
     lesson: [
       {
-        title: 'What Is Decentralized Finance?',
-        content: `Decentralized Finance — DeFi — rebuilds traditional financial services on blockchain. Lending, borrowing, trading, saving, and earning interest all happen through smart contracts, with no bank, broker, or intermediary involved.
+        title: 'What Is DeFi — And Why Does It Exist?',
+        content: `Fatima is a textile trader in Kano. Her business crosses borders constantly — suppliers in Guangzhou, buyers in London, payments flowing in multiple directions. Every international transfer costs her 8–12% in fees and takes up to five business days. Her bank requires documentation she cannot always produce, charges she cannot always afford, and operates on hours that do not align with her working day.
 
-Traditional finance requires:
-• A bank account to access basic services
-• Credit history to borrow
-• Business hours to transact
-• Intermediaries who can freeze or restrict your access
+Traditional finance was not designed with Fatima in mind. It was designed around banks, which exist to profit from being in the middle of every transaction — approving who gets access, setting the terms, and taking their cut.
 
-DeFi requires only:
-• A crypto wallet
-• An internet connection
-• No approval from anyone
+Decentralized Finance — DeFi — is what happens when you remove the bank from that equation entirely.
 
-Smart contracts are the engine behind DeFi. They are self-executing programs deployed on a blockchain that automatically carry out financial transactions when predefined conditions are met. The code runs exactly as written — no human interference, no hidden terms.
+DeFi is an ecosystem of financial services built directly on blockchain networks. Lending, borrowing, trading, saving, and earning interest all happen through smart contracts — self-executing programs that run exactly as written, automatically, without any human intermediary. No bank approves your loan. No broker executes your trade. No payment processor clips a percentage off your transfer. The code does it all.
 
-By 2026, DeFi has matured from an experimental concept into a multi-hundred-billion dollar ecosystem. Layer 2 networks — built on top of Ethereum — have reduced transaction fees to fractions of a cent, making DeFi genuinely accessible to everyday users for the first time at scale.`
+What this makes possible is profound. Anyone with a smartphone and an internet connection can access the same financial services that were previously available only to people with bank accounts, credit histories, and government-issued ID. This is not a minor improvement. For the 1.4 billion adults globally who are unbanked, it is the difference between participation and exclusion.
+
+The five principles that define DeFi:
+
+Decentralization — no single entity controls DeFi protocols. Code is law: the smart contract executes exactly as programmed.
+
+Transparency — every transaction and every line of protocol logic is recorded on a public blockchain. Anyone can audit it, verify it, track it.
+
+Accessibility — open to anyone with a wallet and internet connection. No credit score. No ID requirement for most protocols. No bank manager to impress.
+
+Permissionless — anyone can use DeFi services or build new protocols on top of existing ones without requiring approval from a gatekeeper.
+
+Self-custody — your funds never leave your wallet's control when using non-custodial protocols. You remain in control.
+
+By 2026, DeFi has matured from a speculative experiment into a multi-hundred-billion dollar ecosystem. Crucially, Layer 2 networks have reduced transaction fees from $20–100 on Ethereum mainnet to fractions of a cent — making DeFi genuinely accessible to everyday users in Africa, Southeast Asia, and Latin America for the first time at scale.
+
+Takeaway: DeFi rebuilds financial services on open, transparent, permissionless blockchain infrastructure — removing banks and brokers from the equation. It exists because traditional finance systematically excludes billions of people, and the technology now exists to do better.`
       },
       {
-        title: 'How DeFi Protocols Work',
-        content: `DeFi is built from several interconnected protocol types, each replacing a different part of the traditional financial system.
+        title: 'Smart Contracts and How DeFi Protocols Actually Work',
+        content: `If DeFi is a financial system without banks, something has to enforce the rules, execute the transactions, and make sure no one cheats. That something is a smart contract — and understanding it is the key to understanding how all of DeFi actually functions.
 
-Decentralized Exchanges (DEXs)
-Trade tokens directly from your wallet with no company holding your funds. DEXs use liquidity pools instead of traditional order books. Users deposit token pairs into a pool — traders swap against that pool and liquidity providers earn a share of every trading fee. Leading DEXs include Uniswap on Ethereum and Jupiter on Solana.
+A smart contract is a program deployed directly on a blockchain. It contains a set of rules written in code, and it executes those rules automatically when the predefined conditions are met — without any human intervention, without any possibility of interference, and without any possibility of changing its mind halfway through.
 
-Lending and Borrowing
-Deposit crypto to earn interest, or borrow against your holdings without a credit check. Protocols like Aave and Compound set interest rates algorithmically based on supply and demand. Loans require over-collateralization — depositing more than you borrow — to protect the protocol against price volatility.
+A simple example: imagine a vending machine. You insert money, select your item, and the machine dispenses it automatically. There is no cashier who could decide to give your money to someone else, no manager who could override the transaction, no closing time. The rules are mechanical and the outcome is predictable. A smart contract is the digital equivalent — but infinitely more complex, capable of handling lending, trading, insurance, and governance simultaneously.
 
-Liquid Staking
-Stake assets like ETH and receive a tradeable receipt token in return. For example, staking ETH with Lido returns stETH, which accrues daily rewards while remaining usable across DeFi. In 2025-2026, liquid staking has become one of the most widely used DeFi strategies globally.
+Here is how the DeFi architecture comes together:
 
-Stablecoins
-The backbone of DeFi. Dollar-pegged assets like USDT and USDC provide a stable unit of account in an otherwise volatile market. Decentralized stablecoins like DAI are backed by on-chain collateral and governed by smart contracts — resistant to centralized censorship.`
+The blockchain is the foundation — providing the secure, immutable infrastructure where every transaction is permanently recorded and verifiable by anyone.
+
+Smart contracts are the operational engines. A lending protocol's smart contract defines every rule: collateral requirements, interest rate calculations, liquidation thresholds, fee structures. All executed by code, automatically, 24 hours a day.
+
+dApps (decentralized applications) are the user interfaces — websites and apps that let you interact with those smart contracts without needing to write code yourself. When you visit app.aave.com or app.uniswap.org, you are connecting your wallet to a smart contract through a web interface.
+
+Oracles are critical connectors that bring real-world data on-chain. DeFi protocols need to know the current price of ETH, the exchange rate between USDT and USDC, the interest rate on US Treasury bills. Oracles — led by Chainlink, which secures tens of billions in DeFi value — provide this data. Oracle manipulation attacks, where bad actors feed false price data to a protocol to drain its funds, are one of the most significant DeFi security risks.
+
+Governance tokens give the community control. Many protocols issue tokens — UNI for Uniswap, AAVE for Aave, CRV for Curve — that allow holders to vote on protocol changes, fee structures, and treasury spending. DeFi governance is a genuinely new model of organizational decision-making: the users who depend on the protocol also govern it.
+
+Composability is what makes DeFi uniquely powerful. Because DeFi protocols are open and interoperable, they can be combined like building blocks. A single transaction can borrow on Aave, swap on Uniswap, and deposit into a yield vault — all atomically, in one operation. This composability has enabled DeFi innovation to move at a speed that traditional finance simply cannot match.
+
+Takeaway: Smart contracts are self-executing programs that enforce DeFi rules automatically without human intermediaries. The DeFi stack — blockchain, smart contracts, dApps, oracles, and governance tokens — works together to create financial services that are transparent, composable, and accessible to anyone.`
       },
       {
-        title: 'DeFi Risks and Real Yields',
-        content: `DeFi offers genuine financial opportunity — but carries risks that every participant must understand before committing funds.
+        title: 'DEXs and Lending — The Two Pillars of DeFi',
+        content: `DeFi contains many protocol categories, but two dominate both usage and importance: decentralized exchanges (DEXs), where you trade assets, and lending protocols, where you borrow or earn interest. Understanding both gives you the foundation to navigate everything else in DeFi.
+
+Decentralized Exchanges — Trading Without a Counterparty
+
+On a traditional exchange — Binance, Coinbase, Kraken — you place an order and wait for another user to take the other side. The exchange matches your buy with someone's sell. It holds your funds, controls the process, and takes a fee.
+
+A DEX works entirely differently. Instead of matching buyers and sellers, most DEXs use Automated Market Makers (AMMs) and liquidity pools.
+
+Here is how it works: Instead of an order book, there is a pool of two tokens — say, ETH and USDC — deposited by liquidity providers (LPs). When you want to swap ETH for USDC, you trade against that pool. A mathematical formula (x × y = k) automatically adjusts the price based on how the ratio of tokens in the pool changes after your trade. The larger your trade relative to the pool, the more the price moves against you — this is called slippage.
+
+Liquidity providers deposit equal values of both tokens into the pool. In return, they earn a share of every trading fee generated by swaps through their pool — typically 0.05% to 1% per trade, distributed proportionally to all LPs.
+
+Leading DEXs in 2026:
+• Uniswap — the original and largest DEX, operating across Ethereum and Layer 2 networks
+• PancakeSwap — dominant on BNB Chain, popular entry point for African users
+• Jupiter — the leading DEX aggregator on Solana, routing trades for best price across all Solana liquidity sources
+• Curve Finance — specialized for stablecoin swaps with minimal slippage
+• Hyperliquid — the leading perpetual DEX for leveraged trading directly from your wallet
+
+Lending Protocols — Borrow Without a Credit Check
+
+DeFi lending removes the bank from the lending equation. You can deposit crypto to earn interest — or borrow against your holdings without selling them and without a credit check.
+
+Aave is the largest lending protocol by TVL (Total Value Locked). It operates across Ethereum and multiple Layer 2 networks and supports dozens of assets. Compound pioneered algorithmic interest rates that adjust automatically based on supply and demand — when more people borrow, rates rise; when more people deposit, rates fall.
+
+The critical concept: over-collateralization. Unlike a bank loan where your creditworthiness determines how much you can borrow, DeFi loans require you to deposit more collateral than you borrow. To borrow $100 of USDC, you might need to deposit $150 of ETH. This protects the protocol against price volatility — if your collateral value drops significantly, the protocol liquidates it automatically to repay the loan before the debt exceeds the collateral value.
+
+A practical example: Kwame holds ETH and believes it will appreciate, but needs USDC for a business expense. Rather than selling his ETH and missing the potential upside, he deposits it on Aave as collateral and borrows USDC against it. He pays interest on the loan, uses the USDC, and when he repays, he gets his ETH back — having kept his position throughout.
+
+Takeaway: DEXs allow token trading through liquidity pools without a counterparty or custodian. Lending protocols allow borrowing against crypto collateral without a credit check. Together they form the foundation of DeFi — and both are now accessible at near-zero cost on Layer 2 networks.`
+      },
+      {
+        title: 'Yield, Staking, and Advanced DeFi Strategies',
+        content: `Beyond basic trading and lending, DeFi offers a sophisticated ecosystem of yield-generating strategies. Understanding these tools — and their risks — separates informed participants from those who get burned chasing returns they do not understand.
+
+Liquid Staking — Earn While Staying Flexible
+
+Standard staking on a Proof of Stake blockchain like Ethereum requires locking your assets for a period, during which they cannot be used elsewhere. Liquid staking solves this problem.
+
+When you stake ETH through Lido Finance — the largest liquid staking protocol — you receive stETH (staked ETH) in return. This token represents your staked position plus accrued rewards, and it updates daily. The crucial difference: stETH is a normal ERC-20 token. You can use it as collateral on Aave, swap it on Uniswap, or provide liquidity with it — all while your underlying ETH continues earning staking rewards.
+
+Rocket Pool offers a more decentralized alternative, issuing rETH. By 2025–2026, liquid staking has become one of the most widely used DeFi strategies globally.
+
+Restaking — The Next Layer of Yield
+
+EigenLayer on Ethereum pioneered restaking: taking already-staked ETH or liquid staking tokens and re-using them to secure additional protocols simultaneously. Your stake now secures both Ethereum and additional services — earning rewards from multiple sources at once.
+
+The trade-off: restaking introduces additional slashing risk. If your chosen validator misbehaves on any of the protocols being secured, you can lose a portion of your staked assets. More yield, more complexity, more risk.
+
+Real-World Asset (RWA) DeFi — Bridging On-Chain and Off-Chain
+
+One of the fastest-growing DeFi categories in 2025–2026 brings real-world assets onto the blockchain. Ondo Finance tokenizes US Treasury bills, giving DeFi users access to institutional-grade government bond yields entirely on-chain. Centrifuge enables businesses to tokenize real-world invoices and loans as collateral in DeFi protocols.
+
+For Africa, RWA DeFi holds particular promise. Agricultural cooperatives, SMEs, and community lenders could theoretically tokenize local assets — trade invoices, land titles, commodity stockpiles — as on-chain collateral, accessing global capital markets that were previously completely closed to them.
+
+Yield Farming — Chasing Returns Responsibly
+
+Yield farming involves providing liquidity or capital to DeFi protocols in exchange for rewards — typically a combination of trading fees and governance tokens. At its peak in 2020–2021, some protocols offered annual yields of 1,000% or more — but these were funded by inflating token supplies, not real economic activity.
+
+The 2026 reality: the era of unsustainable token-inflation yields has largely ended. Credible DeFi protocols now compete on real yield — income from genuine economic activity: lending fees, trading commissions, protocol revenue. Real yield is sustainable. Inflated token rewards are temporary and often collapse when incentives end.
+
+Practical DeFi tools for 2026:
+• DefiLlama — the definitive DeFi dashboard showing TVL, protocol revenue, and yield opportunities across all chains
+• Zapper / Zerion — portfolio trackers showing all your DeFi positions across multiple chains
+• Dune Analytics — community-built dashboards for verifying protocol usage independently
+• Nexus Mutual — DeFi insurance; check coverage cost before depositing significant funds into any protocol
+
+Takeaway: Liquid staking, restaking, RWA DeFi, and yield farming offer increasingly sophisticated ways to generate returns on crypto assets. The key distinction for 2026: real yield from genuine economic activity is sustainable; inflated token incentives are not. Every additional yield layer adds complexity and risk that must be understood before committing capital.`
+      },
+      {
+        title: 'DeFi Risks — What Can Go Wrong and How to Protect Yourself',
+        content: `DeFi offers genuine financial opportunity. It also carries risks that do not exist in traditional finance — risks that have cost users billions of dollars and that every participant must understand before committing real funds.
+
+The most important thing to know upfront: smart contracts are code, and code can have bugs. Unlike a bank that can reverse a fraudulent transaction, blockchain transactions are final. If a DeFi protocol is exploited, there is no customer service line to call and no deposit insurance to compensate you. This is the fundamental trade-off of DeFi: you get sovereignty and access, but you also get personal responsibility for the outcomes.
 
 Smart Contract Risk
-DeFi protocols run on code. Bugs or vulnerabilities in that code can be exploited. Even audited contracts have been hacked — the Ronin Bridge lost $625 million in 2022, Euler Finance lost $197 million in 2023. Never deposit more than you can afford to lose into any single protocol.
+
+The Ronin Bridge — which connected Axie Infinity's gaming ecosystem to Ethereum — was hacked for $625 million in March 2022. Euler Finance, an Ethereum lending protocol, lost $197 million in March 2023. Both were audited protocols. Both failed.
+
+Smart contract risk cannot be eliminated, only managed. Mitigations: use protocols that have been operating without incident for at least 12–18 months; check that multiple reputable audit firms have reviewed the code; diversify across protocols rather than concentrating in one; and never deposit more than you can afford to lose entirely.
 
 Liquidation Risk
-Borrowing against collateral comes with a liquidation threshold. If your collateral value drops below the required ratio due to price movements, the protocol automatically sells your collateral to repay the loan. Monitor your health factor constantly when borrowing.
+
+When you borrow against crypto collateral, you are exposed to liquidation. If the price of your collateral drops below the required collateral ratio — say your $150 of ETH collateral falls to $110 against a $100 loan — the protocol automatically sells your collateral to repay the debt, often at a penalty.
+
+Manage this by maintaining a healthy buffer above the minimum collateral ratio, monitoring your position's health factor actively (Aave shows this clearly), and setting price alerts for your collateral asset.
 
 Impermanent Loss
-When providing liquidity to a DEX pool, significant price divergence between your deposited tokens can leave you with less value than simply holding them. Understand this before providing liquidity.
 
-The 2026 Reality
-The era of unsustainable 1,000% APY yield farming fuelled by token inflation has largely ended. Credible DeFi protocols in 2026 compete on real yield — income derived from genuine economic activity such as lending fees, trading commissions, and protocol revenue. Real yield is sustainable. Inflated token rewards are not.
+This is the most misunderstood risk in DeFi. When you provide liquidity to a DEX pool — say, ETH/USDC — you deposit equal values of both tokens. If the price of ETH changes significantly after your deposit, the AMM rebalances the pool automatically, leaving you with a different ratio of tokens than you started with. When you withdraw, you may have less total value than if you had simply held both tokens without providing liquidity.
 
-Tools every DeFi user should know: DefiLlama for protocol data, Revoke.cash for managing token approvals, and Aave or Compound for entry-level lending.`
+Impermanent loss is only "realized" when you withdraw — if prices return to the original ratio, it disappears. But in practice, large price moves often mean LP positions underperform simple holding. Always calculate whether the trading fees earned exceed the impermanent loss risk before providing liquidity.
+
+The Terra/LUNA Lesson — Algorithmic Stablecoin Risk
+
+In May 2022, TerraUSD (UST) — an algorithmic stablecoin — lost its peg to the US dollar and collapsed within days, wiping out approximately $60 billion in value and triggering a broader crypto bear market. UST was not backed by real dollars or crypto collateral; it relied on a complex algorithmic mechanism that failed catastrophically under selling pressure.
+
+The lesson: treat any algorithmic stablecoin with extreme caution. Stick to battle-tested stablecoins — USDT, USDC, or DAI — for DeFi positions where stability matters.
+
+Oracle Manipulation and Rug Pulls
+
+Protocols that use price feeds from unreliable oracles can be manipulated by attackers who temporarily distort prices to drain funds. Always check that any protocol you use sources price data from Chainlink or another battle-tested decentralized oracle network.
+
+Rug pulls — where developers drain a protocol's liquidity and disappear — are common on newly launched DEX tokens. Check DefiLlama for TVL history before depositing. Sudden TVL drops are a major red flag. Use Token Sniffer or Rugcheck.xyz to assess new token contract risk.
+
+A practical risk framework:
+• Only use protocols with 12+ months of operating history and multiple audits
+• Never concentrate more than 20–25% of your DeFi holdings in any single protocol
+• Check Nexus Mutual for insurance coverage cost before large deposits — high premiums signal perceived risk
+• Run Revoke.cash monthly to remove old token approvals
+• Use Layer 2 networks to keep fees manageable
+
+Takeaway: DeFi risks include smart contract bugs, liquidation, impermanent loss, algorithmic stablecoin failures, oracle manipulation, and rug pulls. These risks are real and have caused billions in losses. Managing them requires diversification, protocol due diligence, active position monitoring, and never depositing more than you can afford to lose.`
+      },
+      {
+        title: 'Exchanges, the Crypto Economy, and DeFi\'s Role in Africa',
+        content: `DeFi does not exist in isolation — it sits within a broader crypto economy that includes centralized exchanges, P2P trading networks, stablecoins, and the economic reality of millions of people across Africa who are using these tools for genuinely critical financial needs. Understanding how all of this connects gives you the full picture.
+
+Centralized vs Decentralized Exchanges — Knowing When to Use Each
+
+Centralized exchanges (CEXs) — Binance, Coinbase, Kraken, Bybit — are companies that hold your funds and facilitate trading through internal order books. They are the primary gateway for converting fiat currency into crypto. Their advantages: fast execution, high liquidity, beginner-friendly interfaces, and fiat on-ramps that accept local payment methods.
+
+Their critical risk — as FTX demonstrated catastrophically in November 2022 — is custodial. When FTX collapsed, $8 billion in customer funds disappeared because users had trusted the exchange with custody of their assets. The exchange held the keys. The users held IOUs.
+
+The post-FTX essential: Proof of Reserves. Reputable exchanges now publish regularly audited proof that they hold customer assets 1:1. Check this before trusting any exchange with significant funds. Always withdraw significant holdings to a non-custodial wallet after trading.
+
+For African users specifically, Africa-founded exchanges offer critical advantages: Yellow Card operates across 20+ African countries with local currency support; Quidax, Busha, and Roqqu are Nigerian-founded platforms with naira support and local payment methods. Noones (founded by former Paxful co-founder Ray Youssef) specifically focuses on African and Global South P2P users.
+
+DEXs complement CEXs rather than replace them — CEXs for fiat conversion and advanced features, DEXs for DeFi access, new token discovery, and trading without KYC.
+
+The Broader Crypto Economy — How DeFi Changes Everything
+
+The economic impact of DeFi and the broader crypto ecosystem is most visible where traditional finance has failed most visibly — and Africa is the clearest example.
+
+Remittances: Africa receives over $90 billion annually in remittances. Traditional channels charge 5–10% in fees. USDT transfers via Tron's TRC-20 network settle in under 30 seconds for fractions of a cent. This is not a marginal improvement — on a $300 transfer, the difference between 8% and 0.01% is the difference between $24 lost and $0.03 lost. Multiplied across millions of transfers, the economic impact is enormous.
+
+Dollar savings access: In Nigeria, Ghana, Zimbabwe, and other high-inflation economies, USDT and USDC function as practical dollar savings accounts for millions of people who cannot access US banking. This is monetary sovereignty at the individual level — the ability to preserve the value of your labor regardless of what your central bank does to the local currency.
+
+Financial inclusion: With over 57% of sub-Saharan Africa's adult population unbanked, DeFi protocols offer immediate access to savings, borrowing, and yield — with no bank account, no credit history, and in many cases no identity documents required.
+
+Career and economic opportunity: The crypto and DeFi ecosystem has created entirely new categories of employment — blockchain developers, smart contract auditors, community managers, DAO contributors, crypto educators. Nigeria, Kenya, and South Africa have growing Web3 developer communities. Africa's creator and builder community is increasingly participating in the global crypto economy, earning in crypto for work done in code, content, and community.
+
+DePIN — Crypto as Infrastructure Funding
+
+Decentralized Physical Infrastructure Networks represent one of the most direct connections between DeFi economics and African community development. Rather than waiting for a telecom company to invest in rural connectivity, communities can deploy wireless nodes and earn crypto rewards for providing coverage. The economic model is DeFi-native: provide a service, earn a token reward, participate in network governance.
+
+This is the vision behind projects like Helium (wireless), Filecoin (storage), and community networks like African First Network — using crypto economic incentives to fund infrastructure that traditional capital markets have never reached.
+
+Takeaway: DeFi sits within a broader crypto economy that is reshaping financial access globally. Centralized exchanges provide the fiat on-ramps; DEXs provide the DeFi access layer; stablecoins provide the stable unit of account; and together they create a financial system that is genuinely inclusive in ways traditional banking has never been — particularly across Africa.`
       },
     ],
     flashcards: [
       {
-        front: 'What is DeFi?',
-        back: 'Decentralized Finance — an ecosystem of financial services including lending, borrowing, trading, and saving built on blockchain networks. It operates through smart contracts with no banks or intermediaries required.'
+        front: 'What is DeFi and what are its five core principles?',
+        back: 'DeFi (Decentralized Finance) is an ecosystem of financial services built on blockchain via smart contracts — no banks or intermediaries. Five principles: Decentralization (no single controller), Transparency (all on-chain), Accessibility (wallet + internet = access), Permissionless (no approval needed), Self-custody (your keys, your funds).'
       },
       {
-        front: 'What is a smart contract?',
-        back: 'A self-executing program deployed on a blockchain that automatically carries out transactions when predefined conditions are met. It runs exactly as written — no human intervention, no hidden terms, no possibility of interference.'
+        front: 'What is a smart contract and what makes it different from a traditional contract?',
+        back: 'A program deployed on a blockchain that automatically executes financial transactions when predefined conditions are met. Unlike traditional contracts: no human enforcement needed, no possibility of interference, runs exactly as written 24/7, and all logic is publicly auditable by anyone.'
       },
       {
-        front: 'How do DEX liquidity pools work?',
-        back: 'Users deposit pairs of tokens into a shared pool. Traders swap against the pool rather than matching with individual buyers or sellers. Liquidity providers earn a share of every trading fee generated by the pool in proportion to their deposit.'
+        front: 'How does an Automated Market Maker (AMM) work?',
+        back: 'Instead of matching buyers and sellers, an AMM uses liquidity pools — reserves of two tokens deposited by liquidity providers. A formula (x × y = k) automatically sets prices based on pool ratios. You trade against the pool, not a counterparty. LPs earn a share of every trading fee.'
       },
       {
-        front: 'What is liquidation risk in DeFi lending?',
-        back: 'When you borrow against crypto collateral, if the collateral\'s value drops below the required threshold, the protocol automatically sells your collateral to repay the loan. Always monitor your health factor to avoid unexpected liquidation.'
+        front: 'What is over-collateralization in DeFi lending and why is it required?',
+        back: 'DeFi loans require depositing more collateral than you borrow — e.g., deposit $150 of ETH to borrow $100 USDC. This protects the protocol against crypto price volatility. If collateral value drops below the required ratio, the protocol automatically liquidates it to repay the loan.'
       },
       {
-        front: 'What is liquid staking?',
-        back: 'A method of staking assets where you receive a tradeable receipt token representing your staked position plus accrued rewards. For example, staking ETH with Lido returns stETH — which earns staking yields while remaining usable across DeFi.'
+        front: 'What is liquid staking and what problem does it solve?',
+        back: 'Liquid staking lets you stake assets (like ETH) and receive a tradeable receipt token (like stETH from Lido) that earns staking rewards while remaining usable in DeFi. It solves the illiquidity problem of standard staking where assets are locked and cannot be used elsewhere.'
+      },
+      {
+        front: 'What is impermanent loss?',
+        back: 'A risk for liquidity providers in DEX pools. When token prices diverge significantly after you deposit, the AMM rebalances the pool, leaving you with a different token ratio. When you withdraw, you may have less total value than if you had simply held the tokens. Only realized on withdrawal.'
+      },
+      {
+        front: 'What lesson did the Terra/LUNA collapse of May 2022 teach about stablecoins?',
+        back: 'TerraUSD (UST) was an algorithmic stablecoin not backed by real assets — it used a complex mechanism that failed catastrophically, wiping out ~$60 billion in days. Lesson: treat algorithmic stablecoins with extreme caution. Stick to asset-backed stablecoins (USDT, USDC, DAI) for DeFi positions.'
+      },
+      {
+        front: 'What is real yield in DeFi and why does it matter more than token incentives?',
+        back: 'Real yield is income from genuine economic activity — lending fees, trading commissions, protocol revenue — that exists regardless of token price. Token incentive yields inflate from printing new tokens and collapse when incentives end. Real yield is sustainable; inflated token rewards are temporary. In 2026, credible DeFi protocols compete on real yield.'
       },
     ],
     quiz: [
       {
-        question: 'What is the key difference between DeFi and traditional finance?',
+        question: 'Fatima is a trader in Kano. She wants to send $500 to a supplier in Dubai without paying 8% in bank fees. Which DeFi-adjacent tool is most appropriate?',
         options: [
-          'DeFi is controlled by central banks and regulated institutions',
-          'DeFi requires a credit score and government-issued ID to access',
-          'DeFi operates through smart contracts on blockchain with no intermediaries — accessible to anyone with a wallet and internet connection',
-          'DeFi is only available to institutional investors and hedge funds'
-        ],
-        correct: 2
-      },
-      {
-        question: 'What is a smart contract?',
-        options: [
-          'A legal agreement drafted by lawyers and stored digitally',
-          'A self-executing program on a blockchain that automatically carries out transactions when conditions are met',
-          'A government-regulated financial instrument traded on exchanges',
-          'An AI system that manages investment portfolios automatically'
+          'A centralized exchange futures contract',
+          'A stablecoin transfer (USDT/USDC) via Tron or Solana, settling in seconds for fractions of a cent',
+          'A Bitcoin Lightning Network transaction requiring a specialized node setup',
+          'A DAI algorithmic stablecoin transfer via Ethereum mainnet'
         ],
         correct: 1
       },
       {
-        question: 'How do liquidity providers earn money in a DEX pool?',
+        question: 'What is the primary function of an oracle in DeFi?',
         options: [
-          'They receive a salary paid by the DEX development team',
-          'They earn government-backed interest on their deposits',
-          'They earn a share of every trading fee generated by swaps through their pool',
-          'They earn rewards by reporting fraudulent transactions'
-        ],
-        correct: 2
-      },
-      {
-        question: 'What happened to the era of 1,000%+ APY yield farming in DeFi?',
-        options: [
-          'It continues today and is the primary way people use DeFi',
-          'It was banned by regulators in 2023',
-          'It largely ended as unsustainable — credible protocols in 2026 compete on real yield from genuine economic activity',
-          'It was replaced by government-backed stablecoin programs'
-        ],
-        correct: 2
-      },
-      {
-        question: 'What is impermanent loss?',
-        options: [
-          'The fee paid to validators for processing DeFi transactions',
-          'A potential loss for liquidity providers when the price ratio of their deposited tokens changes significantly after deposit',
-          'The penalty charged for withdrawing funds before a lock-up period ends',
-          'A tax applied to DeFi earnings by regulatory authorities'
+          'To validate and add new blocks to the blockchain',
+          'To bring real-world data (like asset prices) on-chain so smart contracts can use it',
+          'To audit smart contract code for security vulnerabilities',
+          'To provide customer support for DeFi protocol users'
         ],
         correct: 1
+      },
+      {
+        question: 'Kwame deposits $150 of ETH on Aave as collateral and borrows $100 USDC. ETH\'s price drops 40%. What happens?',
+        options: [
+          'Aave contacts Kwame to negotiate new loan terms',
+          'The loan is automatically cancelled and Kwame keeps both the ETH and USDC',
+          'The protocol may automatically liquidate Kwame\'s ETH collateral to repay the loan if the collateral ratio falls below the threshold',
+          'The interest rate on the loan increases to compensate for the price drop'
+        ],
+        correct: 2
+      },
+      {
+        question: 'What is the key advantage of liquid staking over standard staking?',
+        options: [
+          'Liquid staking earns higher rewards than standard staking',
+          'Liquid staking has no slashing risk unlike standard staking',
+          'You receive a tradeable receipt token that earns staking rewards while remaining usable in DeFi — solving the illiquidity problem',
+          'Liquid staking is guaranteed by government insurance schemes'
+        ],
+        correct: 2
+      },
+      {
+        question: 'You provide liquidity to an ETH/USDC pool on Uniswap. ETH\'s price doubles while your liquidity is deposited. When you withdraw, you notice you have less total value than if you had just held the tokens. What is this called?',
+        options: [
+          'Smart contract slippage',
+          'Liquidation penalty',
+          'Impermanent loss',
+          'Gas fee accumulation'
+        ],
+        correct: 2
+      },
+      {
+        question: 'TerraUSD (UST) collapsed in May 2022, wiping out ~$60 billion. What type of stablecoin was UST, and what does this teach us?',
+        options: [
+          'A centralized stablecoin backed by US dollar bank reserves — teach us to use DEXs instead of CEXs',
+          'An algorithmic stablecoin not backed by real assets — teach us to treat algorithmic stablecoins with extreme caution',
+          'A decentralized stablecoin backed by ETH collateral — teach us that over-collateralization is too risky',
+          'A government-issued CBDC — teach us to avoid government-controlled digital currencies'
+        ],
+        correct: 1
+      },
+      {
+        question: 'What is "real yield" in DeFi and why do credible protocols in 2026 compete on it?',
+        options: [
+          'Yield paid in stablecoins rather than volatile governance tokens',
+          'Income from genuine economic activity (lending fees, trading commissions) that is sustainable — unlike inflated token incentives that collapse when rewards end',
+          'Yield that is guaranteed by smart contract insurance protocols',
+          'Returns that are verified by government-regulated auditors'
+        ],
+        correct: 1
+      },
+      {
+        question: 'After the FTX collapse in 2022, what became the industry standard for exchange transparency?',
+        options: [
+          'Government-mandated daily trading reports submitted to regulators',
+          'Real-time blockchain publishing of all internal order book data',
+          'Proof of Reserves — independently audited confirmation that exchanges hold customer assets 1:1',
+          'Mandatory insurance funds covering 100% of customer deposits'
+        ],
+        correct: 2
       },
     ],
   },
@@ -460,153 +1099,343 @@ Tools every DeFi user should know: DefiLlama for protocol data, Revoke.cash for 
   // ── MODULE 4: NFTs & TOKENS ───────────────────────────────────────────────
   {
     id: 'nfts', title: 'NFTs & Tokens',
-    description: 'Understand digital ownership, token types, real utility, and how to evaluate crypto projects.',
+    description: 'Master digital ownership, token standards, tokenomics analysis, and NFT utility in 2026.',
     color: '#f59e0b', icon: '🎨',
     lesson: [
       {
-        title: 'What Is an NFT? Ownership in the Digital Age',
-        content: `An NFT — Non-Fungible Token — is a unique digital asset recorded on a blockchain that proves ownership and authenticity of a specific item.
+        title: 'NFTs — What They Are and How They Actually Work',
+        content: `In 2021, a digital image of a cartoon ape sold for $3.4 million. A year later, the same image was worth $30,000. By 2023, most NFT collections had lost 90–99% of their value. The hype collapsed — and took a lot of people's money with it.
 
-The key word is non-fungible. Here is the difference:
+But here is what did not collapse: the underlying technology. NFTs are still being used to verify university degrees, issue concert tickets, power gaming economies, and register land titles. The speculation failed. The technology did not. Understanding the difference is essential for anyone engaging with NFTs in 2026.
 
-Fungible: A ₦1,000 note is fungible — your note and mine are identical and interchangeable.
-Non-Fungible: A signed certificate of land ownership is non-fungible — it refers to one specific piece of land that cannot be swapped for another.
+What Is an NFT?
 
-NFTs bring verifiable, unique ownership to the digital world.
+A Non-Fungible Token is a unique digital asset recorded on a blockchain that proves ownership and authenticity of a specific item. The key word is non-fungible.
 
-How an NFT is created:
-• Minting — Creating an NFT by recording a unique token on a blockchain. The token points to metadata (an image, file, or credential) stored on IPFS or Arweave — decentralized storage networks.
-• Smart Contract — Each NFT collection is governed by a smart contract defining rules: total supply, royalty percentages, transfer conditions.
-• Ownership Record — The blockchain permanently records who owns each NFT. Transfers are publicly verifiable. No company can revoke, delete, or alter this record.
+Fungible means interchangeable. One euro is identical to any other euro — they are perfectly substitutable. One Bitcoin equals any other Bitcoin of the same denomination. These are fungible assets.
 
-⚠️ Storage matters: The NFT token is on-chain, but the linked image or file is usually stored separately. If that storage is centralized (a regular company server), the image can disappear even if the token still exists. Decentralized storage on IPFS or Arweave is far more permanent.
+Non-fungible means unique. A signed land title for a specific plot in Lagos cannot be swapped for another — it refers to one specific, irreplaceable thing. A first-edition signed book, a specific seat at a concert, a university degree in your name: these are non-fungible.
 
-Key insight: NFTs do not prevent copying a digital file. But they create an immutable, verifiable proof of who owns the original — something that did not exist before blockchain.`
+NFTs bring this concept of verifiable, unique ownership into the digital world for the first time.
+
+How an NFT is created and what it contains:
+
+Minting is the process of recording a unique token on a blockchain. When an NFT is minted, the blockchain permanently records: who created it, a unique token ID that distinguishes it from every other NFT in the collection, a pointer to the item's metadata (image, traits, description), and the ownership history from that moment forward.
+
+Smart contracts govern every NFT collection. They define: total supply, royalty percentages for the creator on every secondary sale, transfer rules, and ownership records. These rules are written in code and enforced automatically — no company can override them.
+
+One critical technical point: the NFT token lives on-chain permanently. But the image or file it points to is typically stored separately — on IPFS, Arweave, or sometimes a centralized server. If that storage disappears, the token still exists but the image it references is gone. Always check whether an NFT's metadata is stored on decentralized storage (IPFS or Arweave) before purchasing.
+
+The honest reality of the bubble: The 2021–2022 NFT bubble was driven by cheap money, FOMO, and speculation — not by utility. Celebrities launched collections with no genuine value. Buyers paid millions hoping to sell to someone else at a higher price. When interest rates rose in 2022 and speculative capital left the market, that dynamic collapsed completely. The technology survived. The speculation did not.
+
+Takeaway: An NFT is a blockchain record proving unique ownership of a specific digital or physical item. The technology creates something genuinely new — verifiable digital ownership. But ownership of something worthless is still worthless. The question is always: what does this NFT actually represent, and does that thing have genuine value?`
       },
       {
-        title: 'Real NFT Utility in 2026: Beyond the Hype',
-        content: `The 2021–2022 NFT bubble — where digital images sold for millions — collapsed when speculative money left the market. Most collections lost 90–99% of their value. But the technology itself did not disappear.
+        title: 'Real NFT Utility in 2026 — Six Areas Where It Actually Works',
+        content: `After the bubble cleared, what remained is a clearer picture of where NFT technology creates genuine, defensible value. In 2026, six application areas have demonstrated real-world utility that goes well beyond speculation.
 
-In 2025–2026, NFTs have genuine utility in six areas:
+Gaming and Digital Ownership
 
-🎮 Gaming & Digital Ownership
-Traditional games: your items belong to the company. When the game shuts down, they disappear. NFT-based games let players truly own in-game assets, trade them freely, and carry value across platforms.
+This is the most compelling NFT use case and the one most likely to reach mainstream scale. In traditional games — Call of Duty, FIFA, Fortnite — your items belong to the game company. When the game shuts down, your skins, weapons, and characters disappear. You spent real money on digital items that were never yours.
 
-🎵 Music & Creator Royalties
-Smart contracts embedded in music NFTs automatically pay the creator a royalty every time the NFT is resold — impossible in traditional music licensing. African musicians can reach global collectors directly, bypass labels, and embed permanent royalty rights into their work.
+NFT-based games change this fundamentally. When you earn or purchase a weapon in a blockchain game, that weapon is an NFT in your wallet. You own it. You can sell it, trade it, or carry its value to other compatible games. Axie Infinity demonstrated this model at scale — providing real income for thousands of players in the Philippines and Venezuela during the pandemic. The game had economic design problems that later emerged, but the core proof of ownership concept worked.
 
-🎟️ Event Tickets & Anti-Fraud
-An NFT ticket is verifiably authentic and impossible to duplicate. Smart contracts can limit resale prices or pay the venue a royalty on secondary sales. Nigerian concert promoters can use this to eliminate fake tickets and recapture scalper profits.
+In 2025–2026, higher-production blockchain games like Illuvium and Gods Unchained are building on this foundation with more sustainable token economics and genuine gameplay.
 
-🪪 Digital Identity & Credentials
-Academic certificates, professional licences, and membership credentials can be issued as NFTs — permanently verifiable, unforgeable, and controlled by the holder.
+Music and Creator Royalties
 
-Soulbound Tokens (SBTs) are a special type: non-transferable NFTs permanently tied to a wallet. They cannot be sold. Ideal for university degrees and professional licences. Nigeria's challenge with certificate forgery could be directly addressed by SBT-based degree verification.
+Smart contracts embedded in music NFTs automatically pay the creator a royalty every time the NFT changes hands — forever. In traditional music, an artist sells a record to a label and receives a one-time payment or a small royalty percentage. Every subsequent resale of that physical record earns the artist nothing.
 
-🏠 Real-World Asset Certificates
-Land titles, property deeds, gold certificates, and commodity ownership can be represented as NFTs — enabling fractional ownership and global tradability. African land registries exploring blockchain-based title deeds would make ownership permanently verifiable and impossible to forge.
+Platforms like Royal.io allow artists to sell fractional ownership of their music royalty streams directly to fans. Sound.xyz allows musicians to sell limited editions of songs without labels as intermediaries. For African musicians — Afrobeats artists, highlife producers, amapiano creators — this represents a genuinely different economic model for their work.
 
-🎯 Loyalty Programs
-Brands are replacing traditional loyalty points with NFT-based rewards that customers genuinely own, can trade, and that create secondary market value.`
+Event Tickets and Anti-Fraud
+
+An NFT ticket is cryptographically unique, traceable to its original purchaser, and can be programmed with rules that prevent unauthorized resale above face value — or that pay the artist a percentage of every secondary sale automatically.
+
+For Nigerian concert promoters dealing with rampant ticket forgery, NFT ticketing through protocols like GET Protocol offers a direct technical solution. The ticket exists on a public blockchain. Its authenticity can be verified instantly by anyone with the contract address. It cannot be duplicated.
+
+Digital Identity and Credentials
+
+Soulbound Tokens (SBTs) — proposed by Vitalik Buterin in 2022 — are a non-transferable variant of NFTs permanently tied to one wallet. They cannot be sold or moved. This makes them ideal for representing credentials that should be permanently associated with a person: university degrees, professional licences, community membership, DAO governance rights.
+
+Nigeria's challenge with certificate forgery — a documented, costly problem — could be directly addressed by SBT-based degree verification. An on-chain credential issued by a university is verifiable by any employer anywhere in the world, instantly, without calling anyone.
+
+Real-World Asset Certificates
+
+NFTs are increasingly used as digital certificates for tokenized physical assets. A land title issued as an NFT on a public blockchain is permanently verifiable and theoretically impossible to duplicate or forge. Several African governments are exploring blockchain land registries for exactly this reason — property disputes cost the continent billions annually.
+
+Loyalty Programs and Brand Communities
+
+Starbucks replaced its traditional loyalty points with NFT-based stamps through its Odyssey program. Members collect, trade, and redeem them for real rewards. Unlike traditional points that expire and have no secondary market, NFT rewards are owned by the customer and can be sold. Any business running a loyalty program can upgrade to this model.
+
+Takeaway: In 2026, NFT utility is concentrated in gaming ownership, creator royalties, event ticketing, digital credentials, real-world asset certificates, and loyalty programs. These applications share a common feature: they solve a real problem that traditional systems handle poorly. Speculation failed. Genuine utility remains.`
       },
       {
-        title: 'Token Standards & How to Evaluate Projects',
-        content: `Every token follows a technical standard — a set of rules defining how it is created, transferred, and used. Understanding standards tells you exactly what a token can do.
+        title: 'Token Standards — The Technical Rules Every Token Follows',
+        content: `Every crypto token follows a set of technical rules called a token standard. These standards define how a token is created, transferred, approved for spending, and queried for balance. Understanding them is not just academic — knowing which standard a token uses tells you what it can do, how much it costs to send, and what security risks to watch for.
 
-The Major Token Standards:
+Think of token standards like electrical socket standards. A Nigerian Type D plug works in every socket built to that standard, anywhere it is installed. A Type G (UK) plug does not — even though both carry electricity. Token standards work the same way: a wallet built to support ERC-20 automatically supports every ERC-20 token ever created.
 
-ERC-20 — Fungible tokens on Ethereum and all EVM chains (Arbitrum, Base, Polygon, BNB Chain). USDT, USDC, UNI, LINK, AAVE — all ERC-20. Used for currencies, governance, and utility.
+The Core Distinction: Fungible vs. Non-Fungible
 
-ERC-721 — The original NFT standard. Each token has a unique ID. No two are alike within the collection. Used for art, credentials, event tickets, land titles.
+Every token standard falls into one of two categories.
 
-ERC-1155 — Multi-token standard. One contract manages both fungible and non-fungible tokens. Batch transfers reduce gas costs dramatically. Ideal for gaming with complex asset economies.
+Fungible tokens: every unit is identical and interchangeable. 1 USDT equals any other 1 USDT. They are divisible — you can send 0.001 of them. Used for currencies, governance, and utility.
 
-TRC-20 (Tron) — USDT on Tron is the most-used token in Nigerian P2P trading. Near-zero fees ($0.01–0.10). Conceptually identical to ERC-20 but cheaper.
+Non-fungible tokens: every token is unique. NFT #1 is not equal to NFT #2 even in the same collection. They are indivisible — you own them whole or not at all. Used for art, gaming items, credentials, and title deeds.
 
-⚠️ Critical rule: Sending USDT on ERC-20 to a TRC-20 address (or vice versa) results in permanent loss of funds. Always verify the network before confirming any transfer.
+ERC-20 — The Universal Fungible Standard
 
-Tokenomics Basics: How to Evaluate a Token
+Proposed in 2015, ERC-20 is the most widely deployed token standard in existence. Every EVM-compatible chain uses it: Ethereum, Arbitrum, Base, Optimism, Polygon, BNB Chain. USDT, USDC, DAI, UNI, AAVE, LINK — all ERC-20.
 
-Tokenomics = token + economics. The economic design of a token determines whether it holds value long-term or collapses.
+Security note: ERC-20's approval function lets you authorize smart contracts to spend your tokens. Approving unlimited amounts is risky — if that contract is exploited, your entire token balance can be drained. Run Revoke.cash monthly to audit and remove unnecessary approvals.
 
-Three things to always check:
+ERC-721 — The Original NFT Standard
 
-1. Supply — What is the maximum supply? What percentage is currently circulating? A token with only 5% circulating means 95% of tokens are locked and will eventually create sell pressure.
+Proposed in 2017, ERC-721 gives every token a unique ID that distinguishes it from every other token in the collection. Token #1 and Token #2 are different assets even within the same smart contract. Ownership is tracked per token ID, not per balance. Used for unique NFTs, ENS domain names, Uniswap v3 liquidity positions, academic credentials.
 
-2. Fully Diluted Valuation (FDV) — Current price × Maximum supply. This is the project's real total valuation. If FDV is 20–50x higher than market cap, massive future dilution is coming.
+Soulbound Token variant: a non-transferable ERC-721 where transfer functions are disabled. Permanently tied to one wallet. Ideal for credentials and memberships.
 
-3. Utility — What does the token actually do? Genuine utility (pay transaction fees, earn protocol revenue, governance that matters) sustains demand. Vague utility — like "ecosystem participation" — is a warning sign.
+ERC-1155 — The Multi-Token Standard
 
-🚩 Red Flags: Anonymous team with large token allocation. No vesting schedule. Token used only to earn more of the same token. No verifiable revenue. Promised returns with no clear source.
+Proposed in 2018, ERC-1155 allows a single smart contract to manage both fungible and non-fungible tokens simultaneously. One contract handles the in-game currency, the common weapons, and the unique legendary items all at once. Batch transfers — sending multiple token types in a single transaction — dramatically reduce gas costs. The standard of choice for complex gaming economies.
 
-✅ Green Flags: Experienced, verifiable team. 3–4 year vesting with 1-year cliff. High community allocation. Growing protocol revenue. Active GitHub.`
+TRC-20 — Africa's Most Important Standard
+
+Tron's fungible token standard is technically nearly identical to ERC-20 — but transaction fees are $0.01–0.10 compared to $5–20 on Ethereum mainnet during congestion. This single economic difference explains why TRC-20 USDT dominates Nigerian P2P trading. The same dollar savings, the same stablecoin, a fraction of the cost.
+
+Critical rule: USDT exists on multiple networks — ERC-20, TRC-20, BEP-20, SPL on Solana. Sending USDT on the wrong network — for example, sending ERC-20 USDT to a TRC-20 address — results in permanent, unrecoverable loss of funds. Always verify the network before confirming any transfer.
+
+SPL Tokens — Solana's Standard
+
+Solana uses SPL (Solana Program Library) tokens instead of Ethereum's ERC standards. USDC on Solana, Jupiter (JUP), Raydium (RAY) — all SPL. Solana's Metaplex standard governs NFTs. Compressed NFTs (cNFTs) — Solana's 2023 innovation — reduced minting costs by over 1,000x, making mass credential and ticket distribution genuinely affordable.
+
+Bitcoin Ordinals — NFTs on Bitcoin
+
+Launched in January 2023, Ordinals inscribe data directly onto individual satoshis — the smallest Bitcoin unit. Unlike ERC-721 NFTs that point to external storage, Ordinals store everything on-chain on Bitcoin itself. Maximum permanence, higher cost, limited flexibility.
+
+Takeaway: Token standards are the technical rules defining how tokens behave. ERC-20 is the universal fungible standard. ERC-721 creates unique NFTs. ERC-1155 handles mixed asset economies. TRC-20 dominates African stablecoin transfers due to near-zero fees. Sending tokens on the wrong network causes permanent, unrecoverable loss — always verify the network.`
+      },
+      {
+        title: 'Tokenomics — Reading Token Economics Like a Professional',
+        content: `Imagine two projects. Project A has a beautiful website, a bold whitepaper, and a token trading at $0.50 with a market cap of $25 million. Project B is less flashy but has 3 years of verifiable operating history, growing protocol revenue, a team with locked tokens, and a fully diluted valuation that is reasonable. Which is the better investment?
+
+Most beginners choose Project A because it looks exciting. Most professionals choose Project B because the numbers make sense. Tokenomics is the discipline that separates those two decisions.
+
+Tokenomics (token + economics) refers to the complete economic system governing a token: how many exist, how they are distributed, how new ones are created or destroyed, what the token is used for, and how all of these factors create incentives — or destroy them.
+
+Supply: The Foundation of Everything
+
+Maximum supply is the absolute hard cap of tokens that will ever exist. Bitcoin's is 21 million — no more will ever be created. A hard cap creates predictable scarcity.
+
+Circulating supply is the number of tokens actively tradeable right now. This is what determines the market cap you see on CoinGecko.
+
+Market cap = current price × circulating supply.
+Fully Diluted Valuation (FDV) = current price × maximum supply.
+
+This distinction is critical and widely misunderstood. A token launching at $1 with 10 million tokens circulating has a market cap of $10 million. But if the total supply is 1 billion tokens, the FDV is $1 billion. The remaining 990 million tokens are locked — held by the team, investors, and reserves — and they will eventually unlock and enter the market. That is $990 million of potential sell pressure that the $10 million market cap does not reflect.
+
+Never invest in any project without checking its FDV. If FDV is 20–50x higher than market cap, significant dilution is coming.
+
+Token Distribution: Who Holds What
+
+How tokens are allocated at launch reveals the project's true priorities.
+
+Standard healthy ranges: team and founders 10–20% (vested over 3–4 years with a 1-year cliff where no tokens are accessible for the first 12 months); investors 15–25%; ecosystem and treasury 20–40% (governed by DAO, not centralized team); public sale and community as large as possible.
+
+Red flags: team allocation above 25–30% with short vesting; no vesting schedule disclosed; private investors holding large allocations at deep discounts; treasury controlled entirely by the founding team; anonymous team with large token allocations.
+
+Vesting Schedules and Unlock Risk
+
+Vesting schedules control when locked tokens become available. A cliff is a period during which no tokens unlock at all. After the cliff, tokens release gradually (linear vesting) or in batches.
+
+Use TokenUnlocks.app to check upcoming release schedules before investing in any project. If 40% of total supply unlocks in three months for team and VC holders who bought at 10 cents and the token is currently at $2, that represents enormous sell pressure. Position accordingly.
+
+Token Utility: The Foundation of Sustainable Demand
+
+A token's utility — what it is genuinely used for — determines whether demand for it is real or speculative. The strongest utility: gas tokens required for every transaction on a network (ETH on Ethereum — inescapable demand). Strong utility: governance over protocols generating real revenue; staking to participate in network security; protocol revenue share. Weak utility: governance over a protocol generating no revenue; vaguely described "ecosystem participation"; tokens used only to earn more of the same token.
+
+Protocol Revenue: The New Standard for 2026
+
+Use Token Terminal to check protocol revenue — fees paid to the protocol itself from genuine economic activity. A protocol with verifiable, growing revenue is sustainable. A protocol generating no revenue whose token yield depends entirely on token inflation is not. If a project does not appear on Token Terminal with measurable revenue, treat it with significant caution.
+
+Takeaway: Professional tokenomics analysis checks four things: the FDV versus market cap (future dilution risk), token distribution (who holds what and when does it unlock), token utility (is demand real or speculative), and protocol revenue (is there genuine economic activity). Projects that pass all four checks are meaningfully better than those that do not.`
+      },
+      {
+        title: 'How to Evaluate a Crypto Project — A Professional Framework',
+        content: `Thousands of new tokens launch every month. The overwhelming majority will fail — through abandonment, fraud, poor design, or simply running out of momentum. A small number will create genuine value. The skill of separating them is one of the most practically valuable things you can develop as a crypto participant.
+
+This lesson gives you a systematic evaluation framework used by serious investors and analysts.
+
+Start with the Team
+
+The team is the single most important factor in early-stage crypto projects. Technology can be copied. Code can be forked. Teams with specific knowledge, networks, and execution track records cannot.
+
+Questions to answer: Are the founders and key team members publicly identified (doxxed) with verifiable real-world identities and professional histories? Have they successfully built and shipped products before? Are they active and communicative with the community? Do they have any history of scams, abandoned projects, or fraud?
+
+An anonymous team with large token allocations and no track record is the single highest-risk combination in crypto. It is not necessarily a scam — some legitimate teams operate pseudonymously — but the risk profile demands proportionally higher scrutiny of every other element.
+
+Read the Whitepaper — But Critically
+
+The whitepaper is the project's foundational document. Read: the introduction (what specific problem does this solve, and is the problem real?); the technology section (what blockchain, what consensus mechanism, is it credible?); the use case section (who uses this, and why would they choose this over alternatives?); the tokenomics section (supply, distribution, vesting — cross-reference with on-chain data).
+
+Check the GitHub. A whitepaper describes what the team intends to build. The GitHub repository shows what they have actually built. No GitHub activity in months is a significant warning sign. Open-source code that multiple contributors are actively developing signals genuine momentum.
+
+Analyse the Market Position
+
+Even excellent technology fails in a market dominated by a stronger competitor. Who are the top 3 direct competitors? How does this project's TVL, protocol revenue, and active user growth compare? Does it have a genuine competitive advantage — network effects, superior technology, liquidity depth, regulatory compliance, brand — that is difficult to replicate?
+
+Use DefiLlama for TVL comparison across protocols. Use Token Terminal for revenue comparison. Use Dune Analytics to verify active user counts on-chain rather than relying on team-reported numbers.
+
+Verify On-Chain Data
+
+Blockchain data is public and permanent. Every claim a team makes about usage, growth, and community can be verified independently. This is one of crypto's most powerful advantages over traditional investment research — and most people do not use it.
+
+Check: active addresses (daily unique wallets interacting with the protocol — rising is healthy, declining signals loss of interest); transaction volume (organic growth versus artificial wash trading); top token holder distribution (if the top 10 wallets hold 70%+ of supply, manipulation risk is high); smart contract interaction frequency (high frequency signals genuine use).
+
+Apply the Red Flag Checklist
+
+If multiple red flags appear simultaneously, extreme caution or avoidance is warranted:
+• Anonymous team with large token allocation and no track record
+• No audit from a reputable firm (CertiK, Hacken, Trail of Bits)
+• FDV dramatically higher than market cap with near-term unlocks
+• Team or VC allocation above 30% with short vesting
+• Token utility described vaguely — "ecosystem participation"
+• No verifiable protocol revenue on Token Terminal
+• Promises of guaranteed returns or fixed high APY with no clear revenue source
+• No on-chain activity verifiable via block explorer
+• Closed-source code with no public GitHub
+
+Green flags that indicate quality: doxxed, experienced team with verifiable track record; multiple independent audits publicly available; genuine protocol revenue growing over time; conservative team allocation under 20% with 3–4 year vesting; large community and ecosystem allocation governed by DAO; active GitHub with frequent commits from multiple contributors; growing active user base verifiable on-chain.
+
+A practical exercise: take any token you are considering. Search it on CoinGecko for market cap and FDV. Search it on Token Terminal for protocol revenue. Search it on DefiLlama for TVL history. Check its GitHub for recent activity. If all four return positive signals, you have meaningfully better information than 95% of retail participants making the same decision based on social media and price charts alone.
+
+Takeaway: Professional crypto project evaluation covers five areas: team credibility and track record, whitepaper quality and GitHub activity, competitive market position, on-chain data verification, and red flag screening. No single factor is conclusive — the combination builds conviction. Projects that pass a thorough evaluation are meaningfully lower-risk than those evaluated only on price momentum and community hype.`
+      },
+      {
+        title: 'NFTs, Tokens, and the African Opportunity',
+        content: `Technology has no inherent geography. But its impact is not evenly distributed — it concentrates most powerfully where existing systems are most broken. For NFTs and token economies, Africa is one of the most significant opportunity zones in the world.
+
+Not because Africa needs charity. Because Africa has problems that these technologies are specifically suited to solve.
+
+The Credential Problem — and the NFT Solution
+
+Nigeria loses an estimated billions of naira annually to certificate forgery. Fake university degrees, fraudulent professional certificates, and forged credentials cost employers, institutions, and legitimate graduates enormously. The problem exists because credential verification relies on institutions that can be bribed, records that can be falsified, and processes that are slow and expensive.
+
+A blockchain-based credential system changes the verification equation entirely. A degree issued as a Soulbound Token — permanently tied to the graduate's wallet, recorded immutably on a public blockchain — can be verified by any employer anywhere in the world in seconds. The contract address is public. The record cannot be altered. No call to the university is required.
+
+Several African universities are beginning to explore exactly this. The technology exists. The implementation is a question of institutional will and technical capacity.
+
+The Creator Economy — Direct Access to Global Markets
+
+Africa has produced some of the world's most culturally influential music — Afrobeats, amapiano, highlife, Afro-fusion — yet African artists have historically received a fraction of the value their work generates. Labels take large cuts. Streaming platforms pay fractions of a cent per stream. Distributors and promoters extract value at every step.
+
+Music NFTs and creator platforms offer a different model. An Afrobeats producer in Lagos can mint 100 limited-edition copies of an unreleased track as NFTs, sell them directly to global fans for $50 each, receive payment in USDC instantly, and embed a 10% royalty into the smart contract so every future resale pays them automatically — forever.
+
+This is not theoretical. Artists globally are doing this today. For African creators with globally resonant work and historically broken distribution infrastructure, the opportunity is substantial.
+
+The Land Registry Problem
+
+Property disputes cost African countries billions annually. Land titles in many African jurisdictions are stored in paper registries, are subject to corruption, and can be altered, lost, or disputed with few reliable remedies. Multiple parties can hold conflicting documents for the same land.
+
+An NFT-based land registry on a public blockchain is immutable and transparent. Ownership is recorded permanently. Transfer history is publicly auditable. Corruption of a single actor cannot alter the record. Rwanda, Ghana, and several other African governments are actively exploring blockchain land registries.
+
+The Infrastructure Funding Problem — DePIN
+
+Much of rural Africa lacks reliable internet connectivity because traditional capital markets do not fund infrastructure where returns on investment are uncertain or slow. DePIN — Decentralized Physical Infrastructure Networks — offers an alternative funding model.
+
+Community members deploy wireless nodes, sensor networks, and data infrastructure and earn crypto token rewards for the coverage they provide. The economic incentive is local; the capital comes from a global token economy. Projects like Helium demonstrate this model. African First Network, founded by community builders, is pursuing exactly this vision for African community connectivity.
+
+The Event Economy — Eliminating Ticket Fraud
+
+Nigeria's live music and entertainment economy is massive. It is also plagued by ticket fraud — fake tickets printed and sold at scale, promoters losing revenue, fans turned away at doors. NFT ticketing eliminates this at the technical level. Every ticket is a unique, verifiable blockchain record. Its authenticity is instantly checkable. Its resale can be controlled by smart contract rules.
+
+Building for What Comes Next
+
+The most important observation about NFTs and tokens in Africa is not the current state — it is the trajectory. The infrastructure is maturing rapidly. Compressed NFTs on Solana have reduced minting costs to fractions of a cent, making mass credential and ticket issuance genuinely affordable. Account abstraction is making wallets easier to use for non-technical users. Stablecoin rails are making payment straightforward.
+
+The question for builders, educators, and community leaders across Africa is not whether this technology will matter here. It is who will build the institutions, the products, and the communities that shape how it matters.
+
+Takeaway: NFTs and token economies offer specific, practical solutions to real African problems: credential forgery, creator exploitation, property disputes, infrastructure funding gaps, and event ticket fraud. The technology is mature enough to deploy. The opportunity is real. The builders who understand both the technology and the local context are the ones who will define what comes next.`
       },
     ],
     flashcards: [
       {
-        front: 'What is the difference between fungible and non-fungible tokens?',
-        back: 'Fungible: every unit is identical and interchangeable — 1 USDT = any other 1 USDT. Non-fungible: every token is unique — NFT #1 is not equal to NFT #2. Fungible tokens are currencies and utility tokens. Non-fungible tokens represent unique ownership of specific assets.'
+        front: 'What is the difference between a fungible and a non-fungible token?',
+        back: 'Fungible: every unit is identical and interchangeable — 1 USDT equals any other 1 USDT, divisible to fractions. Non-fungible: every token is unique — NFT #1 is not equal to NFT #2, indivisible. Fungible tokens are currencies and utility tokens. NFTs represent unique ownership of specific items.'
       },
       {
         front: 'What are ERC-721 and ERC-1155, and when is each used?',
-        back: 'ERC-721: the original NFT standard — each token has a unique ID. Best for 1-of-1 art, credentials, and title deeds. ERC-1155: multi-token standard managing both fungible and non-fungible tokens in one contract, with gas-efficient batch transfers. Best for gaming economies with diverse asset types.'
+        back: 'ERC-721: original NFT standard — each token has a unique ID. One token = one unique item. Best for 1-of-1 art, credentials, land titles. ERC-1155: multi-token standard managing both fungible and non-fungible tokens in one contract, with gas-efficient batch transfers. Best for gaming economies with diverse asset types.'
       },
       {
-        front: 'What is a Soulbound Token (SBT)?',
-        back: 'A non-transferable NFT permanently tied to one wallet — it cannot be sold or moved. Used for credentials, achievements, and verified memberships. Ideal for university degrees, professional licences, and DAO membership — solving Nigeria\'s certificate forgery problem with unforgeable on-chain verification.'
+        front: 'What is a Soulbound Token (SBT) and what makes it different from a standard NFT?',
+        back: 'A non-transferable NFT variant permanently tied to one wallet — it cannot be sold or moved. Transfer functions are disabled in the smart contract. Ideal for university degrees, professional licences, and DAO membership where credentials should be permanently associated with a specific person, not tradeable.'
       },
       {
-        front: 'What is Fully Diluted Valuation (FDV) and why does it matter?',
-        back: 'FDV = current price × maximum token supply. It shows the project\'s real total valuation if all tokens were circulating today. If FDV is 20–50x higher than market cap, most tokens are still locked — and when they unlock, they create enormous sell pressure. Always check FDV before investing.'
+        front: 'What is Fully Diluted Valuation (FDV) and why must you always check it?',
+        back: 'FDV = current price × maximum token supply. It shows the project\'s real valuation if all tokens were circulating today. If FDV is 20–50x higher than market cap, most tokens are locked and will create massive sell pressure when they unlock. Never invest without checking FDV — market cap alone is misleading.'
       },
       {
-        front: 'Why does TRC-20 USDT dominate African P2P trading, and what is the critical network rule?',
-        back: 'TRC-20 USDT runs on Tron, with transaction fees of just $0.01–0.10 vs $5–20+ on Ethereum mainnet. It dominates Nigerian P2P platforms like Binance P2P and Noones. Critical rule: sending USDT across the wrong network (e.g. ERC-20 to a TRC-20 address) results in permanent, unrecoverable loss of funds. Always verify the network before confirming.'
+        front: 'What is a token vesting schedule and what should a healthy one look like?',
+        back: 'A vesting schedule controls when locked tokens (team, investors, advisors) become available for sale. A healthy schedule: 3–4 year total vesting with a 1-year cliff (no tokens accessible for the first 12 months). Red flags: vesting under 1 year, no cliff, team allocation above 30%, or no schedule disclosed at all.'
+      },
+      {
+        front: 'Why does TRC-20 USDT dominate African P2P markets — and what is the critical safety rule?',
+        back: 'TRC-20 USDT runs on Tron with fees of $0.01–0.10 vs $5–20+ on Ethereum mainnet. Near-zero cost makes it ideal for Nigerian P2P trades and remittances. Critical rule: sending USDT on the wrong network (e.g. ERC-20 to a TRC-20 address) results in permanent, unrecoverable loss of funds. Always verify the network before confirming any transfer.'
+      },
+      {
+        front: 'What four on-chain data points should you check before investing in any crypto project?',
+        back: '1) Active addresses — daily unique wallets interacting (rising = healthy). 2) Transaction volume — organic growth vs wash trading. 3) Top holder distribution — if top 10 wallets hold 70%+ of supply, manipulation risk is high. 4) GitHub activity — frequent commits from multiple contributors signal genuine development. All data is publicly verifiable on block explorers.'
+      },
+      {
+        front: 'What is token utility and what distinguishes strong utility from weak utility?',
+        back: 'Token utility is what the token is genuinely used for within its ecosystem. Strong: gas tokens required for every network transaction (ETH); governance over revenue-generating protocols; staking for network security; protocol revenue share. Weak: governance over protocols with no revenue; vague "ecosystem participation"; tokens used only to earn more of the same token with no external revenue source.'
       },
     ],
     quiz: [
       {
-        question: 'A ₦1,000 note is fungible. What makes an NFT "non-fungible"?',
+        question: 'A ₦1,000 note is fungible. Which of the following correctly explains what makes an NFT non-fungible?',
         options: [
-          'It cannot be transferred to another wallet',
-          'It is unique — it cannot be exchanged 1:1 with any other token, even in the same collection',
-          'It is stored offline on a hardware device',
-          'It is backed by a physical commodity like gold'
+          'NFTs cannot be transferred to another wallet once minted',
+          'Each NFT has a unique token ID — NFT #1 and NFT #2 are different assets even within the same collection and cannot be exchanged 1:1',
+          'NFTs are stored offline on hardware devices, making them physically unique',
+          'NFTs are backed by physical commodities, giving each one a unique real-world value'
         ],
         correct: 1
       },
       {
-        question: 'You want to send USDT to a friend in Lagos at near-zero cost. Which network should you use?',
+        question: 'A new token has a market cap of $8 million but a Fully Diluted Valuation (FDV) of $800 million. Only 1% of tokens are circulating. What does this signal?',
         options: [
-          'ERC-20 on Ethereum mainnet',
-          'TRC-20 on Tron',
-          'BTC on Bitcoin',
-          'SPL on Solana'
+          'The token is extremely undervalued and represents a strong buying opportunity',
+          'The team has burned 99% of the supply, making the token scarcer',
+          'Massive future sell pressure is coming as the remaining 99% of locked tokens unlock — the real valuation is $800M, not $8M',
+          'The token is backed by $800 million in treasury assets'
         ],
-        correct: 1
+        correct: 2
       },
       {
-        question: 'A university issues your degree as a Soulbound Token (SBT). What is the key feature of an SBT?',
+        question: 'A Nigerian university wants to issue degrees that cannot be forged, can be verified instantly by any employer globally, and cannot be transferred or sold by the graduate. Which token type is most appropriate?',
         options: [
-          'It can be sold on OpenSea for profit',
-          'It is permanently tied to your wallet and cannot be transferred or sold',
-          'It expires after 10 years',
-          'It requires annual renewal fees paid in ETH'
+          'ERC-20 fungible tokens distributed to all graduates',
+          'ERC-1155 multi-tokens with batch transfer capability',
+          'Soulbound Tokens (SBTs) — non-transferable NFTs permanently tied to the graduate\'s wallet',
+          'TRC-20 stablecoins redeemable for physical certificates'
         ],
-        correct: 1
+        correct: 2
       },
       {
-        question: 'A new token has a market cap of $5 million but a Fully Diluted Valuation (FDV) of $500 million. What does this tell you?',
+        question: 'You want to send $200 of USDT to a family member using the lowest possible fees. Which network should you use?',
         options: [
-          'The token is a guaranteed good investment at this low price',
-          'Only 1% of tokens are circulating — 99% are locked and will eventually enter the market, creating future sell pressure',
-          'The team has burned 99% of the supply permanently',
-          'The token is backed by $500 million in real assets'
+          'ERC-20 on Ethereum mainnet — highest security',
+          'BTC on Bitcoin — most established network',
+          'TRC-20 on Tron — fees of $0.01–0.10 vs $5–20+ on Ethereum mainnet',
+          'BEP-20 on BNB Chain — regulated by Binance'
         ],
-        correct: 1
+        correct: 2
       },
       {
-        question: 'Which token standard allows a single smart contract to manage both fungible currencies and unique NFT items — making it ideal for blockchain games?',
+        question: 'Which token standard allows a single smart contract to manage both in-game currency (fungible) and unique legendary weapons (non-fungible) with gas-efficient batch transfers — making it ideal for blockchain games?',
         options: [
           'ERC-20',
           'ERC-721',
@@ -614,6 +1443,36 @@ Three things to always check:
           'TRC-20'
         ],
         correct: 2
+      },
+      {
+        question: 'An Afrobeats producer mints 50 limited-edition NFTs of an unreleased track and embeds a 10% royalty in the smart contract. What does this mean?',
+        options: [
+          'The producer receives 10% of the initial sale price only — no future payments',
+          'Every time any of the 50 NFTs is resold in the future, the producer automatically receives 10% of that resale price — enforced by the smart contract forever',
+          'The producer must manually collect royalty payments from buyers each time',
+          'The 10% royalty is paid by the NFT platform, not the buyer'
+        ],
+        correct: 1
+      },
+      {
+        question: 'You are evaluating a new DeFi project. It has no entry on Token Terminal, its GitHub has had no commits in 4 months, the top 5 wallets hold 65% of supply, and the whitepaper describes token utility as "ecosystem participation." How should you assess this project?',
+        options: [
+          'Strong buy — low community awareness means early entry opportunity',
+          'Multiple serious red flags — no verifiable revenue, inactive development, high supply concentration, and vague utility all signal high risk',
+          'Neutral — wait for the next token unlock before deciding',
+          'Positive — ecosystem participation tokens have historically outperformed governance tokens'
+        ],
+        correct: 1
+      },
+      {
+        question: 'What does it mean when a DeFi protocol generates "real yield" — and why does it matter more in 2026 than token incentive yields?',
+        options: [
+          'Real yield is paid in stablecoins rather than governance tokens, making it more stable in price',
+          'Real yield comes from genuine economic activity (trading fees, lending revenue) that exists regardless of token price — unlike inflated token incentive yields that collapse when rewards end',
+          'Real yield is guaranteed by smart contract insurance and carries no risk of loss',
+          'Real yield is verified by government regulators, making it legally protected income'
+        ],
+        correct: 1
       },
     ],
   },
@@ -798,12 +1657,10 @@ export default function App() {
   const focusState     = getFocusState(metrics.bpm);
 
   // ── Cheat detection ───────────────────────────────────────────────────────
-  // warmupSeconds:0 — guard activates immediately without waiting for session timer
   const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds, {
     warmupSeconds: 0,
   });
 
-  // Running average of signal quality across the session
   const qualityHistoryRef = useRef<number[]>([]);
   if (qualityPct > 0) {
     qualityHistoryRef.current.push(qualityPct);
@@ -813,12 +1670,8 @@ export default function App() {
     ? Math.round(qualityHistoryRef.current.reduce((a, b) => a + b, 0) / qualityHistoryRef.current.length)
     : 0;
 
-  // ── Auto-log when suspicion hits HIGH during a live session ──────────────
-  // This fires without needing the user to end the session manually.
-  // A ref prevents the same event from being logged more than once per session.
   const hasLoggedHighRef = useRef(false);
   useEffect(() => {
-    // Only reset the flag when a session genuinely ends
     if (!sessionActive && hasLoggedHighRef.current) {
       hasLoggedHighRef.current = false;
       return;
@@ -850,8 +1703,6 @@ export default function App() {
       leaderboardData.addEntry({ moduleTitle: mod.title, moduleIcon: mod.icon, quizScore: quizPct, focusScore: focusScoreValue, xpEarned: sessionXP, streak: streakData.streak });
       tokenData.addPendingXP(sessionXP);
     }
-
-    // ── Log suspicious session to Supabase for Elata research ────────────────
     if (guard.suspicionLevel !== 'none') {
       void logSuspiciousSession({
         username:      username ?? 'anonymous',
