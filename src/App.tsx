@@ -1476,6 +1476,449 @@ Takeaway: NFTs and token economies offer specific, practical solutions to real A
       },
     ],
   },
+
+  // ── MODULE 5: TRADING, CAREERS & LIFE IN WEB3 ────────────────────────────
+  {
+    id: 'trading', title: 'Trading, Careers & Life in Web3',
+    description: 'From your first trade to building a Web3 career — practical skills for real life in the crypto economy.',
+    color: '#f97316', icon: '📈',
+    lesson: [
+      {
+        title: 'Trading Foundations — Principles, Setup, and the Nigerian Reality',
+        content: `Cryptocurrency trading means buying and selling digital assets to benefit from price movements. Unlike long-term investing — where you buy and hold for years — trading can last minutes, days, or weeks depending on your strategy.
+
+In 2026, trading happens across multiple types of platforms:
+• Centralised exchanges (CEXs) like Binance and Bybit — you create an account, complete KYC, and trade through the platform
+• Decentralised exchanges (DEXs) like Uniswap and Jupiter — you connect your wallet and trade directly on-chain, no account needed
+• P2P platforms like Bitget P2P and Bybit P2P — you trade directly with other people, converting naira to crypto and back
+• Perpetual DEXs like Hyperliquid — advanced platforms for leveraged trading without a centralised custodian
+
+For Nigerian users starting out, the most practical entry point is a CEX with P2P support. Bitget Exchange and Bybit Exchange both offer active P2P markets where you can buy USDT with naira using your bank transfer, OPay, or PalmPay. Bitget DEX Wallet has also introduced a direct naira ↔ USDT swap feature inside the wallet itself — currently one of the most beginner-friendly on-ramp options available in Nigeria.
+
+An important note on Binance P2P: it was the dominant naira-to-crypto platform for Nigerian users for many years. It was deactivated in 2024 and has not been restored as of 2026. If you search for it expecting it to work, you will be disappointed. Use Bitget P2P or Bybit P2P as your current alternatives. Busha is also used by Nigerian traders for simpler buy/sell of major assets with NGN support.
+
+Before we go further — an honest word: trading is not the fastest path to wealth, and it is not right for everyone. Most beginners lose money in their first year. The goal of this lesson is not to make you excited about trading. It is to make sure that if you trade, you do it with your eyes open.
+
+**The Five Principles Every Trader Must Know**
+
+1. DYOR — Do Your Own Research. Never buy a cryptocurrency because someone on Twitter, Telegram, or WhatsApp told you to. Before trading anything, research the project yourself — its purpose, its team, its tokenomics, its real usage. On-chain tools like CoinGecko, DefiLlama, and Glassnode let you verify activity independently of marketing claims. If you cannot explain what a project does in two sentences, do not trade it.
+
+2. Never trade more than you can afford to lose. Bitcoin fell over 75% in 2022. New tokens can lose 90% of their value in days. Keep your total crypto allocation below 5–10% of your savings. If losing the money would affect your ability to pay rent, school fees, or feed your family — it is too much.
+
+3. Risk management comes before profit. Professional traders think about protecting their capital first and making profit second. This means setting a stop-loss before every trade — a price level where your position automatically closes to limit your loss. It also means calculating your risk-reward ratio before entering: if your target profit is 10% but your stop-loss is 5% away, your ratio is 2:1. A minimum 2:1 ratio is the standard most experienced traders require.
+
+4. Have a trading plan and follow it. Undisciplined trading is one of the fastest ways to lose money. A trading plan means: you know why you are entering a trade, what price you are targeting, where your stop-loss is, and how much of your capital you are risking — all decided before you buy, not after.
+
+5. Patience and discipline beat excitement. FOMO — Fear Of Missing Out — is one of the most dangerous forces in crypto. When a coin surges 50% in a day, the instinct is to jump in. That moment is usually exactly when experienced traders are selling to new buyers. The best trades require waiting for the right setup. If a trade does not meet your criteria, do not take it.
+
+**The Seven Mistakes That Wipe Out Beginners**
+
+Chasing pumps: buying after a 50–100% surge because of FOMO. You become exit liquidity for experienced traders.
+
+Ignoring fees: trading fees, withdrawal fees, and spread costs accumulate quickly. Always calculate fees as part of your trade.
+
+Using leverage too early: a 10x leveraged position can be fully wiped out by a 10% price move. Do not use leverage until you have at least 12 months of consistent, profitable spot trading behind you.
+
+Leaving funds on exchanges long-term: FTX proved this at catastrophic scale. Move significant holdings to a non-custodial wallet after trading.
+
+Panic selling: selling during a sharp dip out of fear, only for the price to recover. Set your stop-loss before entering — your exit should be decided by your plan, not your emotions in the moment.
+
+Over-trading: making too many trades out of boredom. Most professional traders make relatively few, high-conviction trades.
+
+Ignoring taxes: crypto trading is taxable in Nigeria. The FIRS has issued guidance and enforcement is increasing. Keep records of every trade. Lesson 6 covers this in full.
+
+Takeaway: Trading is a skill, not a shortcut. The five principles — DYOR, size your risk, manage losses first, plan every trade, and stay disciplined — separate traders who survive from those who don't. For Nigerians, Bitget P2P and Bybit P2P are the current reliable naira on-ramp and off-ramp routes.`
+      },
+      {
+        title: 'Order Types — How to Enter and Exit Trades Like a Professional',
+        content: `The order type you choose determines how, when, and at what price your trade executes. Using the wrong order type in a volatile market can mean paying far more than intended or missing a trade entirely. Every serious trader understands these before placing their first position.
+
+**Limit Order — Precision Entry**
+
+A limit order lets you set the exact price at which you want to buy or sell. The order sits in the exchange's order book and only executes when the market reaches your specified price.
+
+Advantages: price control — you will not pay more (when buying) or receive less (when selling) than your set price. Reduces slippage in volatile or low-liquidity markets.
+
+Disadvantage: if the market never reaches your price, the order never fills.
+
+Example: Bitcoin is trading at $95,000. You believe it will dip to $90,000 before recovering. You place a limit buy order at $90,000 for 0.1 BTC. If BTC drops to $90,000, your order fills. If it never reaches that price, your order stays open until you cancel it.
+
+**Market Order — Immediate Execution**
+
+A market order executes immediately at the best available price. It prioritizes speed over price precision.
+
+Use for: high-liquidity assets (BTC, ETH, SOL) when you need immediate execution. Avoid for small-cap altcoins with thin order books — slippage can be significant.
+
+**Stop-Loss Order — Your Most Important Risk Tool**
+
+A stop-loss is an automatic sell that triggers when price falls to your pre-set level, limiting your downside.
+
+Pro rule: set your stop-loss before entering the position, not after. Decide your maximum acceptable loss first. Also avoid round numbers — experienced traders know that stops cluster around obvious levels like $90,000 or $100,000, and prices are sometimes pushed there deliberately to trigger them. Set yours slightly below key levels.
+
+Never remove a stop-loss out of hope. This is how small losses become catastrophic ones.
+
+**Take-Profit Order — Locking In Gains**
+
+A take-profit order automatically sells your position when it reaches your target price. It removes emotion from the exit — preventing the common mistake of holding too long and watching profits evaporate.
+
+Pro approach: instead of one take-profit, scale out in portions. Sell 30% at your first target, 40% at a higher target, and keep 30% for a potential extended move. This balances capturing gains with staying in a winning trade.
+
+**OCO — One Cancels the Other**
+
+An OCO order combines a take-profit and a stop-loss set simultaneously. When one executes, the other is automatically cancelled. This is the most practical risk management tool for active traders — both your upside target and downside protection are set in advance. You can step away from the screen knowing your exit is handled.
+
+Example: you buy ETH at $2,500. OCO setup: Take-Profit at $2,900. Stop-Loss at $2,350. Whichever price ETH hits first triggers that order and cancels the other.
+
+**Trailing Stop — Riding Trends While Protecting Gains**
+
+A trailing stop is a dynamic stop-loss that moves upward automatically as price rises. If price reverses by your set percentage from its peak, the trailing stop triggers and closes the position.
+
+Example: you buy BTC at $95,000 with a 5% trailing stop. BTC rises to $110,000 — your stop rises to $104,500. BTC then falls to $104,500 — your trailing stop triggers, capturing most of the move.
+
+Set the trailing distance wide enough to absorb normal market noise — too tight and you get stopped out before the trend resumes.
+
+**Trigger / Conditional Order — Breakout Entries**
+
+A trigger order activates a new buy or sell order only when a specific price is hit — useful for entering breakouts without watching the screen. Example: BTC consolidates below $100,000. You set a trigger buy at $100,200 — if BTC breaks above resistance, your buy order activates automatically.
+
+**Order Types on DEXs**
+
+DEX order types have improved significantly. Protocols like Hyperliquid, GMX, and dYdX now support limit orders, stop-losses, take-profits, and OCO on perpetual futures entirely on-chain — CEX-level features without custody risk.
+
+On all DEXs, you set a slippage tolerance (e.g. 0.5–2%). If the market moves beyond this before your transaction confirms, it reverts. Set too tight and trades fail. Set too loose and MEV bots can extract value from your transaction by sandwiching it — buying just before and selling just after your swap.
+
+Takeaway: Limit orders give you price control. Market orders give you speed. Stop-losses protect your downside. Take-profits lock in gains. OCO automates both exits simultaneously. Trailing stops ride trends. Trigger orders enter breakouts. Know all seven before trading anything — and always set your stop-loss before entering any position.`
+      },
+      {
+        title: 'Reading the Market — Analysis Tools Every Trader Needs',
+        content: `Experienced traders do not guess where prices are going. They use a combination of fundamental analysis and technical analysis to form a view — and then they act on that view with strict risk management. Neither method is a crystal ball. But both significantly improve the quality of your decisions.
+
+**Fundamental Analysis (FA) — Is This Project Worth Owning?**
+
+Fundamental analysis evaluates a cryptocurrency based on non-price factors: the project's technology, team, tokenomics, real-world adoption, revenue, partnerships, and competitive position. FA answers the question: does this asset have genuine value, or is the price driven by hype alone?
+
+Key FA questions:
+• Does this project solve a real problem? Is there evidence of genuine usage?
+• Is the tokenomics sustainable? (Module 4 covered this in depth — apply that framework here)
+• Does the protocol generate real revenue, or does it depend on token inflation?
+• Who are the competitors, and does this project have a genuine advantage?
+
+FA is especially important for long-term investment decisions. You can use FA to build conviction in an asset before using TA to find a good entry price.
+
+On-chain analytics tools for FA: Glassnode (Bitcoin and Ethereum on-chain data — exchange inflows/outflows, whale activity, miner behaviour), Nansen (wallet labelling and smart money tracking), Dune Analytics (community-built on-chain dashboards for any protocol), DefiLlama (TVL and protocol revenue across all DeFi), Token Terminal (protocol earnings and P/E-equivalent ratios for crypto).
+
+**Technical Analysis (TA) — Finding Entry and Exit Points**
+
+Technical analysis uses historical price charts and trading volume data to forecast future price movements. TA assumes that all available information is already reflected in the price, and that price patterns tend to repeat because human psychology is consistent.
+
+Support and Resistance Levels: Support is a price zone where buying interest has historically increased — a floor. Resistance is a price zone where selling pressure has historically been strong — a ceiling. Buying near support and selling near resistance is the foundation of most swing trading strategies. These levels are visible on any chart.
+
+Moving Averages: The 50-day and 200-day moving averages are the most widely watched trend indicators in crypto. When price is above the 200-day MA, the long-term trend is considered bullish. When the 50-day MA crosses above the 200-day MA (a "golden cross"), it is often considered a bullish signal. The reverse (a "death cross") signals a potential downtrend.
+
+RSI — Relative Strength Index: RSI measures whether an asset is overbought or oversold on a scale of 0–100. RSI above 70: the asset may be overbought — a potential sign that a pullback is coming. RSI below 30: the asset may be oversold — a potential buying opportunity. RSI is most useful in sideways or ranging markets. In strong trends, assets can remain overbought or oversold for extended periods.
+
+MACD — Moving Average Convergence Divergence: MACD tracks the relationship between two moving averages and shows momentum. When the MACD line crosses above the signal line, it can indicate bullish momentum. When it crosses below, bearish momentum. MACD crossovers are more reliable when confirmed by volume.
+
+Volume Analysis: High volume confirms price movements. A price breakout to new highs on high volume is more reliable than the same move on low volume. Volume spikes at key levels often signal genuine interest from large participants.
+
+**The Macro Context — What Moves Crypto in 2026**
+
+In 2025–2026, crypto is increasingly correlated with global macroeconomic conditions. Traders who ignore the macro context trade blindly.
+
+US Federal Reserve interest rate decisions directly affect crypto. When rates are falling (easy money), risk assets including crypto tend to rise. When rates are rising (tight money), risk assets tend to fall. Watch the Fed's meeting schedule.
+
+Bitcoin ETF flows: since January 2024, daily institutional ETF inflows and outflows have become a key market signal. Large inflows suggest institutional buying pressure. Monitor via CoinGlass.
+
+Bitcoin Dominance Index: Bitcoin's share of total crypto market cap. When BTC dominance rises, altcoins typically underperform. When dominance falls, altcoin season conditions emerge. Available on CoinMarketCap.
+
+Fear & Greed Index: a quick sentiment gauge. Extreme fear (index below 20) has historically been a buying opportunity. Extreme greed (index above 80) has historically preceded corrections. Available on CoinMarketCap. Use it as one input among many — not as a standalone signal.
+
+⚠️ TA Limitation: Technical analysis is not a crystal ball. Crypto markets are heavily influenced by news events, regulatory announcements, and large wallet activity that no chart can predict. Use TA to identify high-probability setups, not as a definitive oracle. Always combine with FA and sound risk management.
+
+Takeaway: FA tells you what to trade. TA tells you when to trade it. The macro context tells you what environment you are trading in. All three together give you a significantly more complete picture than price alone — but none of them removes the need for strict risk management on every position.`
+      },
+      {
+        title: 'Trading Strategies — Choosing the Right Approach for Your Life',
+        content: `There is no single "best" trading strategy. The best strategy is the one that fits your capital, your time availability, your risk tolerance, and your current level of knowledge. This lesson maps the major strategies honestly — including what each requires and what each risks.
+
+**HODLing — Buy and Hold**
+
+The simplest and historically most effective strategy for most participants. Buy quality assets — Bitcoin, Ethereum — and hold them through market cycles, ignoring short-term volatility. Requires patience and conviction but demands minimal active management.
+
+Time requirement: very low. Check prices occasionally. No daily monitoring.
+Capital requirement: any amount.
+Skill requirement: low — primarily requires conviction and the emotional discipline to hold through drawdowns.
+Risk: you will watch your portfolio fall 50–80% during bear markets. You must be able to hold without selling.
+
+Best suited for: Bitcoin and Ethereum with strong long-term conviction. Not appropriate for speculative altcoins without genuine fundamentals.
+
+**Dollar-Cost Averaging (DCA)**
+
+Invest a fixed amount — say ₦20,000 or $20 — into a specific asset at regular intervals regardless of price. Weekly, bi-weekly, or monthly. DCA removes the pressure of timing the market, averages your purchase price over time, and reduces the emotional impact of volatility.
+
+Example: investing $50 in Bitcoin every Monday regardless of price. Some weeks you buy when BTC is expensive, some weeks when it is cheap. Over time, your average cost is typically lower than trying to pick the perfect entry.
+
+Widely recommended for beginners and long-term investors. Combined with HODLing, it is the approach most consistent with building wealth over time.
+
+**Swing Trading**
+
+Holding positions for days to weeks to capture medium-term price movements. Swing traders aim to buy at support levels and sell at resistance levels, using the TA tools from Lesson 3. Requires understanding of technical analysis and more active monitoring than HODLing.
+
+Time requirement: moderate — check charts daily, execute trades a few times per week.
+Skill requirement: moderate — requires TA literacy and emotional discipline.
+Risk: getting caught in sideways markets, false breakouts, and overnight news events that gap price past your stop-loss.
+
+**Day Trading**
+
+Opening and closing positions within a single trading day to profit from intraday price movements. Requires significant time commitment, deep technical analysis skills, fast execution, and strong emotional discipline.
+
+Honest assessment: even professional day traders frequently lose money. Transaction fees and spread costs accumulate quickly. The Nigerian crypto market context — electricity interruptions, internet reliability, platform access — adds operational risk that international traders do not face. Not recommended for beginners or anyone without dedicated time and infrastructure.
+
+**Copy Trading**
+
+Platforms like Bitget, Bybit, and Binance now offer copy trading — automatically mirroring the trades of experienced, verified traders in real time. This can be an educational entry point for beginners.
+
+Honest limitations: past performance does not guarantee future results. Even top copy traders have significant losing periods. You do not learn the underlying skills. Always diversify across multiple copy traders, use stop-losses, and start with small amounts to understand how the feature works before committing significant capital.
+
+**On-Chain and DeFi Trading**
+
+Beyond CEXs, traders increasingly use DEXs to trade tokens not yet listed on centralized exchanges. On-chain trading gives earlier access to new projects — but requires self-custody skills, understanding of gas fees, and vigilance against scams and honeypot tokens.
+
+Before buying any new token on a DEX: use Rugcheck.xyz or Token Sniffer to assess contract risk. Check the token on DefiLlama. Verify liquidity is locked. Never buy based solely on Telegram or social media hype.
+
+**Choosing Your Strategy Honestly**
+
+Ask yourself honestly: how much time can I dedicate to this per day? How much capital am I willing to risk? How would I respond emotionally to watching my portfolio drop 30% in a week?
+
+For most Nigerians starting out: a DCA + HODL approach for Bitcoin and Ethereum, combined with genuine education before touching altcoins, is the most honest starting point. The complex strategies require skills and infrastructure that take months to build responsibly.
+
+Takeaway: Every trading strategy makes different trade-offs between time, skill, capital, and risk. HODLing and DCA are the most accessible starting points. Swing trading requires TA skills. Day trading requires professional-grade commitment. Copy trading is accessible but does not build the underlying skills you need. Match your strategy to your actual situation, not to the strategy that sounds most exciting.`
+      },
+      {
+        title: 'Web3 Careers & Income — Building a Life in the Crypto Economy',
+        content: `Web3 is not just a technology — it is a global economic system that is actively hiring, rewarding contributors, and creating income streams that did not exist five years ago. For Africans with the right skills and knowledge, the Web3 economy offers access to global-rate income without leaving home, without a foreign visa, and without the barriers traditional global employment imposes.
+
+This lesson gives you the honest, complete picture.
+
+**Why Web3 Is Significant for African Income Seekers**
+
+Location independence: Web3 jobs are overwhelmingly remote. A developer in Lagos, a community manager in Accra, or a researcher in Nairobi can compete for and win global-rate positions without relocating.
+
+Payment in crypto: Web3 employers pay in cryptocurrency — bypassing expensive, slow international wire transfers. Request payment in USDT or USDC, receive it in minutes at near-zero cost, convert to naira via Bitget P2P or Bybit P2P.
+
+Skills over credentials: Web3 hiring is heavily merit-based. A strong GitHub profile, a community reputation, verifiable on-chain activity, and demonstrated skills routinely outweigh formal degrees. This levels the playing field for African talent.
+
+**The Income Map — What You Can Actually Earn**
+
+Technical Roles (higher barrier, higher income): Blockchain Developer (Solidity for EVM chains, Rust for Solana) — one of the highest-paid roles in global tech. Smart Contract Auditor — reviews code for vulnerabilities; firms like CertiK and Hacken pay very well; start with bug bounties to build a portfolio. Frontend Web3 Developer — builds dApp interfaces using React and Web3 libraries; lower barrier than smart contract development. DevRel (Developer Relations) — bridges technical teams and developer communities; very accessible for technically curious Africans with communication skills.
+
+Non-Technical Roles (lower barrier, variable income): Community Manager — moderates and grows project communities on Discord, Telegram, and X. Content Creator/Copywriter — writes blogs, threads, documentation, and social content for Web3 projects. Social Media Manager — manages protocol presence online. Crypto Educator — creates educational content for protocols, exchanges, and communities.
+
+**The Honest Reality of Entry-Level Roles in Nigeria**
+
+Many Nigerian Web3 communities advertise ambassadorial and community roles with inflated or vague incentives. Payment does exist in some cases, but it is frequently exaggerated in how it is presented publicly. Entry-level Web3 community roles in Nigeria often offer little to no reliable income, especially at the start.
+
+This is not a reason to avoid these roles. It is a reason to be clear-eyed about what they actually provide: experience, reputation, and community connections — not immediate income. Treat early community work as building your portfolio and your network, not as a primary income source. The income follows the reputation, not the other way around.
+
+**Where to Find Genuine Opportunities**
+
+Superteam Nigeria: the most important platform for Nigerian Web3 job seekers. Join their Discord server — it is active, regularly updated with bounties and job postings, and has a strong community of serious builders. This is your first stop.
+
+MetaMask Nigeria: has created a developer forum and runs regular in-person meetups in Nigeria. If you are interested in development, plug into this community.
+
+Trust Squad Nigeria: the voluntary community arm of Trust Wallet. Community education and safety work. Hosting and representing Trust Wallet at local events — like the Port Harcourt meetup in March 2026 — is the kind of real-world community work that builds genuine credibility. Voluntary, but builds a portfolio of demonstrated activity.
+
+Crypto Jobs List (cryptojobslist.com), Web3 Career (web3.career), and Wellfound (formerly AngelList) are job boards worth monitoring for remote roles.
+
+Freelancing platforms: Gitcoin for bounties, Layer3 for on-chain tasks, and Braintrust for talent matching (freelancers keep 100% of earnings).
+
+DAO contributions: Many protocols pay contributors in stablecoins for work that advances their ecosystem. Uniswap Grants, Aave Grants DAO, and the Arbitrum DAO all fund community builders. Research Africa-specific grant tracks — the Solana Foundation, Ethereum Foundation, and Cardano have all funded African projects.
+
+**Getting Paid in Nigeria**
+
+Request payment in USDT or USDC to avoid crypto price volatility eroding your earnings. Receive on a low-fee network — TRC-20 or Solana — to minimize transfer costs. Convert to naira via Bitget P2P or Bybit P2P at market rates using your bank account, OPay, or PalmPay. Keep records of every payment received — date, amount in USD, naira equivalent at time of receipt. This is essential for tax compliance.
+
+Takeaway: Web3 career opportunities for Africans are real but require genuine skill development, patience, and consistent effort. Be honest about what entry-level community roles offer — experience and connections, not immediate income. Superteam Nigeria is your most important local entry point. Build in public, contribute before you earn, and specialize rather than spreading thin.`
+      },
+      {
+        title: 'Crypto Taxes, Compliance & Playing the Long Game',
+        content: `Cryptocurrency taxation is no longer an abstract concern for Nigerian crypto users — it is an active enforcement reality. The Federal Inland Revenue Service (FIRS) has issued guidance on crypto taxation, and global regulatory pressure is increasing. Ignorance of tax obligations is not a legal defence.
+
+This lesson explains what you need to know. It is educational information, not legal or financial advice. Tax law is complex and evolving — consult a qualified Nigerian tax professional for guidance specific to your situation.
+
+**Yes — Crypto Is Taxable in Nigeria**
+
+The FIRS applies existing Nigerian tax law to crypto activities:
+• Personal Income Tax Act (PITA): applies to income earned through crypto trading, staking, freelancing paid in crypto, and crypto employment.
+• Capital Gains Tax Act (CGTA): applies to gains from the disposal of cryptocurrency. Nigeria's capital gains tax rate is 10% on net gains.
+• Companies Income Tax Act (CITA): applies to registered companies earning income from crypto activities.
+
+The FIRS issued a circular classifying cryptocurrency as property or an asset for tax purposes. Direction of enforcement has increased steadily through 2024–2026.
+
+**What Is and Is Not a Taxable Event**
+
+Taxable events — these create a tax obligation:
+• Selling crypto for naira or foreign currency — converting any crypto to fiat is a disposal that triggers potential capital gains or income tax
+• Trading one crypto for another — swapping Bitcoin for Ethereum is treated as a disposal of Bitcoin; any gain is potentially taxable
+• Receiving crypto as income — payment for services, mining rewards, staking rewards, or airdrop income is taxable as ordinary income at fair market value at time of receipt
+• Earning DeFi yields — lending interest and yield farming rewards are income in the period earned
+
+Non-taxable events:
+• Buying crypto with naira — establishes your cost basis, not a taxable event
+• Transferring between your own wallets — not a taxable disposal
+• HODLing — holding without selling does not trigger a tax event until disposal
+
+**How Tax Is Calculated**
+
+Capital gain = proceeds from disposal minus cost basis (what you originally paid).
+Example: you bought 0.1 BTC for ₦1,800,000. You later sold for ₦2,500,000. Your capital gain is ₦700,000. At 10% CGT, your tax is ₦70,000.
+
+For crypto received as income, the taxable amount is the naira-equivalent fair market value at time of receipt. Personal income tax rates are progressive from 7% to 24% depending on your total annual income.
+
+Cost basis methods: FIFO (First In, First Out) — the first crypto you bought is the first you are considered to have sold. Average Cost — total paid divided by total quantity. Choose one method and apply it consistently.
+
+**Record-Keeping — Your Most Important Obligation**
+
+Without records, accurate tax calculation is impossible. For every transaction, document: date, type (buy/sell/trade/income), asset, quantity, USD price at time (use CoinGecko historical prices), naira equivalent (use CBN or P2P rate), platform used, transaction hash for on-chain transactions.
+
+Tools: Koinly (koinly.io) — the most widely used crypto tax tool globally, supports Nigerian naira, connects to exchanges and wallets via API or CSV import. CoinTracker is an alternative. For simpler situations, a Google Sheets spreadsheet with the fields above is sufficient.
+
+Download your full transaction history from every exchange monthly. Exchanges have been known to delete historical records. Your records are your responsibility.
+
+**The Regulatory Framework**
+
+SEC Nigeria has a VASP licensing framework requiring crypto exchanges operating in Nigeria to register. KYC/AML requirements apply to all registered VASPs. The 2024 Binance-Nigeria dispute — where Nigerian authorities detained a Binance executive over forex manipulation and tax compliance allegations — demonstrated that Nigerian authorities treat large-scale crypto activity through a financial crimes lens when compliance is absent.
+
+For individual users: maintaining proper records, paying applicable taxes, and using registered platforms significantly reduces your regulatory exposure.
+
+International context: Nigeria participates in global financial information exchange. Foreign exchanges with Nigerian user data may share it with FIRS. Do not assume foreign exchange accounts are invisible to Nigerian tax authorities.
+
+**Playing the Long Game**
+
+Legal tax efficiency — reducing your tax burden through legitimate structuring — is different from evasion. Some legal considerations: holding long-term defers tax until disposal. Selling losing positions in the same tax year as profitable disposals may offset your gains. Keep income-generating activity and investment activity in separate records.
+
+The honest bottom line: crypto transactions are permanent, on-chain, and increasingly traceable. The cost of evasion — penalties, fines, potential criminal liability — far exceeds the cost of compliance. Start keeping records today, even if you have not done so historically. On-chain transactions can be retrieved via block explorers using your wallet address.
+
+Takeaway: Crypto trading, income, and DeFi yields are taxable in Nigeria under existing tax law. The FIRS is actively developing enforcement capacity. Your most important obligation is record-keeping — every transaction, documented with date, amount, and naira equivalent. Use Koinly for automated tracking. Consult a Nigerian tax professional for your first filing. Compliance is not optional and it is far less costly than the alternative.`
+      },
+    ],
+    flashcards: [
+      {
+        front: 'What does DYOR mean and why is it the golden rule of trading?',
+        back: 'Do Your Own Research. Never buy based on social media hype, influencer tips, or Telegram recommendations alone. Always research a project\'s purpose, team, tokenomics, and real usage before trading. If you cannot explain what it does in two sentences, do not trade it.'
+      },
+      {
+        front: 'What is a stop-loss order and when should you set it?',
+        back: 'An automatic sell that triggers when price falls to a pre-set level, capping your loss. Set it BEFORE entering the position — not after. Decide your maximum acceptable loss first. Never remove a stop-loss out of hope. This is how small losses become catastrophic ones.'
+      },
+      {
+        front: 'What is an OCO order and why is it useful?',
+        back: 'One Cancels the Other — a linked pair of orders: a take-profit above current price and a stop-loss below it. Whichever price is hit first executes and automatically cancels the other. Lets you set both your upside target and downside protection simultaneously, then step away from the screen.'
+      },
+      {
+        front: 'What is DCA and why is it recommended for beginners?',
+        back: 'Dollar-Cost Averaging — investing a fixed amount at regular intervals regardless of price. Removes the pressure of timing the market, averages your purchase price over time, and reduces emotional impact of volatility. Example: $50 in Bitcoin every Monday. Simple, disciplined, and effective for long-term wealth building.'
+      },
+      {
+        front: 'What happened to Binance P2P for Nigerian users — and what are the current alternatives?',
+        back: 'Binance P2P was deactivated in 2024 and has not been restored as of 2026. Current reliable alternatives for naira ↔ crypto conversion: Bitget Exchange P2P, Bybit Exchange P2P, and Bitget DEX Wallet (direct naira ↔ USDT swap inside the wallet). Busha is also used by Nigerian traders.'
+      },
+      {
+        front: 'What is RSI and what do the key levels mean?',
+        back: 'Relative Strength Index — measures whether an asset is overbought or oversold on a 0–100 scale. RSI above 70: potentially overbought — pullback may be coming. RSI below 30: potentially oversold — buying opportunity may be emerging. Most reliable in ranging markets. In strong trends, assets can stay overbought/oversold for extended periods.'
+      },
+      {
+        front: 'Is crypto taxable in Nigeria — and what is the capital gains tax rate?',
+        back: 'Yes. The FIRS classifies cryptocurrency as property. Selling crypto for naira, trading crypto-to-crypto, receiving crypto as income, and earning DeFi yields are all taxable events. Nigeria\'s capital gains tax rate is 10% on net gains. Personal income from crypto is taxed at progressive rates of 7–24% under PITA.'
+      },
+      {
+        front: 'What is the honest reality of entry-level Web3 community roles in Nigeria?',
+        back: 'Many ambassadorial and community roles are advertised with inflated or unclear incentives. Payment exists in some cases but is frequently exaggerated. Treat early community work as building experience, reputation, and connections — not as a primary income source. Income follows reputation. Superteam Nigeria is the most reliable platform for genuine paid opportunities.'
+      },
+    ],
+    quiz: [
+      {
+        question: 'Amara in Accra wants to place her first trade. She has ₦500,000 in savings. According to safe trading principles, what is the maximum she should allocate to crypto?',
+        options: [
+          '₦500,000 — go all in for maximum returns',
+          '₦250,000 — half is a reasonable starting amount',
+          '₦25,000–₦50,000 — no more than 5–10% of total savings',
+          '₦100,000 — a quarter is always safe'
+        ],
+        correct: 2
+      },
+      {
+        question: 'Tunde sees a coin that has surged 80% today and feels the urge to buy immediately. What is this feeling called — and what should he do?',
+        options: [
+          'FUD — he should buy to fight the negative sentiment',
+          'FOMO — he should wait for his planned setup rather than chasing the move',
+          'HODL — he should buy and hold for the long term',
+          'Alpha — he should act fast before others catch on'
+        ],
+        correct: 1
+      },
+      {
+        question: 'Which P2P platform is currently reliable for naira ↔ USDT conversion for Nigerian users in 2026?',
+        options: [
+          'Binance P2P — the original and still dominant platform',
+          'LocalBitcoins — the most established peer-to-peer platform globally',
+          'Bitget Exchange P2P — active, with security measures comparable to the old Binance P2P',
+          'Coinbase P2P — available for Nigerian bank transfers'
+        ],
+        correct: 2
+      },
+      {
+        question: 'You buy ETH at $2,500 and set up an OCO order: Take-Profit at $2,900, Stop-Loss at $2,300. ETH rises to $2,900. What happens?',
+        options: [
+          'Both orders execute simultaneously, selling your ETH at both prices',
+          'The take-profit executes at $2,900 and the stop-loss order is automatically cancelled',
+          'The stop-loss executes first because it was set lower',
+          'Neither order executes — OCO only works on downward price movements'
+        ],
+        correct: 1
+      },
+      {
+        question: 'David in Nairobi risks ₦10,000 on a trade targeting ₦15,000 profit. What is his risk-reward ratio — and does it meet the minimum standard?',
+        options: [
+          '1.5:1 — below the recommended minimum of 2:1',
+          '2:1 — meets the standard exactly',
+          '3:1 — exceeds the recommended standard',
+          '1:1 — equal risk and reward, which is the standard'
+        ],
+        correct: 0
+      },
+      {
+        question: 'RSI on a crypto chart is showing a reading of 78. What does this suggest?',
+        options: [
+          'The asset is oversold and likely to bounce upward soon',
+          'The asset may be overbought — a potential pullback signal worth monitoring',
+          'The asset is in a strong downtrend and should be sold immediately',
+          'RSI of 78 is neutral — meaningful signals only occur above 90'
+        ],
+        correct: 1
+      },
+      {
+        question: 'You receive 100 USDT as payment for content writing. On that day USDT trades at ₦1,600 per dollar. How should this be treated for Nigerian tax purposes?',
+        options: [
+          'Not taxable — crypto income is not covered by Nigerian tax law',
+          'Taxable as capital gains at 10% only when you eventually sell the USDT',
+          'Taxable as ordinary income — ₦160,000 is added to your annual income and taxed at your applicable PITA rate',
+          'Taxable only if the amount exceeds ₦500,000 per year'
+        ],
+        correct: 2
+      },
+      {
+        question: 'A Nigerian Web3 community is advertising an "Ambassador Program" with vague "incentives" and no clear payment structure. Based on the honest reality of such roles, what is the best approach?',
+        options: [
+          'Apply immediately — ambassador programs always pay well once you reach a certain follower count',
+          'Avoid entirely — no legitimate Web3 role lacks a clear payment structure',
+          'Participate with clear eyes: treat it as experience and network building, not reliable income, and scrutinize the incentive structure carefully before committing significant time',
+          'Negotiate a guaranteed salary before accepting any community role'
+        ],
+        correct: 2
+      },
+    ],
+  },
 ];
 
 // ─── Helper Functions ─────────────────────────────────────────────────────────
