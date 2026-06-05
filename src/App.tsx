@@ -30,6 +30,14 @@ import UsernamePrompt     from './UsernamePrompt';
 import { useBpmGuard }          from './hooks/useBpmGuard';
 import { logSuspiciousSession } from './lib/logSuspiciousSession';
 
+// ── Language imports ──────────────────────────────────────────────────────────
+import LanguageSelect, {
+  getStoredLanguage,
+  hasStoredLanguage,
+  type Language,
+} from './LanguageSelect';
+import { useTranslation, useBatchTranslation } from './useTranslation';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Screen = 'home' | 'lesson' | 'flashcard' | 'quiz' | 'results' | 'leaderboard' | 'analytics' | 'tiergated';
@@ -2366,6 +2374,25 @@ function getFocusScore(avgBpm: number | null) {
   return                   { score: 45, label: 'High Stress Detected',  color: '#ef4444' };
 }
 
+// ─── Translating indicator ────────────────────────────────────────────────────
+function TranslatingBadge() {
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center', gap: '6px',
+      background: 'rgba(61,158,255,0.08)',
+      border: '1px solid rgba(61,158,255,0.2)',
+      borderRadius: '8px',
+      padding: '4px 10px',
+      fontSize: '0.68rem',
+      color: '#3d9eff',
+      marginBottom: '10px',
+      fontFamily: 'var(--font-mono)',
+    }}>
+      🌐 Translating…
+    </div>
+  );
+}
+
 const card = (accent = 'rgba(255,255,255,0.06)'): CSSProperties => ({
   background: 'var(--bg-card)',
   border: `1px solid ${accent}`,
@@ -2389,6 +2416,14 @@ const pill = (bg: string, color: string): CSSProperties => ({
 export default function App() {
 
   const { showOnboarding, completeOnboarding } = useOnboarding();
+
+// ── Language state ────────────────────────────────────────────────────────
+  const [langSelected, setLangSelected] = useState<boolean>(() => hasStoredLanguage());
+  const [currentLang, setCurrentLang]   = useState<Language>(() => getStoredLanguage());
+  const handleLanguageSelect = (lang: Language) => {
+    setCurrentLang(lang);
+    setLangSelected(true);
+  };
 
   // ── Username / Supabase ───────────────────────────────────────────────────
   const { username, showPrompt, submitUsername } = useUsername();
@@ -2618,6 +2653,37 @@ export default function App() {
     setScreen('home'); setActiveModule(null); setSessionSummary(null); quizTimer.resetQuiz();
   };
 
+  // ── Lesson translation wiring ─────────────────────────────────────────────
+  const lessonTitleTranslation = useTranslation(
+    activeModule?.lesson[lessonPage]?.title ?? '',
+    currentLang.code
+  );
+  const lessonContentTranslation = useTranslation(
+    activeModule?.lesson[lessonPage]?.content ?? '',
+    currentLang.code
+  );
+
+  // ── Flashcard translation wiring ──────────────────────────────────────────
+  const flashcardFrontTranslation = useTranslation(
+    activeModule?.flashcards[flashcardIndex]?.front ?? '',
+    currentLang.code
+  );
+  const flashcardBackTranslation = useTranslation(
+    activeModule?.flashcards[flashcardIndex]?.back ?? '',
+    currentLang.code
+  );
+
+  // ── Quiz translation wiring ───────────────────────────────────────────────
+  const currentQuizQuestion = activeModule?.quiz[quizIndex];
+  const quizQuestionTranslation = useTranslation(
+    currentQuizQuestion?.question ?? '',
+    currentLang.code
+  );
+  const quizOptionsTranslation = useBatchTranslation(
+    currentQuizQuestion?.options ?? [],
+    currentLang.code
+  );
+
   function renderHome() {
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
@@ -2670,7 +2736,9 @@ export default function App() {
 
   function renderLesson() {
     if (!activeModule) return null;
-    const page = activeModule.lesson[lessonPage];
+        const isTranslating  = lessonTitleTranslation.loading || lessonContentTranslation.loading;
+    const displayTitle   = lessonTitleTranslation.text || activeModule.lesson[lessonPage].title;
+    const displayContent = lessonContentTranslation.text || activeModule.lesson[lessonPage].content;
     const isLast = lessonPage === activeModule.lesson.length - 1;
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
@@ -2679,9 +2747,10 @@ export default function App() {
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>{activeModule.icon} {activeModule.title}</span>
           <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>{lessonPage + 1}/{activeModule.lesson.length}</span>
         </div>
-        <div style={{ ...card(`${activeModule.color}33`), borderLeft: `3px solid ${activeModule.color}`, maxHeight: '55vh', overflowY: 'auto', marginBottom: '16px' }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '14px', letterSpacing: '-0.02em' }}>{page.title}</h3>
-          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, fontSize: '0.88rem', whiteSpace: 'pre-line' }}>{page.content}</p>
+        {isTranslating && <TranslatingBadge />}
+        <div style={{ ...card(`${activeModule.color}33`), borderLeft: `3px solid ${activeModule.color}`, maxHeight: '55vh', overflowY: 'auto', marginBottom: '16px', opacity: isTranslating ? 0.7 : 1, transition: 'opacity 0.3s' }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '14px', letterSpacing: '-0.02em' }}>{displayTitle}</h3>
+          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, fontSize: '0.88rem', whiteSpace: 'pre-line' }}>{displayContent}</p>
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {lessonPage > 0 ? <button className="btn-secondary" onClick={() => setLessonPage(p => p - 1)}>Previous</button> : <div />}
@@ -2697,7 +2766,9 @@ export default function App() {
 
   function renderFlashcards() {
     if (!activeModule) return null;
-    const card2 = activeModule.flashcards[flashcardIndex];
+    const isTranslating  = flashcardFrontTranslation.loading || flashcardBackTranslation.loading;
+    const displayFront   = flashcardFrontTranslation.text || activeModule.flashcards[flashcardIndex].front;
+    const displayBack    = flashcardBackTranslation.text  || activeModule.flashcards[flashcardIndex].back;
     const isLast = flashcardIndex === activeModule.flashcards.length - 1;
     return (
       <div style={{ paddingTop: '8px' }} className="animate-in">
@@ -2706,10 +2777,10 @@ export default function App() {
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: activeModule.color, fontSize: '0.88rem' }}>{activeModule.icon} Flashcards</span>
           <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>{flashcardIndex + 1}/{activeModule.flashcards.length}</span>
         </div>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginBottom: '12px', textAlign: 'center' }}>{cardFlipped ? 'Answer revealed — ready for next?' : 'Tap the card to reveal the answer'}</p>
-        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)', border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`, borderRadius: 'var(--radius-xl)', padding: '40px 24px', minHeight: '200px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s', boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)' }}>
+        {isTranslating && <TranslatingBadge />} <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginBottom: '12px', textAlign: 'center' }}>{cardFlipped ? 'Answer revealed — ready for next?' : 'Tap the card to reveal the answer'}</p>
+        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)', opacity: `isTranslating ? 0.75 : 1`, border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`, borderRadius: 'var(--radius-xl)', padding: '40px 24px', minHeight: '200px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s', boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)' }}>
           <p style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>{cardFlipped ? 'ANSWER' : 'QUESTION'}</p>
-          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.7, fontFamily: 'var(--font-body)' }}>{cardFlipped ? card2.back : card2.front}</p>
+          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.7, fontFamily: 'var(--font-body)' }}>{cardFlipped ? displayBack : displayFront}</p>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           {cardFlipped && (<button className="btn-primary" style={{ background: activeModule.color }} onClick={nextFlashcard}>{isLast ? 'Take Quiz →' : 'Next Card →'}</button>)}
@@ -2723,6 +2794,11 @@ export default function App() {
 
   function renderQuiz() {
     if (!activeModule) return null;
+    const isTranslating   = quizQuestionTranslation.loading || quizOptionsTranslation.loading;
+    const displayQuestion = quizQuestionTranslation.text || (currentQuizQuestion?.question ?? '');
+    const displayOptions  = quizOptionsTranslation.texts.length > 0
+      ? quizOptionsTranslation.texts
+      : (currentQuizQuestion?.options ?? []);
     const q = activeModule.quiz[quizIndex];
     const answered = selectedAnswer !== null;
     const isUrgent = quizTimer.timeLeft <= 5 && !answered;
@@ -2763,10 +2839,10 @@ export default function App() {
           </div>
         </div>
         {selectedAnswer === -1 && (<div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 'var(--radius-md)', padding: '10px 14px', color: '#ef4444', fontSize: '0.82rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}><span>⏱</span><span>Time's up! The correct answer is highlighted below.</span></div>)}
-        <div style={{ ...card(), marginBottom: '14px' }}>
-          <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.65, marginBottom: '18px', fontWeight: 500 }}>{q.question}</p>
+        {isTranslating && <TranslatingBadge />}<div style={{ ...card(), marginBottom: '14px' }}>
+          <p style={{ color: 'var(--text-primary)', opacity: isTranslating ? 0.75 : 1, transition: 'opacity 0.3s', fontSize: '1rem', lineHeight: 1.65, marginBottom: '18px', fontWeight: 500 }}>{displayQuestion}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {q.options.map((opt, idx) => {
+            {displayOptions.map((opt, idx) => {
               let bg = 'var(--bg-input)', border = 'rgba(255,255,255,0.06)', color = 'var(--text-secondary)';
               if (answered) {
                 if (idx === q.correct) { bg = 'rgba(34,197,94,0.08)'; border = 'rgba(34,197,94,0.4)'; color = '#22c55e'; }
