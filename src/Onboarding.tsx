@@ -241,7 +241,8 @@ const buildSlides = (): Slide[] => [
     title: "Learn. Track. Score.",
     body: (
       <>
-        4 modules across Blockchain, Wallets, DeFi, and NFTs. Each lesson has{" "}
+        6 modules across Blockchain, Wallets, DeFi, NFTs, Trading &amp; Careers,
+        and AI &times; Crypto. Each lesson has{" "}
         <strong style={{ color: "#20d29b", fontWeight: 500 }}>
           flashcards
         </strong>
