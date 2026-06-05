@@ -2778,7 +2778,7 @@ export default function App() {
           <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', fontSize: '0.72rem' }}>{flashcardIndex + 1}/{activeModule.flashcards.length}</span>
         </div>
         {isTranslating && <TranslatingBadge />} <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginBottom: '12px', textAlign: 'center' }}>{cardFlipped ? 'Answer revealed — ready for next?' : 'Tap the card to reveal the answer'}</p>
-        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)', opacity: `isTranslating ? 0.75 : 1`, border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`, borderRadius: 'var(--radius-xl)', padding: '40px 24px', minHeight: '200px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s', boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)' }}>
+        <div onClick={() => setCardFlipped(f => !f)} style={{ background: cardFlipped ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-card)', opacity: isTranslating ? 0.75 : 1, border: `1px solid ${cardFlipped ? 'rgba(34, 197, 94, 0.3)' : activeModule.color + '44'}`, borderRadius: 'var(--radius-xl)', padding: '40px 24px', minHeight: '200px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', textAlign: 'center', marginBottom: '16px', transition: 'all 0.3s', boxShadow: cardFlipped ? '0 0 30px rgba(34,197,94,0.08)' : 'var(--shadow-card)' }}>
           <p style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600 }}>{cardFlipped ? 'ANSWER' : 'QUESTION'}</p>
           <p style={{ color: 'var(--text-primary)', fontSize: '1rem', lineHeight: 1.7, fontFamily: 'var(--font-body)' }}>{cardFlipped ? displayBack : displayFront}</p>
         </div>
@@ -2951,6 +2951,8 @@ export default function App() {
     <div className="app">
       {showPrompt && <UsernamePrompt onSubmit={submitUsername} />}
       {showOnboarding && <Onboarding onComplete={completeOnboarding} />}
+      {/* Language picker — shown on top of everything else */}
+      {!langSelected && <LanguageSelect onSelect={handleLanguageSelect} />}
       <header className="topbar">
         <div className="brand" onClick={handleLogoTap} style={{ cursor: 'pointer' }}>
           <span className="brand-mark" />
@@ -2964,6 +2966,30 @@ export default function App() {
           <span className={`status-dot${statusTone === 'error' ? ' error' : statusTone === 'warn' ? ' warn' : ''}`} />
           <span className="session-chip-text">{status}</span>
         </div>
+        {/* Globe language switcher */}
+        <button
+          onClick={() => setLangSelected(false)}
+          title={`Language: ${currentLang.englishName}`}
+          style={{
+            marginLeft: '8px',
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '8px',
+            padding: '4px 8px',
+            cursor: 'pointer',
+            color: 'var(--text-secondary)',
+            fontSize: '0.72rem',
+            fontFamily: 'var(--font-mono)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            whiteSpace: 'nowrap',
+            transition: 'all 0.2s',
+            flexShrink: 0,
+          }}
+        >
+          🌐 {currentLang.code.toUpperCase()}
+        </button>
       </header>
       <main className="main">
         <section className="stage">
