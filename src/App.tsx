@@ -228,7 +228,7 @@ Takeaway: Public blockchains offer openness and decentralization. Private and co
         title: 'Why Blockchain Matters — Real Impact in the Real World',
         content: `It is easy to talk about blockchain in the abstract — distributed ledgers, cryptographic hashes, consensus mechanisms. But the reason this technology matters is not the engineering. It is what the engineering makes possible for real people solving real problems.
 
-By 2026, blockchain is no longer experimental. It is active infrastructure used by millions of people daily — for payments, savings, identity, trade finance, healthcare, and governance.
+As of 2026, blockchain is no longer experimental. It is an active infrastructure used by millions of people daily — for payments, savings, identity, trade finance, healthcare, and governance.
 
 **Remittances — Cutting the Cost of Sending Money Home**
 
@@ -278,7 +278,7 @@ Regulatory clarity is arriving. The EU's MiCA regulation came into full effect i
 
 **AI and blockchain — a convergence with real consequences**
 
-By 2025–2026, artificial intelligence agents are executing on-chain transactions autonomously. An AI agent can manage a DeFi portfolio — depositing into lending protocols, shifting liquidity, and withdrawing in response to risk signals — all without human intervention. This convergence cuts both ways: it makes DeFi more efficient and accessible, but raises new questions about accountability and security.
+As of 2025–2026, artificial intelligence agents are executing on-chain transactions autonomously. An AI agent can manage a DeFi portfolio — depositing into lending protocols, shifting liquidity, and withdrawing in response to risk signals — all without human intervention. This convergence cuts both ways: it makes DeFi more efficient and accessible, but raises new questions about accountability and security.
 
 **The regulatory picture globally**
 
@@ -299,7 +299,7 @@ Lena is a developer in Berlin building a DeFi protocol. Ahmad is a remittance se
 
 Blockchain is infrastructure now. Not hype. Not experiment. Infrastructure — with all the messiness, progress, and ongoing work that word implies.
 
-Takeaway: By 2026, blockchain has transitioned from speculative technology to active global infrastructure. Bitcoin ETFs, Ethereum's scaling upgrades, regulatory frameworks, and AI convergence have all accelerated this shift. Real challenges remain — UX, scalability, energy — but the trajectory is clear: this technology is embedding itself into the foundations of global finance, identity, and infrastructure.`
+Takeaway: As of 2026, blockchain has transitioned from speculative technology to active global infrastructure. Bitcoin ETFs, Ethereum's scaling upgrades, regulatory frameworks, and AI convergence have all accelerated this shift. Real challenges remain — UX, scalability, energy — but the trajectory is clear: this technology is embedding itself into the foundations of global finance, identity, and infrastructure.`
       },
     ],
     flashcards: [
@@ -460,7 +460,7 @@ Hot Wallets — Convenience for Daily Use
 
 Think of a hot wallet like the cash in your physical wallet. You carry some for everyday spending — enough for daily needs, not your life savings.
 
-Mobile wallets are the most widely used hot wallet type, especially across Africa and Southeast Asia where smartphone penetration is high. Apps like Trust Wallet, MetaMask Mobile, and Phantom run on your phone, supporting multiple blockchains and giving you access to DeFi, P2P trading, and payments anywhere with a signal.
+Mobile wallets are the most widely used hot wallet type, especially across Africa and Southeast Asia where smartphone penetration is high. Apps like Trust Wallet, MetaMask, and Phantom run on your phone, supporting multiple blockchains and giving you access to DeFi, P2P trading, and payments anywhere with a signal.
 
 Browser extension wallets — MetaMask, Phantom, Rabby — connect seamlessly to DeFi protocols and Web3 applications directly from your desktop browser. They are essential for interacting with DEXs, NFT platforms, and lending protocols.
 
@@ -797,7 +797,7 @@ Permissionless — anyone can use DeFi services or build new protocols on top of
 
 Self-custody — your funds never leave your wallet's control when using non-custodial protocols. You remain in control.
 
-By 2026, DeFi has matured from a speculative experiment into a multi-hundred-billion dollar ecosystem. Crucially, Layer 2 networks have reduced transaction fees from $20–100 on Ethereum mainnet to fractions of a cent — making DeFi genuinely accessible to everyday users in Africa, Southeast Asia, and Latin America for the first time at scale.
+As of 2026, DeFi has matured from a speculative experiment into a multi-hundred-billion dollar ecosystem. Crucially, Layer 2 networks have reduced transaction fees from $20–100 on Ethereum mainnet to fractions of a cent — making DeFi genuinely accessible to everyday users in Africa, Southeast Asia, and Latin America for the first time at scale.
 
 Takeaway: DeFi rebuilds financial services on open, transparent, permissionless blockchain infrastructure — removing banks and brokers from the equation. It exists because traditional finance systematically excludes billions of people, and the technology now exists to do better.`
       },
@@ -1140,7 +1140,7 @@ This is the most compelling NFT use case and the one most likely to reach mainst
 
 NFT-based games change this fundamentally. When you earn or purchase a weapon in a blockchain game, that weapon is an NFT in your wallet. You own it. You can sell it, trade it, or carry its value to other compatible games. Axie Infinity demonstrated this model at scale — providing real income for thousands of players in the Philippines and Venezuela during the pandemic. The game had economic design problems that later emerged, but the core proof of ownership concept worked.
 
-In 2025–2026, higher-production blockchain games like Illuvium and Gods Unchained are building on this foundation with more sustainable token economics and genuine gameplay.
+As of 2025–2026, higher-production blockchain games like Illuvium and Gods Unchained are building on this foundation with more sustainable token economics and genuine gameplay.
 
 Music and Creator Royalties
 
