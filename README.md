@@ -250,7 +250,7 @@ NeuroLearn combines three things no other platform does together:
 •	Biosignal feedback — learners see their own focus state in real time, making the learning experience self-aware
 •	Gamified retention — streaks, timers, combos, and tier unlocks create the habit loop that keeps people coming back
 •	Web3-native incentives — ELTA token rewards align learning with real value, not just certificates
-For Nigerian learners specifically, the curriculum addresses local realities: naira-denominated examples, Bitget/Bybit P2P as Binance alternatives, FIRS crypto tax guidance, the Trust Wallet community context, and the African First Network DePIN vision.
+For Nigerian learners, the curriculum addresses local realities: naira-denominated examples, Bitget/Bybit P2P as Binance alternatives, FIRS crypto tax guidance, the crypto community context.
 
 Acknowledgements
 •	Andreas Melhede — Elata Biosciences Co-founder. Directed the spend-to-unlock token model and requested the onboarding experience.
@@ -296,5 +296,5 @@ Contact
 For licensing inquiries, collaboration requests, or permission to use any part of this Software, contact the author through the GitHub repository: https://github.com/Ifeanyiuche98/Neurolearn
 
 
-NeuroLearn v3  ·  Powered by Elata rPPG  ·  Built for Africa 🇳🇬
+NeuroLearn v3  ·  Powered by Elata rPPG  ·  Built for Everyone.
 Clarity over complexity. Utility over hype. Long-term vision over short-term gains.
