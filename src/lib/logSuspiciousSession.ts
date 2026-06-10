@@ -8,20 +8,13 @@ import type { BpmGuardResult } from '../hooks/useBpmGuard';
 
 // ── The data we send per flagged session ──────────────────────────────────────
 export interface SuspiciousSessionPayload {
-  // Who (no sensitive data — just what's already in localStorage)
   username: string;
-  country: string;
+  country: string;       // can be empty string — we convert to null below
   deviceType: string;
-
-  // Session context
   sessionSeconds: number;
   moduleTitle: string;
   quizScore: number;
-
-  // Signal data from useBpmGuard
   guard: BpmGuardResult;
-
-  // Raw signal quality metrics
   avgConfidence: number;
   avgQuality: number;
 }
@@ -34,19 +27,25 @@ export async function logSuspiciousSession(
   // Only log if there is actually something suspicious
   if (payload.guard.suspicionLevel === 'none') return;
 
+  // ── Bug 1 fix: convert empty/placeholder country to null ──────────────────
+  const countryValue =
+    payload.country && payload.country.trim() !== '' && payload.country !== 'EMPTY'
+      ? payload.country.trim()
+      : null;
+
   try {
     const { error } = await supabase
       .from('suspicious_sessions')
       .insert({
         // Who
         username:    payload.username,
-        country:     payload.country,
+        country:     countryValue,          // null instead of '' or 'EMPTY'
         device_type: payload.deviceType,
 
         // Session context
         session_seconds: payload.sessionSeconds,
         module_title:    payload.moduleTitle,
-        quiz_score:      payload.quizScore,
+        quiz_score:      payload.quizScore, // Bug 2 fix: now receives real score
 
         // Signal stats
         avg_bpm:        payload.guard.avgBpm,
@@ -62,14 +61,12 @@ export async function logSuspiciousSession(
       });
 
     if (error) {
-      // Silent fail — never crash the app over a logging error
       console.warn('[BpmGuard] Failed to log suspicious session:', error.message);
     } else {
       console.log('[BpmGuard] Flagged session logged to Supabase:', payload.guard.flagReasons);
     }
 
   } catch (err) {
-    // Network error etc — again, silent fail
     console.warn('[BpmGuard] Unexpected error logging session:', err);
   }
 }

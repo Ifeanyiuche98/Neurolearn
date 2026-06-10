@@ -2522,11 +2522,11 @@ export default function App() {
       hasLoggedHighRef.current = true;
       void logSuspiciousSession({
         username:      username ?? 'anonymous',
-        country:       '',
+        country:       '',          // no country available mid-session - fixed to null in logSuspiciousSession.ts
         deviceType:    /Mobi/.test(navigator.userAgent) ? 'mobile' : 'desktop',
         sessionSeconds,
         moduleTitle:   activeModule?.title ?? 'unknown',
-        quizScore:     0,
+        quizScore:     activeModule ? Math.round((quizScore / activeModule.quiz.length) * 100) :0,
         guard,
         avgConfidence: confidencePct,
         avgQuality,
@@ -2548,7 +2548,7 @@ export default function App() {
     if (guard.suspicionLevel !== 'none') {
       void logSuspiciousSession({
         username:      username ?? 'anonymous',
-        country:       '',
+        country:       '',          // no country available - fixed to null in logSuspiciiousSession.ts
         deviceType:    /Mobi/.test(navigator.userAgent) ? 'mobile' : 'desktop',
         sessionSeconds,
         moduleTitle:   mod?.title ?? 'unknown',
