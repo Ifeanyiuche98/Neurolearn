@@ -1,6 +1,10 @@
 // ─── logSuspiciousSession.ts ──────────────────────────────────────────────────
-// Sends flagged biosignal session data to Supabase for Elata's research dataset.
-// Called once when a session ends and suspicion level is low or high.
+// Sends flagged biosignal session data to Supabase for research dataset.
+// Called when a session ends and suspicion level is low or high.
+//
+// Duplicate prevention: uses a module+username+timestamp window to avoid
+// logging the same session twice when both the mid-session useEffect AND
+// the stopSession function fire close together.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { supabase } from '../supabase';
@@ -9,7 +13,7 @@ import type { BpmGuardResult } from '../hooks/useBpmGuard';
 // ── The data we send per flagged session ──────────────────────────────────────
 export interface SuspiciousSessionPayload {
   username: string;
-  country: string;       // can be empty string — we convert to null below
+  country: string;
   deviceType: string;
   sessionSeconds: number;
   moduleTitle: string;
@@ -19,6 +23,13 @@ export interface SuspiciousSessionPayload {
   avgQuality: number;
 }
 
+// ── Duplicate prevention ──────────────────────────────────────────────────────
+// Tracks the last logged session key (username + moduleTitle + approx minute).
+// If the same key is seen within 60 seconds, the second log is suppressed.
+let lastLoggedKey = '';
+let lastLoggedAt  = 0;
+const DEDUPE_WINDOW_MS = 60_000; // 60 seconds
+
 // ── The function ──────────────────────────────────────────────────────────────
 export async function logSuspiciousSession(
   payload: SuspiciousSessionPayload
@@ -27,11 +38,30 @@ export async function logSuspiciousSession(
   // Only log if there is actually something suspicious
   if (payload.guard.suspicionLevel === 'none') return;
 
+  // ── Duplicate prevention check ────────────────────────────────────────────
+  const sessionKey = `${payload.username}|${payload.moduleTitle}|${payload.guard.suspicionLevel}`;
+  const now        = Date.now();
+
+  if (sessionKey === lastLoggedKey && now - lastLoggedAt < DEDUPE_WINDOW_MS) {
+    console.log('[BpmGuard] Duplicate session suppressed within dedupe window:', sessionKey);
+    return;
+  }
+
+  // Mark this session as logged
+  lastLoggedKey = sessionKey;
+  lastLoggedAt  = now;
+
   // ── Bug 1 fix: convert empty/placeholder country to null ──────────────────
   const countryValue =
-    payload.country && payload.country.trim() !== '' && payload.country !== 'EMPTY'
+    payload.country &&
+    payload.country.trim() !== '' &&
+    payload.country !== 'EMPTY' &&
+    payload.country !== 'Unknown'
       ? payload.country.trim()
       : null;
+
+  // ── Read user_id from localStorage ───────────────────────────────────────
+  const userId = localStorage.getItem('neurolearn_user_id') || null;
 
   try {
     const { error } = await supabase
@@ -39,13 +69,14 @@ export async function logSuspiciousSession(
       .insert({
         // Who
         username:    payload.username,
-        country:     countryValue,          // null instead of '' or 'EMPTY'
+        user_id:     userId,           // now properly linked
+        country:     countryValue,     // null instead of '' or 'EMPTY'
         device_type: payload.deviceType,
 
         // Session context
         session_seconds: payload.sessionSeconds,
         module_title:    payload.moduleTitle,
-        quiz_score:      payload.quizScore, // Bug 2 fix: now receives real score
+        quiz_score:      payload.quizScore,
 
         // Signal stats
         avg_bpm:        payload.guard.avgBpm,

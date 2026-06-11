@@ -83,19 +83,22 @@ function topByXP(entries: LeaderboardEntry[], n = 10): LeaderboardEntry[] {
 }
 
 // ── Post session to Supabase ──────────────────────────────────────────────────
-// Bug 3 fix: now sends focusScore, moduleIcon, streak, and session_seconds
+// Reads user_id from localStorage so the row is properly linked to the user
 async function postToSupabase(entry: LeaderboardEntry): Promise<void> {
   const username = localStorage.getItem('neurolearn_username') || 'Anonymous';
+  const userId   = localStorage.getItem('neurolearn_user_id') || null;
+
   try {
     const { error } = await supabase.from('leaderboard').insert({
       username,
-      module_id:       entry.moduleTitle.toLowerCase().replace(/\s+/g, '_'),
-      module_title:    entry.moduleTitle,
-      module_icon:     entry.moduleIcon,   // was hardcoded to '■' before
-      score:           entry.quizScore,
-      focus_score:     entry.focusScore,   // was dropped before
-      xp_earned:       entry.xpEarned,
-      streak:          entry.streak,       // was dropped before
+      user_id:      userId,           // now properly linked — no longer always NULL
+      module_id:    entry.moduleTitle.toLowerCase().replace(/\s+/g, '_'),
+      module_title: entry.moduleTitle,
+      module_icon:  entry.moduleIcon,
+      score:        entry.quizScore,
+      focus_score:  entry.focusScore,
+      xp_earned:    entry.xpEarned,
+      streak:       entry.streak,
     });
     if (error) {
       console.error('[NeuroLearn] Leaderboard post error:', error.message);
@@ -134,11 +137,10 @@ async function fetchGlobalLeaderboard(): Promise<{
 
     if (weeklyError) throw weeklyError;
 
-    // Bug 3 fix: mapRow now reads focus_score, module_icon, streak from Supabase
     const mapRow = (row: Record<string, unknown>): LeaderboardEntry => ({
       id:          String(row.id),
       moduleTitle: String(row.module_title),
-      moduleIcon:  String(row.module_icon  ?? '🏆'),  // real icon, fallback to trophy
+      moduleIcon:  String(row.module_icon  ?? '🏆'),
       quizScore:   Number(row.score),
       focusScore:  Number(row.focus_score  ?? 0),
       xpEarned:    Number(row.xp_earned),
