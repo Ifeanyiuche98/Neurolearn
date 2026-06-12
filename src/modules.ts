@@ -4,8 +4,6 @@ import type { LearningModule } from './types';
 export const MODULES: LearningModule[] = [
   // ─── Module Content ───────────────────────────────────────────────────────────
 
-const MODULES: LearningModule[] = [
-
   // ── MODULE 1: BLOCKCHAIN BASICS ───────────────────────────────────────────
   {
     id: 'blockchain', title: 'Blockchain Basics',
