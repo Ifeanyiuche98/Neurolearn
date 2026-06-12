@@ -1,8 +1,8 @@
 // src/screens/ResultsScreen.tsx
 import type { CSSProperties } from 'react';
 import type { LearningModule } from '../types';
-import type { UseStreakReturn }  from '../useStreak';
-import type { UseTokensReturn }  from '../useTokens';
+import type { StreakReturn }  from '../useStreak';
+import type { TokenReturn }  from '../useTokens';
 
 interface SessionSummary { duration: number; avgBpm: number | null; }
 
@@ -10,8 +10,8 @@ interface ResultsScreenProps {
   activeModule:    LearningModule;
   quizScore:       number;
   sessionSummary:  SessionSummary | null;
-  streakData:      UseStreakReturn;
-  tokenData:       UseTokensReturn;
+  streakData:      StreakReturn;
+  tokenData:       TokenReturn;
   totalQuizXP:     number;
   backToHome:      () => void;
   setScreen:       (s: 'leaderboard') => void;

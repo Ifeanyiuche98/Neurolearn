@@ -1,17 +1,17 @@
 // src/screens/QuizScreen.tsx
 import type { CSSProperties } from 'react';
 import type { LearningModule } from '../types';
-import type { UseQuizTimerReturn } from '../useQuizTimer';
+import { useQuizTimer }        from '../useQuizTimer';
 
 interface QuizScreenProps {
-  activeModule:     LearningModule;
-  quizIndex:        number;
-  selectedAnswer:   number | null;
-  lastQuestionXP:   number;
-  quizTimer:        UseQuizTimerReturn;
-  handleAnswer:     (idx: number) => void;
-  nextQuestion:     () => void;
-  setScreen:        (s: 'flashcard') => void;
+  activeModule:   LearningModule;
+  quizIndex:      number;
+  selectedAnswer: number | null;
+  lastQuestionXP: number;
+  quizTimer:      ReturnType<typeof useQuizTimer>;
+  handleAnswer:   (idx: number) => void;
+  nextQuestion:   () => void;
+  setScreen:      (s: 'flashcard') => void;
 }
 
 const card = (accent = 'rgba(255,255,255,0.06)'): CSSProperties => ({

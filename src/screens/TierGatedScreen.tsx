@@ -1,12 +1,12 @@
 // src/screens/TierGatedScreen.tsx
 import TierGate            from '../TierGate';
 import type { LearningModule } from '../types';
-import type { UseTiersReturn }  from '../useTiers';
+import { useTiers } from '../useTiers';
 
 interface TierGatedScreenProps {
   activeModule: LearningModule;
   moduleIndex:  number;
-  tierData:     UseTiersReturn;
+  tierData:     ReturnType<typeof useTiers>;
   backToHome:   () => void;
   startModule:  (mod: LearningModule, index: number) => void;
 }

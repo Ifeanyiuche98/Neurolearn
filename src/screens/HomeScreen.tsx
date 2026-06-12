@@ -1,18 +1,18 @@
 // src/screens/HomeScreen.tsx
 import type { CSSProperties } from 'react';
 import type { LearningModule } from '../types';
-import type { UseStreakReturn }      from '../useStreak';
-import type { UseTokensReturn }      from '../useTokens';
-import type { UseLeaderboardReturn } from '../useLeaderboard';
-import type { UseTiersReturn }       from '../useTiers';
-import type { Screen }               from '../types';
+import type { Screen }         from '../types';
+import type { StreakReturn }      from '../useStreak';
+import type { TokenReturn }       from '../useTokens';
+import type { LeaderboardReturn } from '../useLeaderboard';
+import { useTiers }               from '../useTiers';
 
 interface HomeScreenProps {
   modules:         LearningModule[];
-  tierData:        UseTiersReturn;
-  streakData:      UseStreakReturn;
-  tokenData:       UseTokensReturn;
-  leaderboardData: UseLeaderboardReturn;
+  tierData:        ReturnType<typeof useTiers>;
+  streakData:      StreakReturn;
+  tokenData:       TokenReturn;
+  leaderboardData: LeaderboardReturn;
   username:        string | null;
   startModule:     (mod: LearningModule, index: number) => void;
   setScreen:       (s: Screen) => void;
@@ -31,14 +31,12 @@ const pill = (bg: string, color: string): CSSProperties => ({
 export default function HomeScreen({
   modules, tierData, streakData, tokenData, leaderboardData, username, startModule, setScreen,
 }: HomeScreenProps) {
-  // streakData and tokenData are used by StreakBar / TokenWallet rendered in App.tsx above this,
-  // but the tier row and module grid live here.
-  void streakData; // kept in props for future use / completeness
+  void streakData;
+  void tokenData;
 
   return (
     <div style={{ paddingTop: '8px' }} className="animate-in">
 
-      {/* Tier status row */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--bg-card)', border: '1px solid rgba(32,210,155,0.15)', borderRadius: 'var(--radius-md)', padding: '10px 14px', marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Current Tier</span>
@@ -55,7 +53,6 @@ export default function HomeScreen({
         )}
       </div>
 
-      {/* Leaderboard button */}
       <button
         onClick={() => setScreen('leaderboard')}
         style={{ width: '100%', marginBottom: '20px', minHeight: '48px', background: 'var(--bg-card)', border: '1px solid var(--border-soft)', borderRadius: 'var(--radius-md)', color: '#00e5cc', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s' }}
@@ -68,7 +65,6 @@ export default function HomeScreen({
         )}
       </button>
 
-      {/* Module grid */}
       <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '6px', letterSpacing: '-0.02em' }}>
         Choose a Module
       </h2>
