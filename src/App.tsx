@@ -203,7 +203,7 @@ export default function App() {
   const focusState     = getFocusState(metrics.bpm);
 
   // ── Cheat detection ───────────────────────────────────────────────────────
-  const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds, { warmupSeconds: 0 });
+  const guard = useBpmGuard(metrics.bpm, confidencePct, sessionSeconds);
 
   const qualityHistoryRef = useRef<number[]>([]);
   if (qualityPct > 0) {
