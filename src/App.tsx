@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   createRppgSession,
   type Metrics,
@@ -12,15 +12,16 @@ import rppgWasmBinaryUrl from '@elata-biosciences/rppg-web/pkg/rppg_wasm_bg.wasm
 // ── v3 imports ────────────────────────────────────────────────────────────────
 import { useStreak }      from './useStreak';
 import { useQuizTimer }   from './useQuizTimer';
-import { useTokens }      from './useTokens';
+import { useProgress }    from './hooks/useProgress';   // ← REPLACES useTokens + useTiers
 import { useLeaderboard } from './useLeaderboard';
 import StreakBar           from './StreakBar';
-import TokenWallet         from './TokenWallet';
 import Leaderboard         from './Leaderboard';
 import Analytics           from './Analytics';
 import BpmIndicator        from './BpmIndicator';
 import Onboarding, { useOnboarding } from './Onboarding';
-import { useTiers }        from './useTiers';
+// REMOVED: import { useTokens } from './useTokens';
+// REMOVED: import { useTiers }  from './useTiers';
+// REMOVED: import TokenWallet   from './TokenWallet';
 
 // ── Supabase username ─────────────────────────────────────────────────────────
 import { useUsername }    from './useUsername';
@@ -40,12 +41,7 @@ import TierGatedScreen  from './screens/TierGatedScreen';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 import type { Screen, LearningModule } from './types';
-
-// ── MODULES data (unchanged — keep full array here) ───────────────────────────
-// Paste your full MODULES array here exactly as it was in the original App.tsx.
-// It is not repeated in this block to save space — nothing about it changes.
 import { MODULES } from './modules';
-// (See note below about where to put MODULES)
 
 // ─── Helper Functions ─────────────────────────────────────────────────────────
 const EMPTY_METRICS: Metrics = { bpm: null, confidence: 0, signal_quality: 0 };
@@ -100,9 +96,8 @@ export default function App() {
 
   const streakData      = useStreak();
   const quizTimer       = useQuizTimer();
-  const tokenData       = useTokens();
+  const progressData    = useProgress();        // ← REPLACES tokenData + tierData
   const leaderboardData = useLeaderboard();
-  const tierData        = useTiers(tokenData.balance, tokenData.spendTokens);
   const [lastQuestionXP, setLastQuestionXP] = useState(0);
 
   // ── Logo tap easter egg ───────────────────────────────────────────────────
@@ -236,8 +231,8 @@ export default function App() {
     setSessionSummary({ duration: sessionSeconds, avgBpm });
     if (mod) {
       const quizPct = Math.round((score / mod.quiz.length) * 100);
+      // REMOVED: tokenData.addPendingXP(sessionXP)  — no more token conversion
       leaderboardData.addEntry({ moduleTitle: mod.title, moduleIcon: mod.icon, quizScore: quizPct, focusScore: focusScoreValue, xpEarned: sessionXP, streak: streakData.streak });
-      tokenData.addPendingXP(sessionXP);
     }
     if (guard.suspicionLevel !== 'none') {
       void logSuspiciousSession({ username: username ?? 'anonymous', country: '', deviceType: /Mobi/.test(navigator.userAgent) ? 'mobile' : 'desktop', sessionSeconds, moduleTitle: mod?.title ?? 'unknown', quizScore: mod ? Math.round((score / mod.quiz.length) * 100) : 0, guard, avgConfidence: confidencePct, avgQuality });
@@ -246,7 +241,12 @@ export default function App() {
 
   // ── Navigation helpers ────────────────────────────────────────────────────
   const startModule = (mod: LearningModule, moduleIndex: number) => {
-    if (!tierData.canAccessModule(moduleIndex)) { setActiveModule(mod); setScreen('tiergated'); return; }
+    // CHANGED: was tierData.canAccessModule — now uses progressData.canAccessModule
+    if (!progressData.canAccessModule(moduleIndex)) {
+      setActiveModule(mod);
+      setScreen('tiergated');
+      return;
+    }
     setActiveModule(mod); setLessonPage(0); setFlashcardIndex(0);
     setCardFlipped(false); setQuizIndex(0); setSelectedAnswer(null); setQuizScore(0);
     setScreen('lesson');
@@ -282,6 +282,9 @@ export default function App() {
       const avgBpm   = readings.length > 0 ? readings.reduce((a, b) => a + b, 0) / readings.length : null;
       const fs       = getFocusScore(avgBpm);
       const finalScore = quizScore + (activeModule && selectedAnswer === activeModule.quiz[quizIndex].correct ? 1 : 0);
+      const moduleIndex = MODULES.findIndex(m => m.id === activeModule.id);
+      // ADDED: mark module completed so next one unlocks
+      progressData.markCompleted(moduleIndex);
       stopSession(activeModule, finalScore, quizTimer.totalQuizXP, fs.score);
       setScreen('results');
     }
@@ -317,6 +320,7 @@ export default function App() {
         <span className="topbar-sep" />
         <span className="topbar-tagline">Web3 Learning · Focus Tracker</span>
         <div className="topbar-spacer" />
+        {/* CHANGED: removed tier chip, replaced with cleaner progress chip */}
         <div className={`session-chip session-chip--${statusTone}`}>
           <span className={`status-dot${statusTone === 'error' ? ' error' : statusTone === 'warn' ? ' warn' : ''}`} />
           <span className="session-chip-text">{status}</span>
@@ -335,14 +339,18 @@ export default function App() {
               qualityPct={qualityPct} focusState={focusState}
               readinessLabel={readinessLabel}
             />
-            <StreakBar  streakData={streakData} />
-            <TokenWallet tokenData={tokenData} />
+            <StreakBar streakData={streakData} />
+            {/* REMOVED: <TokenWallet tokenData={tokenData} /> */}
 
             {screen === 'home' && (
               <HomeScreen
-                modules={MODULES} tierData={tierData} streakData={streakData}
-                tokenData={tokenData} leaderboardData={leaderboardData}
-                username={username} startModule={startModule} setScreen={setScreen}
+                modules={MODULES}
+                progressData={progressData}
+                streakData={streakData}
+                leaderboardData={leaderboardData}
+                username={username}
+                startModule={startModule}
+                setScreen={setScreen}
               />
             )}
             {screen === 'lesson' && activeModule && (
@@ -371,8 +379,9 @@ export default function App() {
               <ResultsScreen
                 activeModule={activeModule} quizScore={quizScore}
                 sessionSummary={sessionSummary} streakData={streakData}
-                tokenData={tokenData} totalQuizXP={quizTimer.totalQuizXP}
+                totalQuizXP={quizTimer.totalQuizXP}
                 backToHome={backToHome} setScreen={setScreen}
+                // REMOVED: tokenData prop — ResultsScreen no longer needs it
               />
             )}
             {screen === 'leaderboard' && (
@@ -385,7 +394,8 @@ export default function App() {
               <TierGatedScreen
                 activeModule={activeModule}
                 moduleIndex={MODULES.findIndex(m => m.id === activeModule.id)}
-                tierData={tierData} backToHome={backToHome} startModule={startModule}
+                progressData={progressData}
+                backToHome={backToHome}
               />
             )}
           </div>

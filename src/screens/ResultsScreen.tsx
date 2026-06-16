@@ -2,7 +2,7 @@
 import type { CSSProperties } from 'react';
 import type { LearningModule } from '../types';
 import type { StreakReturn }  from '../useStreak';
-import type { TokenReturn }  from '../useTokens';
+// REMOVED: import type { TokenReturn } from '../useTokens'
 
 interface SessionSummary { duration: number; avgBpm: number | null; }
 
@@ -11,7 +11,7 @@ interface ResultsScreenProps {
   quizScore:       number;
   sessionSummary:  SessionSummary | null;
   streakData:      StreakReturn;
-  tokenData:       TokenReturn;
+  // REMOVED: tokenData prop
   totalQuizXP:     number;
   backToHome:      () => void;
   setScreen:       (s: 'leaderboard') => void;
@@ -41,7 +41,7 @@ const card = (accent = 'rgba(255,255,255,0.06)'): CSSProperties => ({
 });
 
 export default function ResultsScreen({
-  activeModule, quizScore, sessionSummary, streakData, tokenData, totalQuizXP, backToHome, setScreen,
+  activeModule, quizScore, sessionSummary, streakData, totalQuizXP, backToHome, setScreen,
 }: ResultsScreenProps) {
   const focusScore = getFocusScore(sessionSummary?.avgBpm ?? null);
   const quizPct    = Math.round((quizScore / activeModule.quiz.length) * 100);
@@ -90,20 +90,7 @@ export default function ResultsScreen({
           <p style={{ color: 'var(--text-muted)', fontSize: '0.68rem' }}>{streakData.getStreakLabel()}</p>
         </div>
       </div>
-
-      {/* ELTA row */}
-      <div style={{ ...card('rgba(245,158,11,0.2)'), background: 'rgba(245,158,11,0.04)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Pending ELTA</p>
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>
-            {tokenData.claimableTokens > 0 ? `${tokenData.claimableTokens} ready to claim! 🎉` : `${tokenData.pendingXP.toLocaleString()} XP pending`}
-          </p>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>Balance</p>
-          <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{tokenData.balance} ELTA</p>
-        </div>
-      </div>
+      {/* REMOVED: ELTA pending/balance card — no more token system */}
 
       {/* Lifetime XP + Study time */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
