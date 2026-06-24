@@ -1,10 +1,12 @@
 // ─── Leaderboard.tsx ──────────────────────────────────────────────────────────
 // Global leaderboard for NeuroLearn v3 — powered by Supabase.
 // Shows global scores from all users worldwide alongside personal bests.
+// v3.2 — Added: Export My Sessions (CSV) button in the "My Sessions" view.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useState, type CSSProperties } from 'react';
 import type { LeaderboardReturn, LeaderboardEntry } from './useLeaderboard';
+import ExportButton from './ExportButton';
 
 interface LeaderboardProps {
   leaderboardData: LeaderboardReturn;
@@ -225,11 +227,29 @@ export default function Leaderboard({ leaderboardData, onBack }: LeaderboardProp
           : entries.map((entry, i) => renderEntry(entry, i + 1))
       }
 
+      {/* Export button — only shown in "My Sessions" view, since this exports
+          the logged-in user's own data only, never anyone else's */}
+      {activeView === 'personal' && (
+        <div style={{ marginTop: '20px' }}>
+          <ExportButton />
+        </div>
+      )}
+
       {/* Footer — honest data notice */}
+      {/* UPDATED: clarified that biosignal data stays device-only by default,
+          and is only included in a download file if the user themselves
+          requests their own export. This stays true to the original promise
+          while accurately describing the new feature. */}
       <p style={{ color: '#333', fontSize: '0.7rem', textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
-        Biosignal data · Device only · Never uploaded
+        Biosignal data · Device only · Never shared with other users
         <br />
-        <span style={{ color: '#2a2a2a' }}>Quiz scores &amp; username shared globally for this leaderboard</span>
+        <span style={{ color: '#2a2a2a' }}>
+          Quiz scores &amp; username shared globally for this leaderboard
+        </span>
+        <br />
+        <span style={{ color: '#2a2a2a' }}>
+          You can export your own session history anytime from "My Sessions"
+        </span>
       </p>
     </div>
   );
