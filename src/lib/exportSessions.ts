@@ -3,35 +3,63 @@
 //   1. leaderboard         — every session (score, focus, XP, streak)
 //   2. suspicious_sessions — only flagged sessions (BPM detail, suspicion level)
 //
-// Most sessions are never flagged, so BPM detail columns will be blank for them.
-// That is expected and correct — it reflects what data actually exists.
+// v3.2.1 — Self-healing user_id: if localStorage is missing or stale,
+// looks up the correct user_id from Supabase using the username, since
+// username + user_id were both written together at signup time.
 
 import { supabase } from '../supabase';
 
-// ── The shape of one exported row ─────────────────────────────────────────────
 export interface ExportRow {
-  session_id:        string;
-  username:           string;
-  module_title:        string;
-  quiz_score_pct:      number;
-  focus_score:         number;
-  xp_earned:           number;
-  streak_at_time:      number;
-  avg_bpm:             string;   // blank if session was never flagged
-  bpm_variance:        string;   // blank if session was never flagged
-  suspicion_level:     string;   // 'none' if never flagged
-  created_at:          string;
+  session_id:      string;
+  username:        string;
+  module_title:    string;
+  quiz_score_pct:  number;
+  focus_score:     number;
+  xp_earned:       number;
+  streak_at_time:  number;
+  avg_bpm:         string;
+  bpm_variance:    string;
+  suspicion_level: string;
+  created_at:      string;
+}
+
+// ── Resolve a trustworthy user_id ──────────────────────────────────────────────
+async function resolveUserId(): Promise<string | null> {
+  const storedUserId = localStorage.getItem('neurolearn_user_id');
+  if (storedUserId) return storedUserId;
+
+  const username = localStorage.getItem('neurolearn_username');
+  if (!username) return null;
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('username', username)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (error || !data) {
+    console.warn('[Export] Could not recover user_id for username:', username, error?.message);
+    return null;
+  }
+
+  localStorage.setItem('neurolearn_user_id', data.id);
+  console.log('[Export] Recovered and saved user_id for', username);
+
+  return data.id;
 }
 
 // ── Fetch and merge ────────────────────────────────────────────────────────────
 export async function fetchSessionExportRows(): Promise<ExportRow[]> {
-  const userId = localStorage.getItem('neurolearn_user_id');
+  const userId = await resolveUserId();
 
   if (!userId) {
-    throw new Error('No user_id found. Cannot export sessions for an unidentified user.');
+    throw new Error(
+      'Could not identify your account on this device. Try re-entering your username, then export again.'
+    );
   }
 
-  // 1. Fetch all leaderboard rows for this user (every session)
   const { data: leaderboardRows, error: lbError } = await supabase
     .from('leaderboard')
     .select('*')
@@ -42,26 +70,40 @@ export async function fetchSessionExportRows(): Promise<ExportRow[]> {
     throw new Error(`Failed to fetch leaderboard data: ${lbError.message}`);
   }
 
-  // 2. Fetch all suspicious_sessions rows for this user (flagged sessions only)
+  let finalRows = leaderboardRows ?? [];
+
+  // Fallback for legacy rows that predate user_id linking
+  if (finalRows.length === 0) {
+    const username = localStorage.getItem('neurolearn_username');
+    if (username) {
+      const { data: legacyRows, error: legacyError } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .eq('username', username)
+        .is('user_id', null)
+        .order('created_at', { ascending: false });
+
+      if (!legacyError && legacyRows) {
+        finalRows = legacyRows;
+        console.log('[Export] Recovered', legacyRows.length, 'legacy unlinked session(s) by username');
+      }
+    }
+  }
+
   const { data: suspiciousRows, error: ssError } = await supabase
     .from('suspicious_sessions')
     .select('*')
     .eq('user_id', userId);
 
   if (ssError) {
-    // Non-fatal — we can still export without BPM detail
     console.warn('[Export] Could not fetch suspicious_sessions:', ssError.message);
   }
 
-  // 3. Build a lookup of flagged sessions by approximate time + module
-  //    (suspicious_sessions doesn't share a direct foreign key with leaderboard,
-  //    so we match on module_title + closest timestamp within a 5-minute window)
   const flaggedList = suspiciousRows ?? [];
 
   function findMatchingFlag(moduleTitle: string, createdAt: string) {
     const targetTime = new Date(createdAt).getTime();
     const FIVE_MIN = 5 * 60 * 1000;
-
     return flaggedList.find(flag => {
       if (flag.module_title !== moduleTitle) return false;
       const flagTime = new Date(flag.created_at).getTime();
@@ -69,10 +111,8 @@ export async function fetchSessionExportRows(): Promise<ExportRow[]> {
     });
   }
 
-  // 4. Merge into final export rows
-  const rows: ExportRow[] = (leaderboardRows ?? []).map(lb => {
+  const rows: ExportRow[] = finalRows.map(lb => {
     const flag = findMatchingFlag(lb.module_title, lb.created_at);
-
     return {
       session_id:      String(lb.id),
       username:        String(lb.username ?? 'Anonymous'),
@@ -91,7 +131,6 @@ export async function fetchSessionExportRows(): Promise<ExportRow[]> {
   return rows;
 }
 
-// ── Convert rows to a CSV string ───────────────────────────────────────────────
 export function rowsToCSV(rows: ExportRow[]): string {
   if (rows.length === 0) {
     return 'No session data available.\n';
@@ -103,7 +142,6 @@ export function rowsToCSV(rows: ExportRow[]): string {
     'avg_bpm', 'bpm_variance', 'suspicion_level', 'created_at',
   ];
 
-  // Escape a value for safe CSV output (handles commas, quotes, newlines)
   function escapeCSV(value: string | number): string {
     const str = String(value);
     if (str.includes(',') || str.includes('"') || str.includes('\n')) {
@@ -113,29 +151,23 @@ export function rowsToCSV(rows: ExportRow[]): string {
   }
 
   const headerLine = headers.join(',');
-  const dataLines = rows.map(row =>
-    headers.map(h => escapeCSV(row[h])).join(',')
-  );
+  const dataLines = rows.map(row => headers.map(h => escapeCSV(row[h])).join(','));
 
   return [headerLine, ...dataLines].join('\n');
 }
 
-// ── Trigger a browser download of the CSV ──────────────────────────────────────
 export function downloadCSV(csvContent: string, filename: string): void {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const url  = URL.createObjectURL(blob);
-
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-
   URL.revokeObjectURL(url);
 }
 
-// ── The full export flow — call this from a button click ───────────────────────
 export async function exportMySessionsAsCSV(): Promise<{ success: boolean; rowCount: number; error?: string }> {
   try {
     const rows = await fetchSessionExportRows();
