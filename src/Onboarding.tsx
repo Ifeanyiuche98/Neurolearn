@@ -123,64 +123,75 @@ const BpmPill = () => (
   </div>
 );
 
-const TierGrid = () => (
+const ProgressUnlockGrid = () => (
   <div style={{
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "8px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "7px",
     marginTop: "20px",
     width: "100%",
     maxWidth: "300px",
   }}>
     {[
-      {
-        name: "Free",
-        desc: "Start your Web3 journey",
-        highlight: false,
-      },
-      {
-        name: "Scholar",
-        desc: "Build real blockchain literacy",
-        highlight: false,
-      },
-      {
-        name: "Expert",
-        desc: "Go deep into DeFi and beyond",
-        highlight: false,
-      },
-      {
-        name: "Pro ✦",
-        desc: "Full access. Full focus. Full leaderboard.",
-        highlight: true,
-      },
-    ].map((tier) => (
-      <div key={tier.name} style={{
-        background: "rgba(32, 210, 155, 0.04)",
-        border: `1px solid ${tier.highlight
-          ? "rgba(32, 210, 155, 0.35)"
-          : "rgba(32, 210, 155, 0.12)"}`,
-        borderRadius: "10px",
-        padding: "10px 12px",
-        textAlign: "left",
+      { num: "01", name: "Blockchain Basics",           unlocked: true  },
+      { num: "02", name: "Wallets & Security",           unlocked: false },
+      { num: "03", name: "DeFi Fundamentals",            unlocked: false },
+      { num: "04", name: "NFTs & Tokens",                unlocked: false },
+      { num: "05", name: "Trading, Careers & Web3",      unlocked: false },
+      { num: "06", name: "AI × Crypto",                  unlocked: false },
+    ].map((mod, i) => (
+      <div key={mod.num} style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        background: mod.unlocked
+          ? "rgba(32, 210, 155, 0.08)"
+          : "rgba(32, 210, 155, 0.02)",
+        border: `1px solid ${mod.unlocked
+          ? "rgba(32, 210, 155, 0.30)"
+          : "rgba(32, 210, 155, 0.08)"}`,
+        borderRadius: "8px",
+        padding: "8px 12px",
       }}>
-        <div style={{
-          fontFamily: "'Syne', sans-serif",
+        {/* Lock / unlock icon */}
+        <span style={{ fontSize: "13px", flexShrink: 0 }}>
+          {mod.unlocked ? "✅" : "🔒"}
+        </span>
+        {/* Module number */}
+        <span style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "9px",
+          color: "rgba(32, 210, 155, 0.4)",
+          flexShrink: 0,
+        }}>
+          {mod.num}
+        </span>
+        {/* Module name */}
+        <span style={{
           fontSize: "11px",
-          fontWeight: 700,
-          color: tier.highlight ? "#26e8ac" : "#20d29b",
-          marginBottom: "4px",
+          color: mod.unlocked ? "#20d29b" : "#4a8070",
+          fontWeight: mod.unlocked ? 600 : 400,
+          flex: 1,
+          textAlign: "left",
         }}>
-          {tier.name}
-        </div>
-        <div style={{
-          fontSize: "10px",
-          color: "#4a8070",
-          lineHeight: 1.5,
-        }}>
-          {tier.desc}
-        </div>
+          {mod.name}
+        </span>
+        {/* Arrow for unlocked */}
+        {mod.unlocked && (
+          <span style={{ fontSize: "11px", color: "#20d29b" }}>›</span>
+        )}
       </div>
     ))}
+    <p style={{
+      fontSize: "10px",
+      color: "rgba(32, 210, 155, 0.4)",
+      textAlign: "center",
+      marginTop: "4px",
+      fontFamily: "'JetBrains Mono', monospace",
+      letterSpacing: "0.05em",
+    }}>
+      Complete each quiz → next module unlocks
+    </p>
   </div>
 );
 
@@ -260,19 +271,20 @@ const buildSlides = (): Slide[] => [
     extra: <BpmPill />,
   },
   {
-    tag: "ELTA Token",
+    tag: "Your Progress",
     icon: <IconToken />,
-    title: "Every token spent is a level gained.",
+    title: "Every quiz completed is a module unlocked.",
     body: (
       <>
+        Modules unlock{" "}
         <strong style={{ color: "#20d29b", fontWeight: 500 }}>
-          ELTA tokens
+          in order as you learn
         </strong>{" "}
-        unlock Scholar, Expert, and Pro tiers &mdash; giving you deeper modules,
-        richer tools, and a place on the global leaderboard.
+        &mdash; no tokens, no paywalls. Complete a quiz to open the next module.
+        Your progress is your key.
       </>
     ),
-    extra: <TierGrid />,
+    extra: <ProgressUnlockGrid />,
   },
   {
     tag: "Camera Access",
