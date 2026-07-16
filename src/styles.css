@@ -33,8 +33,8 @@
   /* Text */
   --text-primary:   #e8f4f8;
   --text-secondary: #7a9db0;
-  --text-muted:     #3a5a6e;
-  --text-ghost:     #1e3a4a;
+  --text-muted:     #6b8fa3;   /* was #3a5a6e — lightened so labels are actually readable */
+  --text-ghost:     #35586b;   /* was #1e3a4a — lightened for the same reason */
 
   /* Borders */
   --border-soft:    rgba(0, 229, 204, 0.12);
@@ -707,4 +707,14 @@ body::after {
 @media (max-width: 480px) {
   .stage { padding: 0 12px; }
   .brand-name { font-size: 0.95rem; }
+
+  /* Bump up small label text so it's readable on phone screens */
+  .meter-head    { font-size: 0.78rem; }
+  .meter-pct     { font-size: 0.78rem; }
+  .bpm-label     { font-size: 0.75rem; }
+  .bpm-unit      { font-size: 0.85rem; }
+  .section-label { font-size: 0.75rem; }
+  .video-label   { font-size: 0.72rem; }
+  .footer        { font-size: 0.72rem; }
+  .chip          { font-size: 0.8rem; }
 }
