@@ -33,8 +33,8 @@
   /* Text */
   --text-primary:   #e8f4f8;
   --text-secondary: #7a9db0;
-  --text-muted:     #6b8fa3;   /* was #3a5a6e — lightened so labels are actually readable */
-  --text-ghost:     #35586b;   /* was #1e3a4a — lightened for the same reason */
+  --text-muted:     #6b8fa3;
+  --text-ghost:     #35586b;
 
   /* Borders */
   --border-soft:    rgba(0, 229, 204, 0.12);
