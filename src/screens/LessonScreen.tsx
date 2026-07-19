@@ -18,6 +18,28 @@ const card = (accent = 'rgba(255,255,255,0.06)'): CSSProperties => ({
   boxShadow: 'var(--shadow-card)',
 });
 
+/**
+ * Turns simple **bold** markdown syntax into real <strong> elements.
+ * Everything else in the text is left exactly as-is, so normal line breaks
+ * (handled by whiteSpace: 'pre-line' on the parent) still work fine.
+ */
+function renderWithBold(text: string) {
+  // Split the string on **bold** markers, keeping the markers in the array
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2); // strip the ** on both sides
+      return (
+        <strong key={i} style={{ color: 'var(--text-primary)', fontWeight: 700 }}>
+          {boldText}
+        </strong>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default function LessonScreen({
   activeModule, lessonPage, setLessonPage, goToFlashcards, backToHome,
 }: LessonScreenProps) {
@@ -44,7 +66,7 @@ export default function LessonScreen({
           {page.title}
         </h3>
         <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, fontSize: '0.88rem', whiteSpace: 'pre-line' }}>
-          {page.content}
+          {renderWithBold(page.content)}
         </p>
       </div>
 
